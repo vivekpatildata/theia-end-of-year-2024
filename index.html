@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Theia: Year in Review 2024 | SynMax</title>
+  <link rel="icon" type="image/x-icon" href="LOGO-synmax.png">
+
+  <!-- Mapbox GL JS -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
+  <!-- Typed.js -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+  <!-- Scrollama -->
+  <script src="https://unpkg.com/scrollama"></script>
+
+  <!-- D3.js -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- Three.js + Threebox -->
+  <script src="https://unpkg.com/three@0.142.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/threebox-plugin@2.3.0/dist/threebox.min.js"></script>
+
+  <!-- GSAP for advanced animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Manrope Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /*─────────────────────────────────────────────────────────
+      CSS Variables for Dynamic Theming
+    ──────────────────────────────────────────────────────────*/
+    :root {
+      --primary-glow: #00ffff;
+      --secondary-glow: #1a80fd;
+      --danger-glow: #ff0066;
+      --success-glow: #00ff88;
+      --bg-dark: #0a0a0a;
+      --text-primary: #ffffff;
+      --text-secondary: #b0b0b0;
+      --map-overlay: rgba(0, 0, 0, 0.85);
+      --animation-duration: 0.6s;
+      --mobile-breakpoint: 768px;
+    }
+
+    /*─────────────────────────────────────────────────────────
+      Base Styles with Enhanced Typography
+    ──────────────────────────────────────────────────────────*/
+    * { 
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-primary);
+      background: var(--bg-dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-dark);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .loading-content {
+      text-align: center;
+    }
+
+    .loading-logo {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+
+    .loading-logo::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--primary-glow);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse-ring 2s ease-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    .loading-text {
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      animation: fade-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes fade-pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Chapter Indicator */
+    #chapter-indicator {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 50;
+      background: var(--map-overlay);
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+    }
+
+    #chapter-indicator.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #chapter-indicator span {
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+    }
+
+    #chapter-indicator strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Enhanced Banner with Parallax Effect */
+    #banner {
+      display: flex;
+      height: 100vh;
+      background: var(--bg-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, transparent 0%, var(--bg-dark) 70%);
+      animation: rotate-gradient 20s linear infinite;
+      opacity: 0.5;
+    }
+
+    @keyframes rotate-gradient {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .banner-image-container {
+      flex: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .banner-image-container img {
+      max-width: 90%;
+      height: auto;
+      filter: drop-shadow(0 0 50px rgba(0, 255, 255, 0.3));
+      animation: float-image 6s ease-in-out infinite;
+    }
+
+    @keyframes float-image {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .banner-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .banner-text h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin: 0;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .highlight {
+      background: linear-gradient(135deg, #00ffff, #0066ff, #0066ff);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+    }
+
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .banner-text p {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      animation: fade-in-up 1s ease-out 0.5s forwards;
+    }
+
+    @keyframes fade-in-up {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      opacity: 0;
+      animation: fade-in 1s ease-out 2s forwards;
+    }
+
+    .scroll-mouse {
+      width: 26px;
+      height: 40px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 13px;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .scroll-mouse::before {
+      content: '';
+      width: 4px;
+      height: 8px;
+      background: var(--primary-glow);
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      animation: scroll-wheel 2s ease-in-out infinite;
+    }
+
+    @keyframes scroll-wheel {
+      0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      100% { transform: translateX(-50%) translateY(10px); opacity: 0; }
+    }
+
+    .scroll-text {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    /* Map Container - Simplified */
+    #map {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 1;
+      background: #000;
+    }
+
+    /* Enhanced Legend & Date-Range - UPDATED with hide functionality */
+    #map-legend, #date-range {
+      position: fixed;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+      backdrop-filter: blur(20px);
+      padding: 1rem 1.5rem;
+      font-size: 0.9rem;
+      border-radius: 12px;
+      display: none;
+      z-index: 25;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    #map-legend {
+      bottom: 20px;
+      left: 20px;
+      /* color: var(--primary-glow); */
+      color: #39ff14; /* UPDATED: neon green for better visibility */
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    #date-range {
+      top: 80px;
+      right: 20px;
+      color: var(--secondary-glow);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    #map-legend::before, #date-range::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 12px;
+      padding: 1px;
+      background: linear-gradient(135deg, var(--primary-glow), transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0.5;
+    }
+
+    /* Story Section */
+    #story {
+      position: relative;
+      z-index: 10;
+      padding: 0;
+    }
+
+    .step {
+      margin: 0 auto;
+      padding: 50vh 0;
+      position: relative;
+    }
+
+    /* UPDATED: Chapter Container - More Compact & Mobile-Friendly */
+    .chapter-container {
+      max-width: 650px;              /* REDUCED: was 800px - controls container width */
+      margin: 0 auto;
+      padding: 1.5rem 2rem;          /* REDUCED: was 2rem - controls internal spacing */
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.88)); /* UPDATED: darker background */
+      backdrop-filter: blur(20px);
+      border-radius: 16px;            /* REDUCED: was 20px - controls corner roundness */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7); /* UPDATED: more prominent shadow */
+      transform: translateY(50px);
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chapter-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow)); /* CONTROLS: border glow color */
+      border-radius: 16px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: -1;
+      filter: blur(10px);
+    }
+
+    .chapter-container.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .chapter-container.active::before {
+      opacity: 0.3;
+    }
+
+    /* UPDATED: Chapter Titles - Centered */
+    .chapter-container h2 {
+      font-size: clamp(1rem, 2.5vw, 2rem); /* REDUCED: was larger */
+      font-weight: 500;
+      margin: 0 0 1.2rem;              /* REDUCED: was 1.5rem */
+      letter-spacing: -0.02em;
+      text-align: center;              /* ADDED: centers the title */
+      background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* UPDATED: Chapter Text - Left Aligned (Normal Reading Flow) */
+    .chapter-container p {
+      font-size: 1rem;                /* REDUCED: was 1.1rem */
+      line-height: 1.7;               /* REDUCED: was 1.8 */
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin: 0;
+      text-align: left;               /* ENSURES: left-to-right reading flow */
+    }
+
+    .chapter-container ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+      text-align: left;               /* ENSURES: left alignment for lists */
+    }
+
+    .chapter-container li {
+      margin: 0.5rem 0;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.6;
+      text-align: left;               /* ENSURES: left alignment for list items */
+    }
+
+    /* FIXED: Alignment Classes - Now Working Properly */
+    .align-left { 
+      text-align: left !important;   /* FIXED: added !important */
+    }
+    .align-center { 
+      text-align: center !important; /* FIXED: added !important */
+    }
+    .align-right { 
+      text-align: right !important;  /* FIXED: added !important */
+    }
+
+    /* Final Chart Section */
+    #chart-final {
+      padding: 5rem 2rem;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-dark), #111);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #chart-final::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
+    }
+
+    #chart-final svg {
+      width: 100%;
+      height: 80px;
+      margin: 2rem 0;
+      filter: drop-shadow(0 8px 24px rgba(0, 255, 255, 0.4));
+    }
+
+    .chart-container h3 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .explanation {
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-weight: 300;
+      text-align: left;               /* UPDATED: left-aligned for better readability */
+    }
+
+    /* UPDATED: After-Map Section with Left Alignment */
+    .after-map {
+      background: #111;
+      padding: 4rem 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* ADDED: Debrief Analysis Section */
+    .debrief-analysis {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      text-align: left;               /* UPDATED: left-aligned for better readability */
+    }
+
+    .debrief-analysis h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--primary-glow);
+      text-align: center;             /* Center the main heading */
+    }
+
+    .debrief-analysis p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      font-weight: 300;
+      margin-bottom: 1.2rem;
+      text-align: left;               /* Left-aligned paragraphs */
+    }
+
+    /* UPDATED: Credits - Left Aligned */
+    .credits {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: left;               /* UPDATED: left-aligned instead of center */
+    }
+
+    .credits p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      text-align: left;               /* UPDATED: left-aligned for better readability */
+    }
+
+    .credits p:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /*─────────────────────────────────────────────────────────
+      Enhanced Annotation Styling
+    ──────────────────────────────────────────────────────────*/
+    .mapboxgl-popup {
+      z-index: 30;
+    }
+
+    .mapboxgl-popup-content {
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.85));
+      backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 60px rgba(0, 255, 255, 0.2);
+      overflow: hidden;
+      animation: popup-appear 0.4s ease-out;
+    }
+
+    @keyframes popup-appear {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .mapboxgl-popup-tip {
+      display: none !important;
+    }
+
+    .annotation-text {
+      background: transparent;
+      color: var(--text-primary);
+      padding: 1rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 400;
+      white-space: pre-line;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+    }
+
+    /* Enhanced Blinking Animation */
+    @keyframes enhanced-blink {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: brightness(1.2) drop-shadow(0 0 10px currentColor);
+      }
+      50% {
+        opacity: 0.3;
+        transform: scale(0.9);
+        filter: brightness(0.8) drop-shadow(0 0 5px currentColor);
+      }
+    }
+
+    .blink {
+      animation: enhanced-blink 1.5s ease-in-out infinite;
+    }
+
+    /* Enhanced Crash Marker */
+    .crash-marker-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      pointer-events: none;
+      animation: crash-drop 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes crash-drop {
+      0% {
+        transform: translateY(-300px) scale(0.5) rotate(-45deg);
+        opacity: 0;
+      }
+      60% {
+        transform: translateY(20px) scale(1.1) rotate(5deg);
+        opacity: 1;
+      }
+      80% {
+        transform: translateY(-10px) scale(0.95) rotate(-2deg);
+      }
+      100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .crash-marker-container::before,
+    .crash-marker-container::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .crash-marker-container::before {
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle, var(--danger-glow), transparent);
+      animation: crash-pulse 2s ease-out infinite;
+    }
+
+    .crash-marker-container::after {
+      width: 20px;
+      height: 20px;
+      background: var(--danger-glow);
+      box-shadow: 0 0 20px var(--danger-glow), 0 0 40px var(--danger-glow);
+    }
+
+    @keyframes crash-pulse {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Enhanced Ping Markers */
+    .ping-marker {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(223, 125, 125, 0.8));
+      box-shadow: 0 0 20px rgba(223, 125, 125, 0.8), 0 0 40px rgba(223, 125, 125, 0.4);
+      animation: enhanced-ping 1.5s ease-out infinite;
+      transform: translate(-50%, -50%);
+      position: relative;
+    }
+
+    .ping-marker::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid rgba(223, 125, 125, 0.8);
+      transform: translate(-50%, -50%);
+      animation: ping-ring 1.5s ease-out infinite;
+    }
+
+    @keyframes enhanced-ping {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1.2);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        filter: brightness(1.5);
+      }
+    }
+
+    @keyframes ping-ring {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+      }
+    }
+
+    /* Enhanced Satellite Image Popups */
+    .annotation-img {
+      display: block;
+      width: 180px;
+      max-width: 85vw;
+      margin: 0;
+      border-radius: 12px 12px 0 0;
+      filter: saturate(1.2) contrast(1.1);
+      transition: transform 0.3s ease;
+    }
+
+    .annotation-img:hover {
+      transform: scale(1.05);
+    }
+
+    .annotation-img-large {
+      display: block;
+      width: 220px;
+      max-width: 75vw;
+      margin: 0;
+      border-radius: 12px 12px 0 0;
+      filter: saturate(1.2) contrast(1.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Enhanced Red Ping Markers */
+    .red-ping-marker {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9), var(--danger-glow));
+      animation: danger-pulse 1.2s ease-in-out infinite;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 30px var(--danger-glow), 0 0 60px rgba(255, 0, 102, 0.4);
+      position: absolute;
+    }
+
+    .red-ping-marker::before,
+    .red-ping-marker::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .red-ping-marker::before {
+      width: 150%;
+      height: 150%;
+      border: 2px solid var(--danger-glow);
+      border-radius: 50%;
+      animation: danger-ring 1.5s ease-out infinite;
+    }
+
+    .red-ping-marker::after {
+      width: 3px;
+      height: 40px;
+      background: linear-gradient(to top, var(--danger-glow), transparent);
+      transform: translateX(-50%) translateY(14px);
+      animation: danger-beam 1.5s ease-in-out infinite;
+    }
+
+    @keyframes danger-pulse {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        filter: brightness(1.5) saturate(1.5);
+      }
+    }
+
+    @keyframes danger-ring {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes danger-beam {
+      0%, 100% {
+        opacity: 0.8;
+        height: 40px;
+      }
+      50% {
+        opacity: 1;
+        height: 50px;
+      }
+    }
+
+    /* Enhanced STS Markers */
+    .sts-marker {
+      position: absolute;
+      display: flex;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      gap: 6px;
+    }
+
+    .sts-marker .dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9), var(--danger-glow));
+      animation: sts-pulse 1.3s ease-in-out infinite;
+      box-shadow: 0 0 20px var(--danger-glow), 0 0 40px rgba(255, 0, 102, 0.3);
+      position: relative;
+    }
+
+    .sts-marker .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .sts-marker .dot::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--danger-glow);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: sts-ring 1.5s ease-out infinite;
+    }
+
+    @keyframes sts-pulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      50% {
+        transform: scale(1.15);
+        filter: brightness(1.5);
+      }
+    }
+
+    @keyframes sts-ring {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+      }
+    }
+
+    /* Chapter 6 Mini-maps Enhancement - KEEP ORIGINAL IDs */
+    #mini-maps-container {
+      display: none;
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 1;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      background: var(--bg-dark);
+    }
+
+    .mini-map {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .mini-map::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.3) 100%);
+      pointer-events: none;
+    }
+
+    .mini-legend, .mini-daterange {
+      position: absolute;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+      backdrop-filter: blur(15px);
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      border-radius: 8px;
+      color: var(--text-primary);
+      pointer-events: none;
+      z-index: 25;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .mini-legend {
+      bottom: 10px;
+      left: 10px;
+      color: var(--primary-glow);
+    }
+
+    .mini-daterange {
+      top: 10px;
+      right: 10px;
+      color: var(--secondary-glow);
+    }
+
+    /*─────────────────────────────────────────────────────────
+      Mobile Optimizations - Enhanced for Chapter Containers
+    ──────────────────────────────────────────────────────────*/
+    @media screen and (max-width: 768px) {
+      /* Banner Mobile */
+      #banner {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .banner-image-container {
+        flex: 1;
+        padding: 3rem 1rem;
+      }
+
+      .banner-text {
+        flex: 1;
+        padding: 2rem;
+        text-align: center;
+      }
+
+      .banner-text h1 {
+        font-size: 2rem;
+      }
+
+      /* Chapter Indicators Mobile */
+      #chapter-indicator {
+        top: auto;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+      }
+
+      #chapter-indicator.visible {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* Map Elements Mobile */
+      #map-legend, #date-range {
+        font-size: 0.8rem;
+        padding: 0.75rem 1rem;
+      }
+
+      #map-legend {
+        bottom: 60px;
+        left: 10px;
+        right: 10px;
+        max-width: calc(100% - 20px);
+      }
+
+      #date-range {
+        top: 60px;
+        left: 10px;
+        right: auto;
+      }
+
+      /* Story Panels Mobile - UPDATED for Better Mobile Experience */
+      .step {
+        padding: 40vh 1rem;
+      }
+
+      .chapter-container {
+        padding: 1.2rem 1.5rem;        /* MOBILE: more compact padding */
+        border-radius: 12px;           /* MOBILE: smaller radius */
+        max-width: calc(100% - 2rem);  /* MOBILE: full width with margin */
+        margin: 0 1rem;               /* MOBILE: side margins */
+      }
+
+      .chapter-container h2 {
+        font-size: 0.7rem;            /* MOBILE: smaller title */
+        margin-bottom: 1rem;          /* MOBILE: less spacing */
+      }
+
+      .chapter-container p {
+        font-size: 0.95rem;           /* MOBILE: smaller text */
+        line-height: 1.6;             /* MOBILE: tighter line height */
+      }
+
+      /* Mini-maps Mobile */
+      #mini-maps-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 250px);
+        gap: 1px;
+      }
+
+      .mini-legend, .mini-daterange {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+      }
+
+      /* Annotations Mobile */
+      .annotation-img {
+        width: 150px;
+      }
+
+      .annotation-img-large {
+        width: 180px;
+      }
+
+      .annotation-text {
+        font-size: 0.85rem;
+        padding: 0.75rem 1rem;
+      }
+
+      /* Markers Mobile */
+      .red-ping-marker {
+        width: 22px;
+        height: 22px;
+      }
+
+      .ping-marker {
+        width: 20px;
+        height: 20px;
+      }
+
+      .sts-marker .dot {
+        width: 18px;
+        height: 18px;
+      }
+
+      .crash-marker-container {
+        width: 100px;
+        height: 100px;
+      }
+
+      /* Final Chart Mobile */
+      #chart-final {
+        padding: 3rem 1rem;
+      }
+
+      .chart-container h3 {
+        font-size: 1.5rem;
+      }
+
+      .explanation {
+        font-size: 1rem;
+      }
+
+      /* UPDATED: After-Map Mobile */
+      .after-map {
+        padding: 3rem 1rem;
+      }
+
+      .debrief-analysis {
+        margin-bottom: 2rem;
+      }
+
+      .debrief-analysis h3 {
+        font-size: 1.5rem;
+      }
+
+      .debrief-analysis p {
+        font-size: 1rem;
+      }
+    }
+
+    /* Touch Device Optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      .annotation-img:hover {
+        transform: none;
+      }
+
+      .chapter-container {
+        transition: all 0.6s ease;
+      }
+    }
+
+    /* High Resolution Display Optimizations */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .mapboxgl-popup-content {
+        border-width: 0.5px;
+      }
+
+      #map-legend::before, #date-range::before {
+        border-width: 0.5px;
+      }
+    }
+
+    /* Reduced Motion Preferences */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Dark Mode Enhancements */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-dark: #000000;
+        --map-overlay: rgba(0, 0, 0, 0.95);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <img src="LOGO-synmax.png" alt="SynMax" style="width: 100%; height: 100%; object-fit: contain;">
+      </div>
+      <div class="loading-text">Initializing Theia...</div>
+    </div>
+  </div>
+
+  <!-- Chapter Indicator -->
+  <div id="chapter-indicator">
+    <span>Chapter <strong id="current-chapter">1</strong> of <strong>12</strong></span>
+  </div>
+
+  <!-- Enhanced Banner -->
+  <section id="banner">
+    <div class="banner-image-container">
+      <picture>
+        <source media="(max-width:768px)" srcset="trialgif-4.gif">
+        <img src="trialgif-4.gif" alt="SynMax Theia Animation">
+      </picture>
+    </div>
+    <div class="banner-text">
+      <h1>
+        <span class="highlight">SynMax Theia:</span>
+        <i><span id="typewriter"></span></i>
+      </h1>
+      <p id="banner-date">Issue: July 4, 2025</p>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-mouse"></div>
+      <div class="scroll-text">Scroll to explore</div>
+    </div>
+  </section>
+
+  <!-- Scrollytelling Section -->
+  <section id="scrolly">
+    <!-- Full-screen map -->
+    <div id="map"></div>
+
+    <!-- Four-pane mini-maps - SHARED CONTAINER with ORIGINAL IDs -->
+    <div id="mini-maps-container">
+      <!-- Mini-map 1 -->
+      <div class="mini-map" id="mini-map-1">
+        <div class="mini-legend" id="legend-1">Loading...</div>
+        <div class="mini-daterange" id="daterange-1">Loading...</div>
+      </div>
+
+      <!-- Mini-map 2 -->
+      <div class="mini-map" id="mini-map-2">
+        <div class="mini-legend" id="legend-2">Loading...</div>
+        <div class="mini-daterange" id="daterange-2">Loading...</div>
+      </div>
+
+      <!-- Mini-map 3 -->
+      <div class="mini-map" id="mini-map-3">
+        <div class="mini-legend" id="legend-3">Loading...</div>
+        <div class="mini-daterange" id="daterange-3">Loading...</div>
+      </div>
+
+      <!-- Mini-map 4 -->
+      <div class="mini-map" id="mini-map-4">
+        <div class="mini-legend" id="legend-4">Loading...</div>
+        <div class="mini-daterange" id="daterange-4">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Map UI Elements -->
+    <div id="map-legend"></div>
+    <div id="date-range"></div>
+    <div id="bar-chart-overlay"></div>
+
+    <!-- Story Panels -->
+    <div id="story">
+      <!-- Introduction -->
+      <div class="step" data-chapter="intro">
+        <div class="chapter-container align-center">
+          <h2>Global Maritime Intelligence Coverage</h2>
+          <p>Throughout 2024, Theia's advanced detection systems maintained persistent surveillance across the world's most strategically critical maritime regions. From the contested waters of the South China Sea to the vital energy corridors of the Arctic, our multi-source intelligence fusion capabilities monitored high-frequency maritime activities across four key operational theaters.</p>
+          <br>
+          <p>Each region presented unique challenges—sanctions evasion networks in South American waters, complex territorial disputes in Asian seas, strategic submarine movements in Arctic routes, and critical chokepoint monitoring in Middle Eastern corridors. This comprehensive coverage enabled real-time threat detection, pattern analysis, and strategic maritime intelligence that shaped our understanding of global maritime security throughout the year.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chapter="chapter1">
+        <div class="chapter-container align-right">
+          <h2>The Story of Gulfstream</h2>
+          <p>In February 2024, the fishing vessel Gulfstream capsized off Tobago's coast, triggering a catastrophic oil spill that devastated marine ecosystems across Trinidad and Tobago. The disaster prompted a national emergency declaration, with cleanup costs exceeding $30 million as volunteers and emergency responders battled to contain the spreading contamination.</p>
+          <br>
+          <p>Theia's advanced detection systems had tracked Gulfstream operating in AIS-dark mode before the capsizing event. Our persistent monitoring capabilities continued surveillance throughout the crisis—from initial wreck detection to coordinating rescue vessel movements during the complex salvage operation that culminated in the vessel's recovery to Chaguaramas port in April 2025.</p>
+        </div>
+      </div>
+
+      <!-- Chapter 2 -->
+      <div class="step" data-chapter="chapter2">
+        <div class="chapter-container align-right">
+          <h2>Venezuela Sanctions Evasion Networks</h2>
+          <p>Following the non-renewal of General License 44 in April 2024, Venezuela's oil sector faced renewed U.S. sanctions restrictions. Despite maintaining crude production around 0.9 million barrels per day, the country increasingly relied on sophisticated evasion networks utilizing ship-to-ship transfers in territorial waters and "dark fleet" operations to obscure oil origins before reaching global markets.</p>
+          <br>
+          <p>Theia's multi-source fusion capabilities proved essential in detecting these illicit STS operations. By integrating AIS data, satellite surveillance, and machine learning algorithms, our platform identified suspicious vessel loitering patterns, verified dark transfers through SAR and optical imagery, and tracked shadow fleet movements even when vessels employed AIS manipulation or flag-hopping tactics to evade traditional monitoring systems.</p>
+        </div>
+      </div>
+
+      <!-- Chapter 3 -->
+      <div class="step" data-chapter="chapter3">
+        <div class="chapter-container align-center">
+          <h2>Baltic Submarine Tracking -NOVOROSSIYSK (IMPROVED KILO CLASS)</h2>
+          <p>In late August 2024, Theia's advanced detection systems identified and tracked a submarine transit across European waters from the Baltic Sea to the Mediterranean. Using multi-source intelligence fusion, our platform monitored both surface transits and escort vessel movements, providing continuous surveillance coverage throughout the submarine's strategic deployment route across multiple maritime jurisdictions.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chapter="chapter4">
+        <div class="chapter-container align-left">
+          <h2>Coordinated STS Operations Off Ceuta</h2>
+          <p>On November 6, 2024, two Russian-origin tankers converged near Ceuta, Spain, for a sophisticated sanctions evasion operation. Sakarya, having departed Primorsk with crude oil on October 27, arrived at 10:41 UTC and deactivated its AIS. Simultaneously, Atila—which had traveled from Malta—began spoofing its location at 12:50 UTC, creating a digital smokescreen for the impending transfer.</p>
+          <br>
+          <p>Theia's dark vessel detection capabilities identified the clandestine STS transfer between Sakarya and Atila on November 7 at 11:18 UTC. Draft analysis revealed Sakarya's cargo load decreased from 14.8m to 9.4m, confirming substantial crude oil transfer. The operation continued as Atila conducted a second transfer with vessel Cankiri, demonstrating the sophisticated multi-vessel coordination employed to circumvent international sanctions monitoring systems.</p>
+        </div>
+      </div>
+
+      <!-- Chapter 5 -->
+      <div class="step" data-chapter="chapter5">
+        <div class="chapter-container align-right">
+          <h2>Post-Transfer Vessel Dispersal</h2>
+          <p>Following the Ceuta STS operations, the three vessels executed sophisticated dispersal patterns to evade continued surveillance. Sakarya completed its transit through Gibraltar on November 9, 2024, returning to Murmansk by November 21—only to begin a return journey three days later, appearing 71 km north of Skikda, Algeria by December 6.</p>
+          <p>Atila's journey revealed the global scope of sanctions evasion networks. After transiting Gibraltar on November 12, the vessel sailed south along the North African coast, reaching Cape Town by November 30. Theia's continuous monitoring detected its passage around the Cape of Good Hope toward Asian markets, demonstrating how successful STS operations enable vessels to access previously restricted trade routes and customers.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chapter="chapter6">
+        <div class="chapter-container align-center">
+          <h2>Russia's Dark LNG Fleet Operations</h2>
+          <p>Following Ukraine's invasion, Russia developed a dedicated shadow LNG fleet of up to 50 carriers—often older ice-class vessels operating under opaque ownership structures registered in non-sanctioning countries like the UAE and India. These carriers employed sophisticated AIS manipulation tactics, including signal disabling and location spoofing, particularly when loading at the sanctioned Arctic LNG 2 terminal.</p>
+          <br>
+          <p>Theia's spoofing detection suite successfully tracked vessels like Pioneer and Asya Energy as they employed deceptive AIS tactics while conducting ship-to-ship transfers near Kildin Island. Despite Western sanctions targeting specific operators and the EU's transshipment ban, Russian LNG exports reached record levels in 2024, with discounted cargoes reaching European markets and Asian destinations, particularly China, through these sophisticated evasion networks.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chapter="chapter7">
+        <div class="chapter-container align-right">
+          <h2>MV Tutor - Red Sea Maritime Crisis</h2>
+          <p>On June 8, 2024, MV Tutor transited the Suez Canal before going AIS-dark at 21:22 UTC—a defensive measure to conceal its location from regional threat actors. Despite these precautions, Houthi forces struck the Greek-owned bulk carrier with a drone on June 12, causing catastrophic flooding and forcing crew evacuation as the vessel began its fatal drift.</p>
+          <br>
+          <p>Theia's persistent tracking capabilities monitored MV Tutor's trajectory throughout its four-day drift between June 13-17, ultimately detecting the vessel's sinking between 07:53 UTC on June 17 and 08:00 UTC on June 18. This incident marked the second major vessel loss in 2024, further disrupting the critical Red Sea trade corridor and intensifying international calls for enhanced maritime protection in these contested waters.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chapter="chapter8">
+        <div class="chapter-container align-left">
+          <h2>Rubymar Environmental Disaster</h2>
+          <p>On February 18, 2024, Houthi missiles struck the Belize-flagged cargo vessel Rubymar in the Red Sea, initiating a 12-day environmental crisis. The vessel, carrying 21,000 metric tonnes of ammonium phosphate sulphate fertilizer, remained afloat but critically damaged as its cargo and fuel began leaking into one of the world's most ecologically sensitive marine environments.</p>
+          <br>
+          <p>Theia's damage assessment algorithms tracked Rubymar's deteriorating condition throughout its prolonged sinking process, monitoring structural failures and environmental discharge patterns until the vessel's final submersion on March 2. This incident represented the first major environmental catastrophe of the 2024 Red Sea crisis, demonstrating how maritime attacks in critical shipping lanes create cascading ecological and economic consequences far beyond the initial strike.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chapter="chapter9">
+        <div class="chapter-container align-center">
+          <h2>MSC Aries Seizure & Detention</h2>
+          <p>On April 13, 2024, Iranian Revolutionary Guards seized the Portuguese-flagged MSC Aries in the Strait of Hormuz via helicopter-deployed commandos, citing AIS violations and failure to respond to Iranian maritime authorities. The container vessel, linked to Israeli interests through Zodiac Maritime and carrying $93.6 million in cargo, was forcibly diverted to Iranian territorial waters amid escalating regional tensions following the Damascus consulate incident.</p>
+          <br>
+          <p>Theia's persistent surveillance capabilities tracked MSC Aries throughout the seizure sequence—from its final AIS transmission through forced diversion, subsequent cargo unloading operations, and continued detention in Iranian waters. While the 25 crew members gained release in May 2024, the vessel and cargo remain under Iranian control, demonstrating how geopolitical conflicts increasingly manifest through maritime domain seizures in critical global chokepoints.</p>
+        </div>
+      </div>
+
+      <!-- Chapter 10 -->
+      <div class="step" data-chapter="chapter10">
+        <div class="chapter-container align-left">
+          <h2>Chapter 10: ANSHUN II</h2>
+          <p>Between July 1 and August 7 2024, Theia fused multiple data sources to track ANSHUN II:</p>
+          <ul>
+            <li>July 1: detected AIS‐light STS transfer off Singapore.</li>
+            <li>July 3–16: holding 100 km NE of Singapore, AIS‐light imaged six times.</li>
+            <li>July 19–21: transiting north; imaged AIS light on July 20 & 21.</li>
+            <li>July 30: spoofing module flagged false AIS broadcast (ghost track).</li>
+            <li>Aug 1: dark STS transfer ~24 km NE of broadcast; then transited to Malacca City for AIS‐light STS.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Chapter 11 -->
+      <div class="step" data-chapter="chapter11">
+        <div class="chapter-container align-right">
+          <h2>Chapter 11: Amphibious Assault in South China Sea</h2>
+          <p>Theia's monitoring of amphibious exercises in the South China Sea provided critical insights into evolving military capabilities and regional power dynamics.</p>
+        </div>
+      </div>
+
+      <!-- Chapter 12 -->
+      <div class="step" data-chapter="chapter12">
+        <div class="chapter-container align-center">
+          <h2>Chapter 12: Engaging Contested Waters</h2>
+          <p>As 2024 concluded, Theia's comprehensive coverage of contested maritime zones demonstrated the increasing importance of persistent, multi-source intelligence in understanding global maritime security.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final Chart -->
+  <section id="chart-final">
+    <!-- This will be populated by finalchart.js -->
+  </section>
+
+  <!-- UPDATED: After-Map Section with Debrief Analysis -->
+  <section class="after-map">
+    <!-- NEW: Debrief Analysis Section -->
+    <div class="debrief-analysis">
+      <h3>Mission Debrief: 2024 Operational Excellence</h3>
+      <p>
+        The year 2024 represents a watershed moment in maritime intelligence, with Theia's multi-source fusion capabilities reaching unprecedented levels of operational effectiveness. Our regional analysis framework successfully monitored nine critical maritime theaters, each presenting unique challenges and strategic importance to global maritime security.
+      </p>
+      <p>
+        From the high-stakes contested waters of the Persian Gulf to the emerging threats in the Russian Arctic, Theia's adaptive intelligence architecture demonstrated remarkable versatility. The comprehensive regional breakdown above illustrates not just the volume of our detection capabilities, but the strategic distribution of maritime activities across geopolitically sensitive areas.
+      </p>
+      <p>
+        The Persian Gulf's emergence as our most active region—with over 5,900 confirmed detections—reflects both the area's strategic importance and the sophisticated nature of maritime operations in contested waters. Similarly, the Arabian Sea and Red Sea corridors demonstrated the critical role of choke-point monitoring in understanding global maritime security dynamics.
+      </p>
+      <p>
+        Our spoofing detection algorithms proved particularly effective in identifying deceptive practices, with over 2,200 confirmed incidents of positional manipulation detected across all regions. This capability has become essential as maritime actors increasingly employ sophisticated electronic countermeasures to evade traditional monitoring systems.
+      </p>
+    </div>
+
+    <!-- UPDATED: Credits Section -->
+    <footer class="credits">
+      <p>Maritime Intelligence Redefined</p>
+      <p>Written & Visualized by Kris Martin, Rob Gardener & Vivek Patil</p>
+      <p>Edited by Dean Harkess</p>
+      <p>Analysis by Theia Intelligence Team</p>
+      <p>Platform: SynMax Theia, 2025</p>
+    </footer>
+  </section>
+
+  <!-- CLEAN JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 Page initialization started');
+
+      // Hide loading screen after resources load
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const loadingScreen = document.getElementById('loading-screen');
+          if (loadingScreen) {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+              loadingScreen.style.display = 'none';
+            }, 800);
+          }
+        }, 1000);
+      });
+
+      // Enhanced typewriter effect
+      if (typeof Typed !== 'undefined') {
+        new Typed('#typewriter', {
+          strings: ['Year in Review 2024'],
+          typeSpeed: 60,
+          showCursor: true,
+          cursorChar: '|',
+          loop: false,
+          onComplete: (self) => {
+            setTimeout(() => {
+              if (self.cursor) {
+                self.cursor.style.animation = 'fade-out 1s forwards';
+              }
+            }, 1000);
+          }
+        });
+      }
+
+      // Chapter indicator visibility
+      const chapterIndicator = document.getElementById('chapter-indicator');
+      let scrollTimeout;
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > window.innerHeight * 0.5) {
+          chapterIndicator.classList.add('visible');
+          
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
+            chapterIndicator.classList.remove('visible');
+          }, 3000);
+        }
+      });
+
+      // Animate chapter containers on intersection
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.3
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const container = entry.target.querySelector('.chapter-container');
+            if (container) {
+              container.classList.add('active');
+            }
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.step').forEach(step => {
+        observer.observe(step);
+      });
+
+      console.log('✅ Page initialization complete');
+    });
+
+    // UPDATED: Hide legend and date-range after map section ends
+    window.addEventListener('chapterChanged', (e) => {
+      const chapter = e.detail.chapter;
+      const legend = document.getElementById('map-legend');
+      const dateRange = document.getElementById('date-range');
+      
+      // Hide legend and date-range after Chapter 12 or for non-chapter content
+      if (chapter && chapter.startsWith('chapter')) {
+        const chapterNum = parseInt(chapter.replace('chapter', ''));
+        if (chapterNum > 12) {
+          // Hide for chapters beyond 12
+          if (legend) legend.style.display = 'none';
+          if (dateRange) dateRange.style.display = 'none';
+          console.log('🗂️ Legend & Date-Range: Hidden (beyond Chapter 12)');
+        }
+      } else if (chapter !== 'intro') {
+        // Hide for non-chapter content (after scrolling past all chapters)
+        if (legend) legend.style.display = 'none';
+        if (dateRange) dateRange.style.display = 'none';
+        console.log('🗂️ Legend & Date-Range: Hidden (post-chapters)');
+      }
+    });
+
+    // ADDED: Hide legend and date-range when final chart section is reached
+    const finalChartObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const legend = document.getElementById('map-legend');
+          const dateRange = document.getElementById('date-range');
+          
+          if (legend) legend.style.display = 'none';
+          if (dateRange) dateRange.style.display = 'none';
+          console.log('🗂️ Legend & Date-Range: Hidden (final chart section reached)');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Observe the final chart section
+    const finalChartSection = document.getElementById('chart-final');
+    if (finalChartSection) {
+      finalChartObserver.observe(finalChartSection);
+    }
+
+    // Add fade-out animation keyframe
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fade-out {
+        to { opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+
+  <!-- Load animation utilities -->
+  <script src="animate.js"></script>
+  <script src="animate2.js"></script>
+  <script src="animate3.js"></script>
+  <script src="animate4.js"></script>
+  <script src="animate5.js"></script>
+  <script src="animate6.js"></script>
+  <script src="animatechapter4.js"></script>
+  <script src="animatechapter5.js"></script>
+  <script src="animatechapter3.js"></script>
+  <script src="animatechapter2.js"></script>
+  <script src="animatechapter1.js"></script>
+
+  <!-- Load enhanced map logic -->
+  <script src="map.js"></script>
+
+  <!-- Load chart logic -->
+  <script src="chart.js"></script>
+  
+  <!-- Load final chart logic -->
+  <script src="finalchart.js"></script>
+</body>
+</html>

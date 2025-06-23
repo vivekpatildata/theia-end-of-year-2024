@@ -1,0 +1,15 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [73.677, 71.085]
+      },
+      "properties": {
+        "name": "Arctic LNG 2 Terminal"
+      }
+    }
+  ]
+}
