@@ -138,16 +138,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // 7. Load data sources
 async function loadDataSources() {
   const sources = [
-    { name: 'oilspill', file: 'oilspillfinal1.geojson' },
-    { name: 'submarine', file: 'novorossiysk.geojson' },
-    { name: 'sakaryaPath', file: 'final-sakarya_pathoct26dec6.geojson' },
-    { name: 'atilaPath', file: 'final-atilaoct26dec6.geojson' },
-    { name: 'mscariesCourse', file: 'mscaries_course.geojson' },
-    { name: 'mscariesAssessed', file: 'mscaries_assessed_course.geojson' },
-    { name: 'anshun2', file: 'anshun2.geojson' },
-    { name: 'seaTrialArea', file: 'assessedseatrialarea.geojson' },
-    { name: 'asiaTerritories', file: 'asia_territories.geojson' },
-    { name: 'venezuela', file: 'venezuela.geojson' }
+    { name: 'oilspill', file: 'data/oilspillfinal1.geojson' },
+    { name: 'submarine', file: 'data/novorossiysk.geojson' },
+    { name: 'sakaryaPath', file: 'data/final-sakarya_pathoct26dec6.geojson' },
+    { name: 'atilaPath', file: 'data/final-atilaoct26dec6.geojson' },
+    { name: 'mscariesCourse', file: 'data/mscaries_course.geojson' },
+    { name: 'mscariesAssessed', file: 'data/mscaries_assessed_course.geojson' },
+    { name: 'anshun2', file: 'data/anshun2.geojson' },
+    { name: 'seaTrialArea', file: 'data/assessedseatrialarea.geojson' },
+    { name: 'asiaTerritories', file: 'data/asia_territories.geojson' },
+    { name: 'venezuela', file: 'data/venezuela.geojson' }
   ];
 
   for (const source of sources) {
@@ -173,10 +173,10 @@ async function loadIntroCoverageData() {
   
   // Coverage data sources for each mini-map
   const coverageFiles = [
-    'South_america.geojson',     // Mini-map 1
-    'middle_east.geojson',       // Mini-map 2
-    'arctic_russia.geojson',     // Mini-map 3
-    'south_china_sea.geojson'    // Mini-map 4
+    'data/South_america.geojson',     // Mini-map 1
+    'data/middle_east.geojson',       // Mini-map 2
+    'data/arctic_russia.geojson',     // Mini-map 3
+    'data/south_china_sea.geojson'    // Mini-map 4
   ];
 
   // PARALLEL LOADING: Load all coverage files simultaneously
@@ -449,16 +449,16 @@ async function loadChapter6VesselData() {
   
   // Data sources for each mini-map
   const vesselFiles = [
-    'finalviz-pioneertanker.geojson',  // Mini-map 1
-    'asya-path.geojson',               // Mini-map 2
-    'everest20-25august.geojson',      // Mini-map 3
-    'mulan(17sept-31dec2024-cleaned).geojson' // Mini-map 4
+    'data/finalviz-pioneertanker.geojson',  // Mini-map 1
+    'data/asya-path.geojson',               // Mini-map 2
+    'data/everest20-25august.geojson',      // Mini-map 3
+    'data/mulan(17sept-31dec2024-cleaned).geojson' // Mini-map 4
   ];
 
   // PARALLEL LOADING: Load all files simultaneously
   const [arcticData, ...vesselDataArray] = await Promise.all([
     // Load Arctic data
-    fetch('arctic2.json').then(response => {
+    fetch('data/arctic2.json').then(response => {
       if (response.ok) return response.json();
       throw new Error(`Arctic2.json: ${response.status}`);
     }).catch(error => {
@@ -1032,7 +1032,7 @@ const configs = [
           // Only show legend and date range for Middle East (index 1)
           if (i === 1) {
             document.getElementById(`legend-${i + 1}`).innerText = cfg.legend;
-            document.getElementById(`legend-${i + 1}`).style.display = 'block';
+            document.getElementById(`legend-${i + 1}`).style.display = 'none';
             document.getElementById(`daterange-${i + 1}`).innerText = cfg.date;
             document.getElementById(`daterange-${i + 1}`).style.display = 'block';
           } else {
@@ -1217,7 +1217,7 @@ const configs = [
   },
 
   chapter4: {
-    config: { center: [-2.191,36.953], zoom: 5.91, pitch: 0, bearing: 3 },
+    config: { center: [-5.284,36.058], zoom: 7.4, pitch: 0, bearing: 3 },
     legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> & <span style="color: #57aeff; font-weight: 600;">Atila</span> – AIS Path STS Operations',
     dateRange: 'Nov 6 2024 – Nov 12 2024',
     async onEnter() {
@@ -1244,7 +1244,7 @@ const configs = [
   },
 
   chapter5: {
-    config: { center: [24,38.5 ], zoom: 1.6, pitch: 0, bearing: 0 },
+    config: { center: [52.2,37.1 ], zoom: 1.62, pitch: 0, bearing: 0 },
     legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> & <span style="color: #57aeff; font-weight: 600;">Atila</span> – Post-STS Dispersal Routes',
     dateRange: 'Nov 9 2024 – Dec 6 2024',
     async onEnter() {
@@ -1454,9 +1454,9 @@ configs.forEach((cfg, i) => {
   },
 
   chapter9: {
-    config: { center: [55.42189, 25.31823], zoom: 5.72, pitch: 0, bearing: 0 },
+    config: { center: [56.285, 26.174], zoom: 6.72, pitch: 0, bearing: 0 },
     legend: 'MSC Aries – AIS Course & Assessed Course',
-    dateRange: 'Apr 13 2024 – May 2024',
+    dateRange: 'Apr 12 2024 – Oct 2024',
     async onEnter() {
       console.log('Entering chapter9');
       comprehensiveCleanup();
@@ -1503,9 +1503,9 @@ configs.forEach((cfg, i) => {
   },
 
   chapter11: {
-    config: { center: [113.918, 22.086], zoom: 8.27, pitch: 0, bearing: 80.8 },
+    config: { center: [113.6742, 21.9049], zoom: 8.5, pitch: 0, bearing: 70.4 },
     legend: 'Assessed Sea Trial Area - Chinese Amphibious Assault Barges',
-    dateRange: 'Dec 1 2024 – Dec 2024',
+    dateRange: 'Dec 1 2024 – Jan 20 2025',
     async onEnter() {
       console.log('Entering chapter11 - Sea Trials');
       comprehensiveCleanup();
@@ -1540,7 +1540,7 @@ configs.forEach((cfg, i) => {
   },
 
   chapter12: {
-    config: { center: [115.0, 12.0], zoom: 4.3, pitch: 0, bearing: 0 },
+    config: { center: [115.0, 12.0], zoom: 4.4, pitch: 0, bearing: 0 },
     legend: 'South China Sea - Contested Territories & Key Incidents',
     dateRange: '2024',
     async onEnter() {
@@ -1674,3 +1674,430 @@ window.debugMap = {
   addIntroCoverage: addIntroCoverageLayers,
   removeIntroCoverage: removeIntroCoverageLayers
 };
+
+// ═══════════════════════════════════════════════════════════
+// 🚀 ESSENTIAL MAP.JS ENHANCEMENTS FOR MARITIME INTELLIGENCE
+// ═══════════════════════════════════════════════════════════
+
+// 1. 📊 PROGRESS TRACKER - Shows chapter completion
+class ChapterProgressTracker {
+  constructor() {
+    this.totalChapters = 12;
+    this.currentProgress = 0;
+  }
+  
+  updateProgress(chapterNumber) {
+    this.currentProgress = (chapterNumber / this.totalChapters) * 100;
+    
+    // Update CSS progress bar
+    const progressBar = document.querySelector('.chapter-progress');
+    if (progressBar) {
+      progressBar.style.setProperty('--progress-width', `${this.currentProgress}%`);
+    }
+    
+    console.log(`📊 Progress: ${Math.round(this.currentProgress)}% (Chapter ${chapterNumber}/${this.totalChapters})`);
+  }
+}
+
+// 2. 🎬 ENHANCED CAMERA - Cinematic map transitions
+class NextLevelCinematicCamera extends CinematicCamera {
+  constructor(map) {
+    super(map);
+    this.isAnimating = false;
+  }
+  
+  async dramaticZoom(config, options = {}) {
+    this.isAnimating = true;
+    
+    // Stage 1: Overshoot zoom (like camera focusing)
+    await this.flyTo({
+      ...config,
+      zoom: config.zoom + 2, // Zoom in too far
+      duration: options.duration * 0.6 || 600
+    });
+    
+    // Stage 2: Settle to final position
+    await this.flyTo({
+      ...config,
+      duration: options.duration * 0.4 || 400
+    });
+    
+    this.isAnimating = false;
+  }
+  
+  async intelligenceReveal(config, options = {}) {
+    // Start high up (satellite view)
+    await this.flyTo({
+      ...config,
+      pitch: 45,
+      zoom: config.zoom - 1,
+      duration: options.duration * 0.5 || 500
+    });
+    
+    // Descend to operational view
+    await this.flyTo({
+      ...config,
+      pitch: 0,
+      duration: options.duration * 0.5 || 500
+    });
+  }
+  
+  pulseEffect(intensity = 1.2, duration = 600) {
+    const currentZoom = this.map.getZoom();
+    
+    // Zoom in slightly
+    this.map.easeTo({
+      zoom: currentZoom * intensity,
+      duration: duration / 2
+    });
+    
+    // Zoom back out
+    setTimeout(() => {
+      this.map.easeTo({
+        zoom: currentZoom,
+        duration: duration / 2
+      });
+    }, duration / 2);
+  }
+}
+
+// 3. 🚀 SMART PRELOADER - Loads next chapter in background
+class IntelligentPreloader {
+  constructor() {
+    this.preloadedChapters = new Set();
+    this.preloadCache = new Map();
+  }
+  
+  async preloadNextChapter(currentChapter) {
+    const nextChapterNum = parseInt(currentChapter.replace('chapter', '')) + 1;
+    const nextChapterId = `chapter${nextChapterNum}`;
+    
+    if (nextChapterNum <= 12 && !this.preloadedChapters.has(nextChapterId)) {
+      console.log(`🚀 Preloading ${nextChapterId}...`);
+      
+      // Preload data for next chapter
+      const nextChapterConfig = chapters[nextChapterId];
+      if (nextChapterConfig) {
+        await this.preloadChapterData(nextChapterId);
+        this.preloadedChapters.add(nextChapterId);
+      }
+    }
+  }
+  
+  async preloadChapterData(chapterId) {
+    // Define which data files each chapter needs
+    const chapterDataFiles = {
+      'chapter1': ['data/oilspillfinal1.geojson'],
+      'chapter2': ['data/venezuela.geojson'],
+      'chapter3': ['data/novorossiysk.geojson'],
+      'chapter4': ['data/final-sakarya_pathoct26dec6.geojson', 'data/final-atilaoct26dec6.geojson'],
+      'chapter5': ['data/final-sakarya_pathoct26dec6.geojson', 'data/final-atilaoct26dec6.geojson'],
+      'chapter7': ['data/mv_tutor_path.geojson'],
+      'chapter9': ['data/mscaries_course.geojson', 'data/mscaries_assessed_course.geojson'],
+      'chapter10': ['data/anshun2.geojson'],
+      'chapter11': ['data/assessedseatrialarea.geojson'],
+      'chapter12': ['data/asia_territories.geojson']
+    };
+    
+    const files = chapterDataFiles[chapterId] || [];
+    
+    try {
+      const promises = files.map(file => 
+        fetch(file).then(response => {
+          if (response.ok) return response.json();
+          throw new Error(`Failed to load ${file}`);
+        })
+      );
+      
+      const data = await Promise.all(promises);
+      this.preloadCache.set(chapterId, data);
+      console.log(`✅ Preloaded data for ${chapterId}`);
+    } catch (error) {
+      console.warn(`❌ Failed to preload ${chapterId}:`, error);
+    }
+  }
+  
+  getPreloadedData(chapterId) {
+    return this.preloadCache.get(chapterId);
+  }
+}
+
+// 4. 🔄 LAYER TRANSITION MANAGER - Smooth fade effects
+class LayerTransitionManager {
+  constructor(map) {
+    this.map = map;
+    this.activeTransitions = new Set();
+  }
+  
+  async smoothLayerTransition(fromLayers, toLayers, duration = 600) {
+    const transitionId = Math.random().toString(36).substr(2, 9);
+    this.activeTransitions.add(transitionId);
+    
+    console.log(`🔄 Transitioning layers: ${fromLayers.join(', ')} → ${toLayers.join(', ')}`);
+    
+    // Fade out old layers
+    const fadeOutPromises = fromLayers.map(layerId => 
+      this.fadeLayer(layerId, 0, duration / 2)
+    );
+    
+    await Promise.all(fadeOutPromises);
+    
+    // Hide old layers and show new ones
+    fromLayers.forEach(layerId => {
+      if (this.map.getLayer(layerId)) {
+        this.map.setLayoutProperty(layerId, 'visibility', 'none');
+      }
+    });
+    
+    toLayers.forEach(layerId => {
+      if (this.map.getLayer(layerId)) {
+        this.map.setLayoutProperty(layerId, 'visibility', 'visible');
+        this.map.setPaintProperty(layerId, this.getOpacityProperty(layerId), 0);
+      }
+    });
+    
+    // Fade in new layers
+    const fadeInPromises = toLayers.map(layerId => 
+      this.fadeLayer(layerId, 1, duration / 2)
+    );
+    
+    await Promise.all(fadeInPromises);
+    this.activeTransitions.delete(transitionId);
+  }
+  
+  fadeLayer(layerId, targetOpacity, duration) {
+    return new Promise(resolve => {
+      if (!this.map.getLayer(layerId)) {
+        resolve();
+        return;
+      }
+      
+      const opacityProperty = this.getOpacityProperty(layerId);
+      const startOpacity = this.map.getPaintProperty(layerId, opacityProperty) || 0;
+      const startTime = Date.now();
+      
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = progress * (2 - progress); // Ease out
+        const currentOpacity = startOpacity + (targetOpacity - startOpacity) * easeProgress;
+        
+        this.map.setPaintProperty(layerId, opacityProperty, currentOpacity);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          resolve();
+        }
+      };
+      
+      animate();
+    });
+  }
+  
+  getOpacityProperty(layerId) {
+    const layer = this.map.getLayer(layerId);
+    if (!layer) return 'opacity';
+    
+    const type = layer.type;
+    switch (type) {
+      case 'line': return 'line-opacity';
+      case 'fill': return 'fill-opacity';
+      case 'circle': return 'circle-opacity';
+      case 'symbol': return 'text-opacity';
+      default: return 'opacity';
+    }
+  }
+}
+
+// 5. 📱 MOBILE OPTIMIZER - Performance optimization for mobile
+class MobileOptimizer {
+  constructor() {
+    this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth <= 768;
+    this.isLowPower = navigator.hardwareConcurrency < 4;
+    this.optimizations = new Set();
+  }
+  
+  applyOptimizations() {
+    if (this.isMobile || this.isLowPower) {
+      console.log('📱 Applying mobile optimizations...');
+      
+      // Reduce transition durations for mobile
+      document.documentElement.style.setProperty('--mobile-transition-speed', '0.3s');
+      
+      // Disable heavy animations
+      this.optimizations.add('reduced-animations');
+      
+      // Simplify layer transitions
+      this.optimizations.add('fast-transitions');
+      
+      console.log('✅ Mobile optimizations applied');
+    }
+  }
+  
+  isOptimizationActive(optimization) {
+    return this.optimizations.has(optimization);
+  }
+  
+  getMobileTransitionDuration() {
+    return this.isMobile ? 400 : 800; // Faster on mobile
+  }
+}
+
+// 6. 🚀 INITIALIZE ESSENTIAL SYSTEMS
+function initializeEssentialSystems() {
+  console.log('🚀 Initializing essential maritime systems...');
+  
+  // Replace the basic camera with enhanced version
+  camera = new NextLevelCinematicCamera(map);
+  
+  // Initialize all systems
+  const progressTracker = new ChapterProgressTracker();
+  const preloader = new IntelligentPreloader();
+  const layerManager = new LayerTransitionManager(map);
+  const mobileOptimizer = new MobileOptimizer();
+  
+  // Apply mobile optimizations immediately
+  mobileOptimizer.applyOptimizations();
+  
+  // Store globally for access
+  window.maritimeEnhancements = {
+    progressTracker,
+    preloader,
+    layerManager,
+    mobileOptimizer
+  };
+  
+  console.log('✅ Essential systems initialized!');
+}
+
+// 7. 🔧 ENHANCED CHAPTER TRANSITIONS
+async function enhancedChapterTransition(fromChapter, toChapter) {
+  console.log(`🔄 Enhanced transition: ${fromChapter} → ${toChapter}`);
+  
+  // Update progress tracker
+  const chapterNum = parseInt(toChapter.replace('chapter', '')) || 0;
+  if (window.maritimeEnhancements?.progressTracker) {
+    window.maritimeEnhancements.progressTracker.updateProgress(chapterNum);
+  }
+  
+  // Start preloading next chapter
+  if (window.maritimeEnhancements?.preloader) {
+    window.maritimeEnhancements.preloader.preloadNextChapter(toChapter);
+  }
+  
+  // Enhanced camera movement
+  if (chapters[toChapter] && chapters[toChapter].config && camera) {
+    const config = chapters[toChapter].config;
+    const mobileOptimizer = window.maritimeEnhancements?.mobileOptimizer;
+    const duration = mobileOptimizer ? mobileOptimizer.getMobileTransitionDuration() : 800;
+    
+    // Use dramatic zoom for important chapters
+    const dramaticChapters = ['chapter1', 'chapter7', 'chapter8', 'chapter12'];
+    if (dramaticChapters.includes(toChapter)) {
+      await camera.dramaticZoom(config, { duration });
+    } else {
+      await camera.intelligenceReveal(config, { duration });
+    }
+  }
+}
+
+// 8. 🎯 INTEGRATE WITH EXISTING SCROLLAMA
+// Modify the existing chapter transition in setupScrollama
+function enhanceScrollamaTransitions() {
+  // Find the existing scroller setup and enhance it
+  const originalOnStepEnter = async (resp) => {
+    const id = resp.element.dataset.chapter;
+    
+    if (isTransitioning || id === currentChapter) return;
+    
+    console.log(`📍 Chapter transition triggered: ${currentChapter} → ${id}`);
+    
+    isTransitioning = true;
+    
+    try {
+      // Run enhanced transition
+      await enhancedChapterTransition(currentChapter, id);
+      
+      // Continue with original chapter logic
+      if (currentChapter && chapters[currentChapter] && chapters[currentChapter].onExit) {
+        await chapters[currentChapter].onExit();
+      }
+
+      currentChapter = id;
+      
+      if (!chapters[id]) {
+        console.error(`Chapter ${id} not found!`);
+        return;
+      }
+      
+      setLegend(chapters[id].legend || '');
+      setDateRange(chapters[id].dateRange || '');
+
+      if (chapters[id].onEnter) {
+        await chapters[id].onEnter();
+      }
+
+      window.dispatchEvent(new CustomEvent('chapterChanged', {
+        detail: { chapter: id }
+      }));
+      
+    } catch (error) {
+      console.error('Error during enhanced chapter transition:', error);
+    } finally {
+      const transitionDelay = id === 'chapter6' ? 50 : 100;
+      setTimeout(() => {
+        isTransitioning = false;
+      }, transitionDelay);
+    }
+  };
+  
+  // Return the enhanced function for use in setupScrollama
+  return originalOnStepEnter;
+}
+
+// 9. 🚀 AUTO-INITIALIZE WHEN MAP LOADS
+// Add this to your existing map.on('load') callback
+function initializeEnhancementsOnMapLoad() {
+  if (mapLoaded) {
+    // Initialize enhanced systems
+    initializeEssentialSystems();
+    
+    // Start preloading intro data
+    if (window.maritimeEnhancements?.preloader) {
+      window.maritimeEnhancements.preloader.preloadNextChapter('intro');
+    }
+  }
+}
+
+// 10. 📊 PROGRESS BAR CSS INTEGRATION
+// Add this CSS to make progress bar work
+const progressBarCSS = `
+.chapter-progress::before {
+  width: var(--progress-width, 0%);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+`;
+
+// Inject CSS
+if (!document.getElementById('progress-bar-styles')) {
+  const style = document.createElement('style');
+  style.id = 'progress-bar-styles';
+  style.textContent = progressBarCSS;
+  document.head.appendChild(style);
+}
+
+// 11. 🎯 READY TO USE
+console.log('🌊 Essential maritime intelligence enhancements loaded and ready!');
+
+// Initialize when map is ready
+if (typeof map !== 'undefined' && map.loaded()) {
+  initializeEnhancementsOnMapLoad();
+} else {
+  // Wait for map to load
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof map !== 'undefined') {
+      map.on('load', initializeEnhancementsOnMapLoad);
+    }
+  });
+}
