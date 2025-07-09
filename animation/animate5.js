@@ -1,4 +1,4 @@
-// animate5.js - Chapter 11 Sea Trials Animation (Mobile Optimized)
+// animate5.js - Chapter 11 Sea Trials Animation (Final Positioning - Mobile Adapted)
 
 (function(global) {
   // Detection points for Chinese amphibious assault barges sea trials
@@ -11,7 +11,7 @@
           <img src="sat-images/chapter11Anew2.png" class="annotation-img single-img" alt="Sea trial detection">
         </div>
       `,
-      offset: [0, -50], // ADJUST POPUP POSITION: [x, y] - negative y moves up, positive x moves right
+      offset: [0, 260], // FINAL POSITION: Popup below marker
       delay: 500
     },
     {
@@ -23,7 +23,7 @@
           <img src="sat-images/chapter11B.png" class="annotation-img group-img" alt="Group operations">
         </div>
       `,
-      offset: [250, 100], // ADJUST GROUP POPUP POSITION: [x, y] - adjust to prevent overlap
+      offset: [250, 100], // FINAL POSITION: Popup to the right and down
       delay: 800
     },
     {
@@ -135,7 +135,7 @@
       type: 'line',
       source: lineId,
       paint: {
-        'line-color': '#ff0000', // Changed to red to match warning markers
+        'line-color': '#ff0000',
         'line-width': 1,
         'line-opacity': 0.3,
         'line-dasharray': [2, 4]
@@ -184,7 +184,7 @@
   global.animateChapter11SeaTrials = animateChapter11SeaTrials;
   global.clearChapter11 = clearChapter11;
 
-  // Add updated CSS styles - MOBILE OPTIMIZED
+  // Add CSS styles - FINAL POSITIONING ADAPTED FOR MOBILE
   if (!document.getElementById('chapter11-styles')) {
     const style = document.createElement('style');
     style.id = 'chapter11-styles';
@@ -257,7 +257,7 @@
         animation: group-indicator-blink 1s ease-in-out infinite;
       }
 
-      /* Marker animations with red colors */
+      /* Marker animations */
       @keyframes detection-glow {
         0%, 100% {
           box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), 0 0 40px rgba(255, 0, 0, 0.3);
@@ -319,15 +319,17 @@
         border-top-color: rgba(255, 0, 0, 0.2);
       }
 
-      /* DESKTOP SIZES - Perfect as requested */
+      /* DESKTOP: FINAL SIZES - Your Settings */
       .enhanced-popup.single-large {
         display: block;
+        width: 400px;     /* Your final width */
+        height: 220px;    /* Your final height */
+        overflow: hidden;
       }
 
       .enhanced-popup.single-large .annotation-img.single-img {
-        width: 510px !important;         /* <-- Desktop: Single image width */
-        height: 280px !important;        /* <-- Desktop: Single image height */
-        max-height: 280px !important;
+        width: 100% !important;
+        height: 100% !important;
         object-fit: cover !important;
         display: block;
         border-radius: 4px;
@@ -335,36 +337,48 @@
 
       .enhanced-popup.group-large {
         display: block;
+        width: 300px;     /* Your final width */
+        height: 290px;    /* Your final height */
+        overflow: hidden;
       }
 
       .enhanced-popup.group-large .annotation-img.group-img {
-        width: 300px !important;         /* <-- Desktop: Group image width */
-        height: 290px !important;        /* <-- Desktop: Group image height */
+        width: 100% !important;
+        height: 100% !important;
         object-fit: cover !important;
         display: block;
         border-radius: 4px;
       }
 
-      /* TABLET OPTIMIZATIONS (1024px) */
+      /* TABLET OPTIMIZATIONS (1024px) - 75% of your final sizes */
       @media screen and (max-width: 1024px) {
-        .enhanced-popup.single-large .annotation-img.single-img {
-          width: 408px !important;        /* <-- Tablet: 80% of desktop width */
-          height: 224px !important;       /* <-- Tablet: 80% of desktop height */
-          max-width: 408px !important;
-          max-height: 224px !important;
+        .detection-marker {
+          width: 45px;
+          height: 45px;
         }
 
-        .enhanced-popup.group-large .annotation-img.group-img {
-          width: 240px !important;        /* <-- Tablet: 80% of desktop width */
-          height: 232px !important;       /* <-- Tablet: 80% of desktop height */
-          max-width: 240px !important;
-          max-height: 232px !important;
+        .detection-core {
+          width: 26px;
+          height: 26px;
+        }
+
+        .detection-symbol {
+          font-size: 15px;
+        }
+
+        .enhanced-popup.single-large {
+          width: 300px;     /* 75% of 400px */
+          height: 165px;    /* 75% of 220px */
+        }
+
+        .enhanced-popup.group-large {
+          width: 225px;     /* 75% of 300px */
+          height: 218px;    /* 75% of 290px */
         }
       }
 
-      /* MOBILE OPTIMIZATIONS (768px) */
+      /* MOBILE OPTIMIZATIONS (768px) - 60% of your final sizes */
       @media screen and (max-width: 768px) {
-        /* Marker size adjustments for mobile */
         .detection-marker {
           width: 40px;
           height: 40px;
@@ -379,72 +393,84 @@
           font-size: 14px;
         }
 
-        /* Mobile image sizes - 60% of desktop */
-        .enhanced-popup.single-large .annotation-img.single-img {
-          width: 306px !important;        /* <-- Mobile: 60% of desktop width */
-          height: 168px !important;       /* <-- Mobile: 60% of desktop height */
-          max-width: 306px !important;
-          max-height: 168px !important;
+        .enhanced-popup.single-large {
+          width: 240px;     /* 60% of 400px */
+          height: 132px;    /* 60% of 220px */
         }
 
-        .enhanced-popup.group-large .annotation-img.group-img {
-          width: 180px !important;        /* <-- Mobile: 60% of desktop width */
-          height: 174px !important;       /* <-- Mobile: 60% of desktop height */
-          max-width: 180px !important;
-          max-height: 174px !important;
-        }
-      }
-
-      /* SMALL MOBILE OPTIMIZATIONS (480px) */
-      @media screen and (max-width: 480px) {
-        /* Small mobile image sizes - 45% of desktop */
-        .enhanced-popup.single-large .annotation-img.single-img {
-          width: 230px !important;        /* <-- Small mobile: 45% of desktop width */
-          height: 126px !important;       /* <-- Small mobile: 45% of desktop height */
-          max-width: 230px !important;
-          max-height: 126px !important;
+        .enhanced-popup.group-large {
+          width: 180px;     /* 60% of 300px */
+          height: 174px;    /* 60% of 290px */
         }
 
-        .enhanced-popup.group-large .annotation-img.group-img {
-          width: 135px !important;        /* <-- Small mobile: 45% of desktop width */
-          height: 131px !important;       /* <-- Small mobile: 45% of desktop height */
-          max-width: 135px !important;
-          max-height: 131px !important;
-        }
-      }
-
-      /* EXTRA SMALL MOBILE (320px) */
-      @media screen and (max-width: 320px) {
-        /* Extra small mobile image sizes - 35% of desktop */
-        .enhanced-popup.single-large .annotation-img.single-img {
-          width: 179px !important;        /* <-- Extra small: 35% of desktop width */
-          height: 98px !important;        /* <-- Extra small: 35% of desktop height */
-          max-width: 179px !important;
-          max-height: 98px !important;
-        }
-
-        .enhanced-popup.group-large .annotation-img.group-img {
-          width: 105px !important;        /* <-- Extra small: 35% of desktop width */
-          height: 102px !important;       /* <-- Extra small: 35% of desktop height */
-          max-width: 105px !important;
-          max-height: 102px !important;
-        }
-      }
-
-      /* Ensure popups don't overflow on mobile screens */
-      @media screen and (max-width: 768px) {
+        /* Ensure popups stay within viewport */
         .sea-trials-popup .mapboxgl-popup-content {
           max-width: 95vw;
           max-height: 80vh;
-          overflow: auto;
         }
       }
 
-      /* Extra safety for very small screens */
-      @media screen and (max-width: 320px) {
+      /* SMALL MOBILE OPTIMIZATIONS (480px) - 45% of your final sizes */
+      @media screen and (max-width: 480px) {
+        .detection-marker {
+          width: 35px;
+          height: 35px;
+        }
+
+        .detection-core {
+          width: 22px;
+          height: 22px;
+        }
+
+        .detection-symbol {
+          font-size: 13px;
+        }
+
+        .enhanced-popup.single-large {
+          width: 180px;     /* 45% of 400px */
+          height: 99px;     /* 45% of 220px */
+        }
+
+        .enhanced-popup.group-large {
+          width: 135px;     /* 45% of 300px */
+          height: 131px;    /* 45% of 290px */
+        }
+
         .sea-trials-popup .mapboxgl-popup-content {
           max-width: 98vw;
           max-height: 75vh;
+        }
+      }
+
+      /* EXTRA SMALL MOBILE (320px) - 35% of your final sizes */
+      @media screen and (max-width: 320px) {
+        .detection-marker {
+          width: 30px;
+          height: 30px;
+        }
+
+        .detection-core {
+          width: 20px;
+          height: 20px;
+        }
+
+        .detection-symbol {
+          font-size: 12px;
+        }
+
+        .enhanced-popup.single-large {
+          width: 140px;     /* 35% of 400px */
+          height: 77px;     /* 35% of 220px */
+        }
+
+        .enhanced-popup.group-large {
+          width: 105px;     /* 35% of 300px */
+          height: 102px;    /* 35% of 290px */
+        }
+
+        .sea-trials-popup .mapboxgl-popup-content {
+          max-width: 99vw;
+          max-height: 70vh;
         }
       }
     `;

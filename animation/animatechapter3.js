@@ -1,4 +1,4 @@
-// animatechapter3.js - Chapter 3 Animation (Submarine Path with Blinking Markers)
+// animatechapter3.js - Chapter 3 Animation (Submarine Path with Blinking Markers) - SMALLER CONTAINERS
 
 (function(global) {
   // Enhanced data for Chapter 3 with satellite imagery
@@ -188,7 +188,7 @@
   global.animateChapter3Markers = animateChapter3Markers;
   global.clearChapter3 = clearChapter3;
 
-  // Add CSS for Chapter 3 submarine-themed animations
+  // Add CSS for Chapter 3 submarine-themed animations - SMALLER CONTAINERS
   if (!document.getElementById('chapter3-styles')) {
     const style = document.createElement('style');
     style.id = 'chapter3-styles';
@@ -231,20 +231,20 @@
         animation-delay: 0.8s;
       }
       
-      .sonar-sweep {
-        position: relative;
-        top: 50%;
-        left: 50%;
-        width: 60px;
-        height: 60px;
-        border: 1px solid rgba(57, 255, 20, 0.3);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        animation: sonar-sweep 3s linear infinite;
-      }
+      // .sonar-sweep {
+      //   position: absolute;
+      //   top: 50%;
+      //   left: 50%;
+      //   width: 60px;
+      //   height: 60px;
+      //   border: 1px solid rgba(57, 255, 20, 0.3);
+      //   border-radius: 50%;
+      //   transform: translate(-50%, -50%);
+      //   animation: sonar-sweep 3s linear infinite;
+      // }
       
       // .submarine-scan-line {
-      //   position: relative;
+      //   position: absolute;
       //   top: 50%;
       //   left: 50%;
       //   width: 2px;
@@ -290,7 +290,7 @@
       /* SIMPLIFIED POPUPS */
       .chapter3-popup .mapboxgl-popup-content {
         padding: 0;
-        border-radius: 1;
+        border-radius: 4px;
         overflow: hidden;
         background: white;
         border: 1px solid #ccc;
@@ -310,36 +310,78 @@
         border-top-color: rgba(57, 255, 20, 0.2);
       }
 
-      /* DEFAULT SATELLITE IMAGE SIZE - DESKTOP (for images C, D, E) */
+      /* CONTAINER SIZE CONTROLS - IMAGES SCALE WITH CONTAINER */
+      .chapter3-popup .enhanced-popup {
+        display: block;
+        overflow: hidden;
+      }
+
+      /* DEFAULT CONTAINER SIZE - DESKTOP (for images C, D, E) */
       .chapter3-popup .enhanced-popup .annotation-img {
-        width: 203px !important;
-        height: 170px !important;
-        object-fit: fill;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
         display: block;
+        border-radius: 4px;
       }
 
-      /* WIDER SATELLITE IMAGE SIZE - DESKTOP (for images A and B) */
+      /* Set container size for regular images (C, D, E) */
+      .chapter3-popup .enhanced-popup:not(:has(.img-wide)) {
+        width: 170px;    /* <-- ADJUST: Container width for regular images */
+        height: 140px;   /* <-- ADJUST: Container height for regular images */
+      }
+
+      /* WIDER CONTAINER SIZE - DESKTOP (for images A and B with img-wide class) */
+      .chapter3-popup .enhanced-popup:has(.img-wide) {
+        width: 400px;    /* <-- ADJUST: Container width for wide images A & B */
+        height: 140px;   /* <-- ADJUST: Container height for wide images A & B */
+      }
+
+      /* Fallback for browsers that don't support :has() */
+      .chapter3-popup .enhanced-popup {
+        width: 160px;    /* Default container size */
+        height: 140px;   
+      }
+
       .chapter3-popup .enhanced-popup .annotation-img.img-wide {
-        width: 470px !important;    /* <-- WIDER: Change this to adjust width for images A & B */
-        height: 170px !important;   /* <-- Keep same height or adjust as needed */
-        object-fit: wrap;
-        display: block;
+        /* This targets the wide images specifically */
       }
 
-      /* Mobile optimizations */
+      /* Force wider container when img-wide is detected */
+      .chapter3-popup .enhanced-popup:has(.img-wide),
+      .chapter3-popup .enhanced-popup.wide-container {
+        width: 400px !important;   /* Wide container for A & B */
+        height: 140px !important;  
+      }
+
+      /* TABLET OPTIMIZATIONS (1024px) - 80% of desktop */
+      @media screen and (max-width: 1024px) {
+        .enhanced-green-ping {
+          width: 40px;
+          height: 40px;
+        }
+
+        .submarine-core {
+          width: 13px;
+          height: 13px;
+        }
+
+        /* Regular containers (C, D, E) - 80% of desktop */
+        .chapter3-popup .enhanced-popup {
+          width: 128px !important;    /* 80% of 160px */
+          height: 112px !important;   /* 80% of 140px */
+        }
+
+        /* Wide containers (A, B) - 80% of desktop */
+        .chapter3-popup .enhanced-popup:has(.img-wide),
+        .chapter3-popup .enhanced-popup.wide-container {
+          width: 256px !important;    /* 80% of 320px */
+          height: 112px !important;   /* 80% of 140px */
+        }
+      }
+
+      /* MOBILE OPTIMIZATIONS (768px) - 60% of desktop */
       @media screen and (max-width: 768px) {
-        /* MOBILE: DEFAULT SATELLITE IMAGE SIZE (for images C, D, E) */
-        .chapter3-popup .enhanced-popup .annotation-img {
-          width: 80px !important;
-          height: 80px !important;
-        }
-
-        /* MOBILE: WIDER SATELLITE IMAGE SIZE (for images A and B) */
-        .chapter3-popup .enhanced-popup .annotation-img.img-wide {
-          width: 120px !important;   /* <-- WIDER: Change this to adjust mobile width for images A & B */
-          height: 80px !important;   /* <-- Keep same height or adjust as needed */
-        }
-
         .enhanced-green-ping {
           width: 35px;
           height: 35px;
@@ -349,22 +391,23 @@
           width: 12px;
           height: 12px;
         }
+
+        /* Regular containers (C, D, E) - 60% of desktop */
+        .chapter3-popup .enhanced-popup {
+          width: 96px !important;     /* 60% of 160px */
+          height: 84px !important;    /* 60% of 140px */
+        }
+
+        /* Wide containers (A, B) - 60% of desktop */
+        .chapter3-popup .enhanced-popup:has(.img-wide),
+        .chapter3-popup .enhanced-popup.wide-container {
+          width: 192px !important;    /* 60% of 320px */
+          height: 84px !important;    /* 60% of 140px */
+        }
       }
 
-      /* Extra small mobile devices */
+      /* SMALL MOBILE OPTIMIZATIONS (480px) - 45% of desktop */
       @media screen and (max-width: 480px) {
-        /* EXTRA SMALL MOBILE: DEFAULT SATELLITE IMAGE SIZE (for images C, D, E) */
-        .chapter3-popup .enhanced-popup .annotation-img {
-          width: 70px !important;
-          height: 70px !important;
-        }
-
-        /* EXTRA SMALL MOBILE: WIDER SATELLITE IMAGE SIZE (for images A and B) */
-        .chapter3-popup .enhanced-popup .annotation-img.img-wide {
-          width: 100px !important;   /* <-- WIDER: Adjust for very small screens */
-          height: 70px !important;
-        }
-
         .enhanced-green-ping {
           width: 30px;
           height: 30px;
@@ -373,6 +416,53 @@
         .submarine-core {
           width: 10px;
           height: 10px;
+        }
+
+        /* Regular containers (C, D, E) - 45% of desktop */
+        .chapter3-popup .enhanced-popup {
+          width: 72px !important;     /* 45% of 160px */
+          height: 63px !important;    /* 45% of 140px */
+        }
+
+        /* Wide containers (A, B) - 45% of desktop */
+        .chapter3-popup .enhanced-popup:has(.img-wide),
+        .chapter3-popup .enhanced-popup.wide-container {
+          width: 144px !important;    /* 45% of 320px */
+          height: 63px !important;    /* 45% of 140px */
+        }
+      }
+
+      /* EXTRA SMALL MOBILE (320px) - 35% of desktop */
+      @media screen and (max-width: 320px) {
+        .enhanced-green-ping {
+          width: 25px;
+          height: 25px;
+        }
+
+        .submarine-core {
+          width: 8px;
+          height: 8px;
+        }
+
+        /* Regular containers (C, D, E) - 35% of desktop */
+        .chapter3-popup .enhanced-popup {
+          width: 56px !important;     /* 35% of 160px */
+          height: 49px !important;    /* 35% of 140px */
+        }
+
+        /* Wide containers (A, B) - 35% of desktop */
+        .chapter3-popup .enhanced-popup:has(.img-wide),
+        .chapter3-popup .enhanced-popup.wide-container {
+          width: 112px !important;    /* 35% of 320px */
+          height: 49px !important;    /* 35% of 140px */
+        }
+      }
+
+      /* Viewport safety for all mobile screens */
+      @media screen and (max-width: 768px) {
+        .chapter3-popup .mapboxgl-popup-content {
+          max-width: 95vw;
+          max-height: 80vh;
         }
       }
     `;

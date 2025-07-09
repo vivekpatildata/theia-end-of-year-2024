@@ -1,4 +1,4 @@
-// animate4.js - ANSHUN II Vessel Tracking Animation (Mobile-Friendly 900px)
+// animate4.js - ANSHUN II Vessel Tracking Animation (Complete Mobile-Responsive Version)
 
 (function(global) {
   // Detection points with annotations based on the tracking narrative
@@ -251,7 +251,7 @@
   global.animateAnshunPath = animateAnshunPath;
   global.clearChapter10 = clearChapter10;
 
-  // Add CSS styles for Chapter 10 - FIXED IMAGE SIZING
+  // Add CSS styles for Chapter 10 - COMPLETE MOBILE-RESPONSIVE VERSION
   if (!document.getElementById('chapter10-styles')) {
     const style = document.createElement('style');
     style.id = 'chapter10-styles';
@@ -385,28 +385,43 @@
         border-top-color: rgba(255, 0, 0, 0.2);
       }
 
-      /* FIXED IMAGE SIZING - Start with default (desktop) */
+      /* COMPLETE RESPONSIVE IMAGE SIZING */
+      /* DEFAULT (LARGE DESKTOP 1200px+) - Full size */
       .anshun-popup .enhanced-popup .annotation-img {
-        width: 220px !important;
-        height: 230px !important;
+        width: 200px !important;
+        height: 204px !important;
         object-fit: cover !important;
         display: block;
         border-radius: 4px;
       }
 
-      /* LARGE DESKTOP (1200px+) - Keep full size */
-      @media screen and (min-width: 1200px) {
+      /* DESKTOP (1024px - 1199px) - Slightly smaller */
+      @media screen and (max-width: 1199px) and (min-width: 1024px) {
         .anshun-popup .enhanced-popup .annotation-img {
-          width: 220px !important;
-          height: 230px !important;
+          width: 180px !important;
+          height: 184px !important;
         }
       }
 
-      /* TABLET OPTIMIZATIONS (1024px and below) - 70% of desktop */
-      @media screen and (max-width: 1024px) {
+      /* TABLET LANDSCAPE (900px - 1023px) - Good size for tablets */
+      @media screen and (max-width: 1023px) and (min-width: 900px) {
         .anshun-popup .enhanced-popup .annotation-img {
-          width: 220px !important;        /* 70% of 900px */
-          height: 230px !important;       /* 70% of 900px */
+          width: 160px !important;
+          height: 164px !important;
+        }
+        
+        .anshun-popup .mapboxgl-popup-content {
+          max-width: 85vw !important;
+          max-height: 75vh !important;
+          overflow: auto;
+        }
+      }
+
+      /* TABLET PORTRAIT (768px - 899px) - Tablet optimized */
+      @media screen and (max-width: 899px) and (min-width: 768px) {
+        .anshun-popup .enhanced-popup .annotation-img {
+          width: 140px !important;
+          height: 144px !important;
         }
         
         .anshun-popup .mapboxgl-popup-content {
@@ -416,8 +431,32 @@
         }
       }
 
-      /* MOBILE OPTIMIZATIONS (768px and below) - 50% of desktop */
-      @media screen and (max-width: 768px) {
+      /* MOBILE LANDSCAPE (600px - 767px) - Mobile landscape */
+      @media screen and (max-width: 767px) and (min-width: 600px) {
+        .red-dot {
+          width: 20px;
+          height: 20px;
+        }
+
+        .red-ping-marker {
+          width: 22px;
+          height: 22px;
+        }
+
+        .anshun-popup .enhanced-popup .annotation-img {
+          width: 120px !important;
+          height: 124px !important;
+        }
+        
+        .anshun-popup .mapboxgl-popup-content {
+          max-width: 85vw !important;
+          max-height: 65vh !important;
+          overflow: auto;
+        }
+      }
+
+      /* MOBILE PORTRAIT (480px - 599px) - Standard mobile */
+      @media screen and (max-width: 599px) and (min-width: 480px) {
         .red-dot {
           width: 18px;
           height: 18px;
@@ -429,8 +468,8 @@
         }
 
         .anshun-popup .enhanced-popup .annotation-img {
-          width: 450px !important;        /* 50% of 900px */
-          height: 450px !important;       /* 50% of 900px */
+          width: 100px !important;
+          height: 104px !important;
         }
         
         .anshun-popup .mapboxgl-popup-content {
@@ -440,31 +479,159 @@
         }
       }
 
-      /* SMALL MOBILE OPTIMIZATIONS (480px and below) - 35% of desktop */
-      @media screen and (max-width: 480px) {
+      /* SMALL MOBILE (400px - 479px) - Smaller phones */
+      @media screen and (max-width: 479px) and (min-width: 400px) {
+        .red-dot {
+          width: 16px;
+          height: 16px;
+        }
+
+        .red-ping-marker {
+          width: 18px;
+          height: 18px;
+        }
+
         .anshun-popup .enhanced-popup .annotation-img {
-          width: 315px !important;        /* 35% of 900px */
-          height: 315px !important;       /* 35% of 900px */
+          width: 85px !important;
+          height: 89px !important;
         }
         
         .anshun-popup .mapboxgl-popup-content {
-          max-width: 95vw !important;
+          max-width: 92vw !important;
           max-height: 55vh !important;
           overflow: auto;
         }
       }
 
-      /* EXTRA SMALL MOBILE (320px and below) - 25% of desktop */
-      @media screen and (max-width: 320px) {
+      /* EXTRA SMALL MOBILE (350px - 399px) - Very small phones */
+      @media screen and (max-width: 399px) and (min-width: 350px) {
+        .red-dot {
+          width: 14px;
+          height: 14px;
+        }
+
+        .red-ping-marker {
+          width: 16px;
+          height: 16px;
+        }
+
         .anshun-popup .enhanced-popup .annotation-img {
-          width: 225px !important;        /* 25% of 900px */
-          height: 225px !important;       /* 25% of 900px */
+          width: 70px !important;
+          height: 74px !important;
+        }
+        
+        .anshun-popup .mapboxgl-popup-content {
+          max-width: 95vw !important;
+          max-height: 50vh !important;
+          overflow: auto;
+        }
+      }
+
+      /* TINY MOBILE (320px - 349px) - Smallest phones */
+      @media screen and (max-width: 349px) and (min-width: 320px) {
+        .red-dot {
+          width: 12px;
+          height: 12px;
+        }
+
+        .red-ping-marker {
+          width: 14px;
+          height: 14px;
+        }
+
+        .anshun-popup .enhanced-popup .annotation-img {
+          width: 60px !important;
+          height: 64px !important;
         }
         
         .anshun-popup .mapboxgl-popup-content {
           max-width: 98vw !important;
-          max-height: 50vh !important;
+          max-height: 45vh !important;
           overflow: auto;
+        }
+      }
+
+      /* ULTRA SMALL (under 320px) - Safety fallback */
+      @media screen and (max-width: 319px) {
+        .red-dot {
+          width: 10px;
+          height: 10px;
+        }
+
+        .red-ping-marker {
+          width: 12px;
+          height: 12px;
+        }
+
+        .anshun-popup .enhanced-popup .annotation-img {
+          width: 50px !important;
+          height: 54px !important;
+        }
+        
+        .anshun-popup .mapboxgl-popup-content {
+          max-width: 98vw !important;
+          max-height: 40vh !important;
+          overflow: auto;
+        }
+      }
+
+      /* ENHANCED MOBILE TOUCH OPTIMIZATIONS */
+      @media screen and (max-width: 768px) {
+        .anshun-popup .mapboxgl-popup-content {
+          /* Better touch scrolling */
+          -webkit-overflow-scrolling: touch;
+          /* Better readability on mobile */
+          font-size: 14px;
+          line-height: 1.4;
+        }
+
+        .anshun-popup .enhanced-popup .annotation-img {
+          /* Better touch interaction */
+          touch-action: manipulation;
+          /* Prevent image selection on mobile */
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+
+        /* Adjust marker ring effects for mobile performance */
+        .red-dot::before,
+        .red-ping-marker::before {
+          animation-duration: 2.5s; /* Slightly slower for battery life */
+        }
+
+        /* Reduce glow intensity on mobile to save battery */
+        .red-dot {
+          box-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
+        }
+
+        .red-ping-marker {
+          box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+        }
+      }
+
+      /* HIGH-DPI DISPLAY OPTIMIZATIONS */
+      @media screen and (-webkit-min-device-pixel-ratio: 2), 
+             screen and (min-resolution: 192dpi) {
+        .anshun-popup .enhanced-popup .annotation-img {
+          /* Better image rendering on retina displays */
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: optimize-contrast;
+        }
+      }
+
+      /* LANDSCAPE ORIENTATION ADJUSTMENTS */
+      @media screen and (orientation: landscape) and (max-height: 500px) {
+        .anshun-popup .mapboxgl-popup-content {
+          max-height: 80vh !important; /* More height in landscape */
+        }
+      }
+
+      /* PORTRAIT ORIENTATION ADJUSTMENTS */
+      @media screen and (orientation: portrait) and (max-width: 768px) {
+        .anshun-popup .mapboxgl-popup-content {
+          max-height: 60vh !important; /* Less height in portrait to keep map visible */
         }
       }
     `;

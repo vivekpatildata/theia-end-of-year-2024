@@ -236,7 +236,6 @@ html, body {
   }
 }
 
-
 /* Scroll Indicator */
 .scroll-indicator {
   position: absolute;
@@ -318,7 +317,7 @@ html, body {
 }
 
 #date-range {
-  top: 80px;
+  top: 100px;
   right: 20px;
   color: var(--secondary-glow);
   font-weight: 500;
@@ -343,7 +342,7 @@ html, body {
 
 /* Enhanced Date Range with Maritime Gold */
 #date-range {
-  top: 80px;
+  top: 100px;
   right: 20px;
   color: var(--maritime-gold);
   font-weight: 600;
@@ -474,9 +473,6 @@ html, body {
   line-height: 1.6;
   text-align: left;                 /* KEEP: list items left-aligned */
 }
-
-/* REMOVED: Old alignment classes that only affected text */
-/* These are no longer needed since we're using container positioning */
 
 /* Final Chart Section */
 #chart-final {
@@ -962,7 +958,7 @@ html, body {
 }
 
 /*─────────────────────────────────────────────────────────
-  Mobile Optimizations
+  Mobile Optimizations - FIXED
 ──────────────────────────────────────────────────────────*/
 @media screen and (max-width: 768px) {
   /* Banner Mobile */
@@ -1001,58 +997,94 @@ html, body {
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Map Elements Mobile */
-  #map-legend, #date-range {
-    font-size: 0.8rem;
-    padding: 0.75rem 1rem;
-  }
-
+  /* FIXED: Map Legend Mobile - Prevent full width */
   #map-legend {
-    bottom: 60px;
-    left: 10px;
-    right: 10px;
-    max-width: calc(100% - 20px);
-  }
-
-  #date-range {
-    top: 60px;
+    bottom: 10px;
     left: 10px;
     right: auto;
+    max-width: 60%;
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+  }
+
+  /* FIXED: Date Range Mobile - Position in top right, smaller */
+  #date-range {
+    top: 30px;
+    right: 10px;
+    left: auto;
+    max-width: 45%;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+  }
+
+  /* FIXED: Mini-map date ranges - Adjusted positioning */
+  #daterange-1 {
+    top: 5px;
+    left: 5px !important;
+    right: auto !important;
+    font-size: 0.65rem;
+    padding: 0.3rem 0.5rem;
+    max-width: 45%;
+  }
+
+  #daterange-2,
+  #daterange-3,
+  #daterange-4 {
+    top: 5px;
+    right: 5px;
+    left: auto;
+    font-size: 0.65rem;
+    padding: 0.3rem 0.5rem;
+    max-width: 45%;
   }
 
   /* Story Panels Mobile */
   .step {
-    padding: 40vh 1rem;
+    padding: 30vh 0.5rem;
   }
 
-  /* MOBILE: Container positioning with safety margins */
+  /* FIXED: Compact Mobile Chapter Containers */
   .chapter-container {
-    padding: 1.2rem 1.5rem;
+    padding: 0.8rem 1rem;
     border-radius: 12px;
-    max-width: calc(100% - 2rem);
-    margin: 0 1rem;                    /* DEFAULT: centered with margins */
+    max-width: calc(100% - 1rem);
+    margin: 0 0.5rem;
   }
 
   .chapter-container.align-left {
-    margin: 0 1rem 0 1rem;             /* MOBILE LEFT: safe margins */
+    margin: 0 0.5rem 0 0.5rem;
   }
 
   .chapter-container.align-center {
-    margin: 0 1rem;                    /* MOBILE CENTER: safe margins */
+    margin: 0 0.5rem;
   }
 
   .chapter-container.align-right {
-    margin: 0 1rem 0 1rem;             /* MOBILE RIGHT: safe margins */
+    margin: 0 0.5rem 0 0.5rem;
   }
 
+  /* FIXED: Smaller mobile text */
   .chapter-container h2 {
-    font-size: 0.7rem;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
   }
 
   .chapter-container p {
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .chapter-container ul {
+    margin: 0.8rem 0;
+    padding-left: 1.2rem;
+  }
+
+  .chapter-container li {
+    margin: 0.4rem 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   /* Mini-maps Mobile */
@@ -1063,73 +1095,85 @@ html, body {
   }
 
   .mini-legend, .mini-daterange {
-    font-size: 0.7rem;
-    padding: 0.4rem 0.8rem;
+    font-size: 0.65rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .mini-legend {
+    bottom: 5px;
+    left: 5px;
+    max-width: 50%;
+  }
+
+  .mini-daterange {
+    top: 5px;
+    right: 5px;
+    max-width: 50%;
   }
 
   /* Annotations Mobile */
   .annotation-img {
-    width: 150px;
+    width: 140px;
   }
 
   .annotation-img-large {
-    width: 180px;
+    width: 160px;
   }
 
   .annotation-text {
-    font-size: 0.85rem;
-    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    padding: 0.6rem 0.8rem;
   }
 
   /* Markers Mobile */
   .red-ping-marker {
-    width: 22px;
-    height: 22px;
-  }
-
-  .ping-marker {
     width: 20px;
     height: 20px;
   }
 
-  .sts-marker .dot {
+  .ping-marker {
     width: 18px;
     height: 18px;
   }
 
+  .sts-marker .dot {
+    width: 16px;
+    height: 16px;
+  }
+
   .crash-marker-container {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
   }
 
   /* Final Chart Mobile */
   #chart-final {
-    padding: 3rem 1rem;
+    padding: 2rem 1rem;
   }
 
   .chart-container h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .explanation {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   /* After-Map Mobile */
   .after-map {
-    padding: 3rem 1rem;
+    padding: 2rem 1rem;
   }
 
   .debrief-analysis {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .debrief-analysis h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .debrief-analysis p {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 }
 

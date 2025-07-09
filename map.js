@@ -306,7 +306,7 @@ function addIntroCoverageLayers() {
               paint: {
                 'line-color': '#660000', // Darker red for borders
                 'line-width': 1.5,
-                'line-opacity': 0.7
+                'line-opacity': 1
               }
             });
             
@@ -359,7 +359,7 @@ function addIntroCoverageLayers() {
               paint: {
                 'text-color': '#ffffff',
                 'text-halo-color': '#8b0000', // Deep red halo
-                'text-halo-width': 2,
+                'text-halo-width': 2.5,
                 'text-opacity': 0.9
               }
             });
@@ -1018,7 +1018,7 @@ const chapters = {
        // Enhanced intro configurations
 const configs = [
   { center: [-63.8, 13.17], zoom: 3.1, legend: 'South American Coverage', date: 'Jan 2024 – Dec 2024' },
-  { center: [39.56, 23.69], zoom: 3.2, legend: 'Middle East Coverage', date: 'Strategic maritime chokepoints monitored continuously' },
+  { center: [39.56, 23.69], zoom: 3.2, legend: 'Middle East Coverage', date: 'Multi-source intelligence fusion across critical maritime corridors' },
   { center: [102.62, 75.05], zoom: 2, legend: 'Russian Arctic Coverage', date: 'Jan 2024 – Dec 2024' },
   { center: [115.34, 17.32], zoom: 4, legend: 'South China Coverage', date: 'Apr 2024 – Sep 2024' }
 ];
@@ -1110,7 +1110,7 @@ const configs = [
 
   chapter1: {
     config: { center: [-60.7328, 11.1762], zoom: 11.5, pitch: 0, bearing: 0 },
-    legend: 'Gulfstream Wreck Site & Oil Contamination Zone',
+    legend: '<span style="color: #ffd700; font-weight: 600;">Gulfstream Wreck Site & Oil Contamination Zone</span>',
     dateRange: 'Feb 7 2024 – Apr 27 2025',
     async onEnter() {
       console.log('Entering chapter1');
@@ -1144,7 +1144,7 @@ const configs = [
   // UPDATED CHAPTER 2 with Venezuela integration
   chapter2: {
     config: { center: [-66.28, 10.91], zoom: 4.89, pitch: 0, bearing: -8.8 },
-    legend: 'Venezuela STS Detection & Dark Fleet Tracking',
+    legend: '<span style="color: #ffd700; font-weight: 600;">Venezuela STS Detection & Dark Fleet Tracking</span>',
     dateRange: 'Apr 2024 – May 31 2024',
     async onEnter() {
       console.log('Entering chapter2 - Venezuela STS Operations');
@@ -1190,7 +1190,7 @@ const configs = [
   },
 
   chapter3: {
-    config: { center: [21.33, 48], zoom: 3.47, pitch: 0, bearing: 3 },
+    config: { center: [11.95, 47.87], zoom: 3.43, pitch: 0, bearing: 3 },
     legend: 'Assessed Submarine Course',
     dateRange: 'Aug 21 2024 – Sep 21 2024',
     async onEnter() {
@@ -1218,7 +1218,7 @@ const configs = [
 
   chapter4: {
     config: { center: [-5.284,36.058], zoom: 7.4, pitch: 0, bearing: 3 },
-    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> & <span style="color: #57aeff; font-weight: 600;">Atila</span> – AIS Path STS Operations',
+    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> & <span style="color: #57aeff; font-weight: 600;">Atila</span> <span style="color: #ffd700; font-weight: 600;">– AIS Path STS Operations</span>',
     dateRange: 'Nov 6 2024 – Nov 12 2024',
     async onEnter() {
       console.log('Entering chapter4');
@@ -1245,7 +1245,7 @@ const configs = [
 
   chapter5: {
     config: { center: [52.2,37.1 ], zoom: 1.62, pitch: 0, bearing: 0 },
-    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> & <span style="color: #57aeff; font-weight: 600;">Atila</span> – Post-STS Dispersal Routes',
+    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> & <span style="color: #57aeff; font-weight: 600;">Atila</span><span style="color: #ffd700; font-weight: 600;">– Post-STS Dispersal Routes</span>',
     dateRange: 'Nov 9 2024 – Dec 6 2024',
     async onEnter() {
       console.log('Entering chapter5');
@@ -1287,25 +1287,25 @@ const configs = [
           { 
             center: [35.803,73.989], 
             zoom: 6.26, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Pioneer</span> - Symmetrical AIS Spoofing', 
-            date: 'August 2024'
+            legend: '<span style="color: #62fda0; font-weight: 600;">Pioneer</span> <span style="color: #ffd700; font-weight: 600;">- Symmetrical AIS Spoofing</span>', 
+            date: '1 - 6 Aug 2024'
           },
           { 
             center: [35.408,74.148], 
             zoom: 6.3, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Asya Energy</span> - Asymmetrical Pattern Manipulation', 
-            date: 'August 2024'
+            legend: '<span style="color: #62fda0; font-weight: 600;">Asya Energy</span><span style="color: #ffd700; font-weight: 600;">- Asymmetrical AIS Spoofing</span>', 
+            date: '2 -15 Aug 2024'
           },
           { 
             center: [47.83, 73.6], 
             zoom: 3.2, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Everest Energy</span> - Coordinated Multi-Vessel Deception', 
+            legend: '<span style="color: #62fda0; font-weight: 600;">Everest Energy</span> - <span style="color: #ffd700; font-weight: 600;">- AIS Switched Off for a brief time (Dark AIS) </span>', 
             date: '20 - 25 Aug 2024'
           },
           { 
             center: [47.83, 73.6], 
             zoom: 2.8, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Mulan</span> - Extended Dark Operations', 
+            legend: '<span style="color: #62fda0; font-weight: 600;">Mulan</span><span style="color: #ffd700; font-weight: 600;">- Loitering Ballast for days before picking up cargo from ALNG2   </span>', 
             date: 'Sept 17 – Dec 31 2024'
           }
         ];
@@ -1417,7 +1417,7 @@ configs.forEach((cfg, i) => {
 
   chapter7: {
     config: { center: [39.92, 25.76], zoom: 4.44, pitch: 0, bearing: 30 },
-    legend: 'MV Tutor Track & Final Position Analysis',
+    legend: '<span style="color: #ffd700; font-weight: 600;">MV Tutor Track & Final Position Analysis</span>',
     dateRange: 'Jun 8 2024 – Jun 18 2024',
     async onEnter() {
       console.log('Entering chapter7');
@@ -1436,7 +1436,7 @@ configs.forEach((cfg, i) => {
 
   chapter8: {
     config: { center: [49.21, 16.29], zoom: 4, pitch: 0, bearing: 3 },
-    legend: 'Rubymar Environmental Impact Zone & Sinking Analysis',
+    legend: '<span style="color: #ffd700; font-weight: 600;">Rubymar Satellite-based damage assessment and ecological impact tracking</span>',
     dateRange: 'Feb 18 2024 – Mar 2 2024',
     async onEnter() {
       console.log('Entering chapter8');
@@ -1504,7 +1504,7 @@ configs.forEach((cfg, i) => {
 
   chapter11: {
     config: { center: [113.6742, 21.9049], zoom: 8.5, pitch: 0, bearing: 70.4 },
-    legend: 'Assessed Sea Trial Area - Chinese Amphibious Assault Barges',
+    legend: '<span style="color: #ffd700; font-weight: 600;">Assessed Sea Trial Area - Chinese Amphibious Assault Barges</span>',
     dateRange: 'Dec 1 2024 – Jan 20 2025',
     async onEnter() {
       console.log('Entering chapter11 - Sea Trials');
@@ -1540,9 +1540,9 @@ configs.forEach((cfg, i) => {
   },
 
   chapter12: {
-    config: { center: [115.0, 12.0], zoom: 4.4, pitch: 0, bearing: 0 },
-    legend: 'South China Sea - Contested Territories & Key Incidents',
-    dateRange: '2024',
+    config: { center: [115.0, 12.0], zoom: 4.5, pitch: 0, bearing: 0 },
+    legend: '<span style="color: #ffd700; font-weight: 600;">South China Sea - Contested Territories & Key Incidents</span>',
+    dateRange: 'Oct - Dec 2024',
     async onEnter() {
       console.log('Entering chapter12 - Contested Islands with Territories');
       comprehensiveCleanup();
