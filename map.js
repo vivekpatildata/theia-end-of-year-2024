@@ -984,10 +984,24 @@ function clearAllMarkers() {
   });
 }
 
-// Enhanced comprehensive cleanup
+// FIND this function in map.js and REPLACE it with this version:
+
 function comprehensiveCleanup() {
   console.log('Running comprehensive cleanup...');
   
+  // ADD THIS BLOCK - Force cleanup all animation chapters FIRST
+  ['forceCleanupChapter7', 'forceCleanupChapter8', 'forceCleanupChapter11', 'forceCleanupChapter12'].forEach(funcName => {
+    if (window[funcName] && typeof window[funcName] === 'function') {
+      try { 
+        window[funcName](); 
+        console.log(`✅ ${funcName} executed successfully`);
+      } catch(e) { 
+        console.warn(`❌ Error in ${funcName}:`, e); 
+      }
+    }
+  });
+  
+  // Your existing cleanup code continues here...
   clearAllTimeouts();
   hideAllLayers();
   clearAllMarkers();

@@ -1,6 +1,10 @@
 // animate6.js - Chapter 12 Contested Islands Animation (NO DELAYS, NO ANIMATIONS - DIRECT PLOTTING)
 
 (function(global) {
+  // Chapter state tracking for Chapter 12
+  let isChapter12Active = false;
+  let chapter12CleanupCallbacks = [];
+
   // Enhanced Chapter 12 points with red markers, text boxes, and satellite images
   const chapter12Points = [
     {
@@ -32,13 +36,67 @@
   let chapter12Popups = [];
 
   /**
+   * Force cleanup function for Chapter 12
+   */
+  function forceCleanupChapter12(map) {
+    console.log('🧹 Force cleanup Chapter 12 triggered');
+    
+    // Set chapter as inactive
+    isChapter12Active = false;
+    
+    // Execute all cleanup callbacks
+    chapter12CleanupCallbacks.forEach(callback => {
+      try {
+        callback();
+      } catch (e) {
+        console.warn('Chapter 12 cleanup callback error:', e);
+      }
+    });
+    chapter12CleanupCallbacks = [];
+    
+    // Remove all Chapter 12 popups IMMEDIATELY (using different variable name)
+    const chapter12PopupElements = document.querySelectorAll('.chapter12-popup');
+    chapter12PopupElements.forEach(popup => {
+      popup.remove();
+    });
+    
+    // Remove all Chapter 12 markers IMMEDIATELY
+    chapter12Markers.forEach(marker => {
+      try {
+        marker.remove();
+      } catch (e) {
+        console.warn('Error removing Chapter 12 marker:', e);
+      }
+    });
+    chapter12Markers = [];
+    
+    // Remove Chapter 12 popups from array
+    chapter12Popups.forEach(p => {
+      try {
+        p.remove();
+      } catch (e) {
+        console.warn('Error removing Chapter 12 popup:', e);
+      }
+    });
+    chapter12Popups = [];
+    
+    console.log('✅ Force cleanup Chapter 12 completed');
+  }
+
+  /**
    * Main animation function for Chapter 12 - DIRECT PLOTTING (NO DELAYS/ANIMATIONS)
    */
   function animateChapter12ContestedIslands(map) {
     console.log('Starting Chapter 12 contested islands - direct plotting...');
     
+    // Set chapter as active
+    isChapter12Active = true;
+    
     chapter12Points.forEach((pt, idx) => {
       try {
+        // Check if chapter is still active
+        if (!isChapter12Active) return;
+        
         // 1. Create red blinking marker - DIRECT PLOTTING
         const markerEl = document.createElement('div');
         markerEl.className = 'chapter12-red-marker';
@@ -55,6 +113,11 @@
         chapter12Markers.push(marker);
         console.log(`✅ Direct plot: Red marker ${idx + 1} at:`, pt.coords);
 
+        // Add cleanup callback
+        chapter12CleanupCallbacks.push(() => {
+          marker.remove();
+        });
+
         // 2. Create text annotation box - DIRECT PLOTTING
         const textEl = document.createElement('div');
         textEl.className = 'chapter12-text-annotation';
@@ -68,6 +131,11 @@
         
         chapter12Markers.push(textMarker);
         console.log(`✅ Direct plot: Text box ${idx + 1}`);
+
+        // Add cleanup callback
+        chapter12CleanupCallbacks.push(() => {
+          textMarker.remove();
+        });
 
         // 3. Create satellite image popup - DIRECT PLOTTING
         const popup = new mapboxgl.Popup({
@@ -84,6 +152,11 @@
         chapter12Popups.push(popup);
         console.log(`✅ Direct plot: Satellite popup ${idx + 1}`);
 
+        // Add cleanup callback
+        chapter12CleanupCallbacks.push(() => {
+          popup.remove();
+        });
+
       } catch (error) {
         console.error(`❌ Error in Chapter 12 direct plotting for point ${idx + 1}:`, error);
       }
@@ -94,40 +167,16 @@
    * Cleanup for Chapter 12 - IMMEDIATE REMOVAL
    */
   function clearChapter12(map) {
-    console.log('🧹 Clearing Chapter 12 - immediate removal...');
-
-    try {
-      // Remove markers immediately
-      chapter12Markers.forEach((marker, idx) => {
-        try {
-          marker.remove();
-          console.log(`✅ Removed marker ${idx + 1}`);
-        } catch (error) {
-          console.error(`❌ Error removing marker ${idx + 1}:`, error);
-        }
-      });
-      chapter12Markers = [];
-
-      // Remove popups immediately
-      chapter12Popups.forEach((popup, idx) => {
-        try {
-          popup.remove();
-          console.log(`✅ Removed popup ${idx + 1}`);
-        } catch (error) {
-          console.error(`❌ Error removing popup ${idx + 1}:`, error);
-        }
-      });
-      chapter12Popups = [];
-
-      console.log('✅ Chapter 12 cleanup complete');
-    } catch (error) {
-      console.error('❌ Error in Chapter 12 cleanup:', error);
-    }
+    console.log('🧹 clearChapter12 called');
+    
+    // Set chapter as inactive and use force cleanup
+    forceCleanupChapter12(map);
   }
 
   // Expose functions globally
   global.animateChapter12ContestedIslands = animateChapter12ContestedIslands;
   global.clearChapter12 = clearChapter12;
+  global.forceCleanupChapter12 = forceCleanupChapter12;
 
   // Add enhanced CSS styles with mobile responsiveness - ADJUSTED FOR YOUR CHANGES
   if (!document.getElementById('chapter12-styles')) {

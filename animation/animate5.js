@@ -1,6 +1,10 @@
 // animate5.js - Chapter 11 Sea Trials Animation (Final Positioning - Mobile Adapted)
 
 (function(global) {
+  // Chapter state tracking for Chapter 11
+  let isChapter11Active = false;
+  let chapter11CleanupCallbacks = [];
+
   // Detection points for Chinese amphibious assault barges sea trials
   const chapter11Points = [
     {
@@ -51,13 +55,68 @@
   let chapter11Popups = [];
 
   /**
+   * Force cleanup function for Chapter 11
+   */
+  function forceCleanupChapter11(map) {
+    console.log('🧹 Force cleanup Chapter 11 triggered');
+    
+    // Set chapter as inactive
+    isChapter11Active = false;
+    
+    // Execute all cleanup callbacks
+    chapter11CleanupCallbacks.forEach(callback => {
+      try {
+        callback();
+      } catch (e) {
+        console.warn('Chapter 11 cleanup callback error:', e);
+      }
+    });
+    chapter11CleanupCallbacks = [];
+    
+    // Remove all Chapter 11 popups IMMEDIATELY
+    const seaTrialsPopups = document.querySelectorAll('.sea-trials-popup');
+    seaTrialsPopups.forEach(popup => {
+      popup.remove();
+    });
+    
+    // Remove all Chapter 11 markers IMMEDIATELY
+    chapter11Markers.forEach(marker => {
+      marker.remove();
+    });
+    chapter11Markers = [];
+    
+    // Remove Chapter 11 popups from array
+    chapter11Popups.forEach(p => p.remove());
+    chapter11Popups = [];
+    
+    // Remove connection lines
+    for (let i = 2; i <= 5; i++) {
+      const lineId = `group-connection-${i}`;
+      if (map.getLayer(lineId)) {
+        map.removeLayer(lineId);
+      }
+      if (map.getSource(lineId)) {
+        map.removeSource(lineId);
+      }
+    }
+    
+    console.log('✅ Force cleanup Chapter 11 completed');
+  }
+
+  /**
    * Main animation function for Chapter 11 sea trials
    */
   function animateChapter11SeaTrials(map) {
     console.log('Starting Chapter 11 sea trials animation...');
     
+    // Set chapter as active
+    isChapter11Active = true;
+    
     chapter11Points.forEach((pt, idx) => {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
+        // Check if chapter is still active
+        if (!isChapter11Active) return;
+        
         // Create detection marker
         const el = document.createElement('div');
         el.className = pt.type === 'group' ? 'detection-marker group-marker' : 'detection-marker single-marker';
@@ -76,6 +135,11 @@
         
         chapter11Markers.push(marker);
 
+        // Add cleanup callback
+        chapter11CleanupCallbacks.push(() => {
+          marker.remove();
+        });
+
         // Add entrance animation
         el.style.opacity = '0';
         el.style.transform = 'translate(-50%, -50%) scale(0)';
@@ -87,7 +151,10 @@
 
         // Show popup only for single markers and group lead
         if ((pt.type === 'single') || (pt.type === 'group' && pt.isGroupLead)) {
-          setTimeout(() => {
+          const popupTimeoutId = setTimeout(() => {
+            // Check if chapter is still active
+            if (!isChapter11Active) return;
+            
             const popupClassName = pt.type === 'group' ? 'sea-trials-popup red-glow' : 'sea-trials-popup red-glow';
             
             const popup = new mapboxgl.Popup({
@@ -102,7 +169,16 @@
               .addTo(map);
             
             chapter11Popups.push(popup);
+
+            // Add cleanup callback
+            chapter11CleanupCallbacks.push(() => {
+              popup.remove();
+            });
           }, 300);
+          
+          chapter11CleanupCallbacks.push(() => {
+            clearTimeout(popupTimeoutId);
+          });
         }
 
         // Add connecting lines for group markers (visual effect)
@@ -110,6 +186,11 @@
           addGroupConnectionLine(map, pt.coords, chapter11Points[1].coords, idx);
         }
       }, pt.delay);
+      
+      // Add timeout cleanup callback
+      chapter11CleanupCallbacks.push(() => {
+        clearTimeout(timeoutId);
+      });
     });
   }
 
@@ -117,6 +198,9 @@
    * Add visual connection lines between group markers
    */
   function addGroupConnectionLine(map, fromCoords, toCoords, index) {
+    // Check if chapter is still active
+    if (!isChapter11Active) return;
+    
     const lineId = `group-connection-${index}`;
     
     map.addSource(lineId, {
@@ -141,48 +225,32 @@
         'line-dasharray': [2, 4]
       }
     });
-  }
 
-  /**
-   * Enhanced cleanup for Chapter 11
-   */
-  function clearChapter11(map) {
-    console.log('Clearing Chapter 11...');
-
-    // Fade out and remove markers
-    chapter11Markers.forEach(marker => {
-      const el = marker.getElement();
-      if (el) {
-        el.style.transition = 'all 0.4s ease-in';
-        el.style.opacity = '0';
-        el.style.transform = 'translate(-50%, -50%) scale(0)';
-        
-        setTimeout(() => marker.remove(), 400);
-      } else {
-        marker.remove();
-      }
-    });
-    chapter11Markers = [];
-
-    // Remove popups
-    chapter11Popups.forEach(p => p.remove());
-    chapter11Popups = [];
-
-    // Remove connection lines
-    for (let i = 2; i <= 5; i++) {
-      const lineId = `group-connection-${i}`;
+    // Add cleanup callback
+    chapter11CleanupCallbacks.push(() => {
       if (map.getLayer(lineId)) {
         map.removeLayer(lineId);
       }
       if (map.getSource(lineId)) {
         map.removeSource(lineId);
       }
-    }
+    });
+  }
+
+  /**
+   * Enhanced cleanup for Chapter 11
+   */
+  function clearChapter11(map) {
+    console.log('🧹 clearChapter11 called');
+    
+    // Set chapter as inactive and use force cleanup
+    forceCleanupChapter11(map);
   }
 
   // Expose functions globally
   global.animateChapter11SeaTrials = animateChapter11SeaTrials;
   global.clearChapter11 = clearChapter11;
+  global.forceCleanupChapter11 = forceCleanupChapter11;
 
   // Add CSS styles - FINAL POSITIONING ADAPTED FOR MOBILE
   if (!document.getElementById('chapter11-styles')) {

@@ -1,6 +1,10 @@
 // animate2.js - Rubymar Animation (Mobile-Friendly with Red Text Box)
 
 (function(global) {
+  // Chapter state tracking for Chapter 8
+  let isChapter8Active = false;
+  let chapter8CleanupCallbacks = [];
+
   // Enhanced data for Chapter 8 with richer details
   const chapter8Points = [
     {
@@ -41,10 +45,80 @@
   let waveEffects = [];
 
   /**
+   * Force cleanup function for Chapter 8
+   */
+  function forceCleanupChapter8(map) {
+    console.log('🧹 Force cleanup Chapter 8 triggered');
+    
+    // Set chapter as inactive
+    isChapter8Active = false;
+    
+    // Cancel any ongoing animations immediately
+    if (pathAnimationFrame) {
+      cancelAnimationFrame(pathAnimationFrame);
+      pathAnimationFrame = null;
+    }
+    
+    // Execute all cleanup callbacks
+    chapter8CleanupCallbacks.forEach(callback => {
+      try {
+        callback();
+      } catch (e) {
+        console.warn('Chapter 8 cleanup callback error:', e);
+      }
+    });
+    chapter8CleanupCallbacks = [];
+    
+    // Remove wave effects
+    waveEffects.forEach(waveId => {
+      if (map.getLayer(waveId)) {
+        map.removeLayer(waveId);
+      }
+      if (map.getSource(waveId)) {
+        map.removeSource(waveId);
+      }
+    });
+    waveEffects = [];
+    
+    // Remove all Chapter 8 popups IMMEDIATELY
+    const rubymarPopups = document.querySelectorAll('.rubymar-popup');
+    rubymarPopups.forEach(popup => {
+      popup.remove();
+    });
+    
+    // Remove all Chapter 8 markers IMMEDIATELY
+    chapter8Markers.forEach(marker => {
+      marker.remove();
+    });
+    chapter8Markers = [];
+    
+    // Remove Chapter 8 popups from array
+    chapter8Popups.forEach(p => p.remove());
+    chapter8Popups = [];
+    
+    // Clean up text annotation
+    if (chapter8TextMarker) {
+      chapter8TextMarker.remove();
+      chapter8TextMarker = null;
+    }
+    
+    // Clean up path layers
+    cleanupPathLayers(map);
+    
+    console.log('✅ Force cleanup Chapter 8 completed');
+  }
+
+  /**
    * Enhanced Rubymar path animation with dynamic effects
    */
   async function animateRubymarPath(map) {
     try {
+      // Set chapter as active
+      isChapter8Active = true;
+      
+      // Only cleanup path layers, not the entire chapter
+      cleanupPathLayers(map);
+      
       const resp = await fetch('data/rubymar_path.geojson');
       if (!resp.ok) {
         console.error('Failed to fetch rubymar_path.geojson');
@@ -114,8 +188,14 @@
         }
       }, 'rubymar-anim-line');
 
+      // Check if chapter is still active before proceeding
+      if (!isChapter8Active) return;
+
       // Animate the path with dynamic effects
       await animatePathWithEffects(map, coords, 800);
+      
+      // Check again before adding markers
+      if (!isChapter8Active) return;
       
       // Flash markers immediately after path
       flashChapter8Markers(map);
@@ -138,6 +218,12 @@
       }
 
       function updatePath(currentTime) {
+        // Check if chapter is still active
+        if (!isChapter8Active) {
+          resolve();
+          return;
+        }
+        
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const easedProgress = easeOutQuart(progress);
@@ -150,25 +236,35 @@
             type: 'Feature',
             geometry: { type: 'LineString', coordinates: partialCoords }
           };
-          map.getSource('rubymarAnim').setData(partialFeature);
+          
+          // Check if source still exists
+          if (map.getSource('rubymarAnim')) {
+            map.getSource('rubymarAnim').setData(partialFeature);
+          }
 
           // Dynamic color based on progress (red to darker red)
           const colorProgress = Math.sin(progress * Math.PI);
           const r = 255;
           const g = Math.floor(100 * colorProgress);
           const b = 0;
-          map.setPaintProperty('rubymar-anim-line', 'line-color', `rgb(${r}, ${g}, ${b})`);
+          if (map.getLayer('rubymar-anim-line')) {
+            map.setPaintProperty('rubymar-anim-line', 'line-color', `rgb(${r}, ${g}, ${b})`);
+          }
 
           // Pulsing width
           const widthPulse = 3 + Math.sin(elapsed * 0.005) * 1;
-          map.setPaintProperty('rubymar-anim-line', 'line-width', widthPulse);
+          if (map.getLayer('rubymar-anim-line')) {
+            map.setPaintProperty('rubymar-anim-line', 'line-width', widthPulse);
+          }
         }
 
         if (progress < 1) {
           pathAnimationFrame = requestAnimationFrame(updatePath);
         } else {
           // Add distress wave effect at end
-          createDistressWaves(map, coords[coords.length - 1]);
+          if (isChapter8Active) {
+            createDistressWaves(map, coords[coords.length - 1]);
+          }
           resolve();
         }
       }
@@ -185,6 +281,9 @@
     
     for (let i = 0; i < waveCount; i++) {
       setTimeout(() => {
+        // Check if chapter is still active
+        if (!isChapter8Active) return;
+        
         const waveId = `distress-wave-${Date.now()}-${i}`;
         
         // Add wave source
@@ -216,6 +315,16 @@
 
         waveEffects.push(waveId);
 
+        // Add cleanup callback
+        chapter8CleanupCallbacks.push(() => {
+          if (map.getLayer(waveId)) {
+            map.removeLayer(waveId);
+          }
+          if (map.getSource(waveId)) {
+            map.removeSource(waveId);
+          }
+        });
+
         // Animate wave expansion
         let radius = 0;
         const maxRadius = 30;
@@ -223,9 +332,11 @@
           radius += 3;
           const opacity = Math.max(0, 0.6 * (1 - radius / maxRadius));
           
-          map.setPaintProperty(waveId, 'circle-radius', radius);
-          map.setPaintProperty(waveId, 'circle-opacity', opacity);
-          map.setPaintProperty(waveId, 'circle-stroke-opacity', opacity * 1.3);
+          if (map.getLayer(waveId)) {
+            map.setPaintProperty(waveId, 'circle-radius', radius);
+            map.setPaintProperty(waveId, 'circle-opacity', opacity);
+            map.setPaintProperty(waveId, 'circle-stroke-opacity', opacity * 1.3);
+          }
 
           if (radius >= maxRadius) {
             clearInterval(waveAnimation);
@@ -240,7 +351,10 @@
    */
   function flashChapter8Markers(map) {
     chapter8Points.forEach((pt, idx) => {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
+        // Check if chapter is still active
+        if (!isChapter8Active) return;
+        
         // Create impact-based marker
         const el = document.createElement('div');
         el.className = `impact-marker ${pt.impactLevel}`;
@@ -257,11 +371,19 @@
         
         chapter8Markers.push(marker);
 
+        // Add cleanup callback
+        chapter8CleanupCallbacks.push(() => {
+          marker.remove();
+        });
+
         // Entrance animation
         animateMarkerEntrance(el, pt.impactLevel);
 
         // Show popup after marker animation
-        setTimeout(() => {
+        const popupTimeoutId = setTimeout(() => {
+          // Check if chapter is still active
+          if (!isChapter8Active) return;
+          
           const popupClassName = pt.impactLevel === 'critical' ? 'rubymar-popup critical-glow' : 'rubymar-popup';
           
           const popup = new mapboxgl.Popup({
@@ -277,12 +399,33 @@
           
           chapter8Popups.push(popup);
 
+          // Add cleanup callback
+          chapter8CleanupCallbacks.push(() => {
+            popup.remove();
+          });
+
           // Show final annotation after last popup
           if (idx === chapter8Points.length - 1) {
-            setTimeout(() => addChapter8TextAnnotation(map), 300);
+            const textTimeoutId = setTimeout(() => {
+              if (!isChapter8Active) return;
+              addChapter8TextAnnotation(map);
+            }, 300);
+            
+            chapter8CleanupCallbacks.push(() => {
+              clearTimeout(textTimeoutId);
+            });
           }
         }, 300);
+        
+        chapter8CleanupCallbacks.push(() => {
+          clearTimeout(popupTimeoutId);
+        });
       }, pt.delay);
+      
+      // Add timeout cleanup callback
+      chapter8CleanupCallbacks.push(() => {
+        clearTimeout(timeoutId);
+      });
     });
   }
 
@@ -325,6 +468,14 @@
       .setLngLat(textAnnotationCoord)
       .addTo(map);
 
+    // Add cleanup callback
+    chapter8CleanupCallbacks.push(() => {
+      if (chapter8TextMarker) {
+        chapter8TextMarker.remove();
+        chapter8TextMarker = null;
+      }
+    });
+
     requestAnimationFrame(() => {
       el.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
       el.style.opacity = '1';
@@ -336,60 +487,10 @@
    * Enhanced cleanup with smooth transitions
    */
   function clearChapter8(map) {
-    if (pathAnimationFrame) {
-      cancelAnimationFrame(pathAnimationFrame);
-      pathAnimationFrame = null;
-    }
-
-    // Fade out path layers
-    ['rubymar-glow', 'rubymar-anim-line', 'rubymar-shadow'].forEach(layerId => {
-      if (map.getLayer(layerId)) {
-        map.setPaintProperty(layerId, 'line-opacity', 0);
-      }
-    });
-
-    // Remove wave effects
-    waveEffects.forEach(waveId => {
-      if (map.getLayer(waveId)) {
-        map.removeLayer(waveId);
-      }
-      if (map.getSource(waveId)) {
-        map.removeSource(waveId);
-      }
-    });
-    waveEffects = [];
-
-    setTimeout(() => {
-      cleanupPathLayers(map);
-    }, 300);
-
-    // Animate out markers
-    chapter8Markers.forEach(marker => {
-      const el = marker.getElement();
-      el.style.transition = 'all 0.4s ease-in';
-      el.style.opacity = '0';
-      el.style.transform = 'translate(-50%, -50%) scale(0) rotate(180deg)';
-      
-      setTimeout(() => marker.remove(), 400);
-    });
-    chapter8Markers = [];
-
-    // Remove popups
-    chapter8Popups.forEach(p => p.remove());
-    chapter8Popups = [];
-
-    // Fade out text annotation
-    if (chapter8TextMarker) {
-      const el = chapter8TextMarker.getElement();
-      el.style.transition = 'all 0.4s ease-in';
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px) scale(0.9)';
-      
-      setTimeout(() => {
-        chapter8TextMarker.remove();
-        chapter8TextMarker = null;
-      }, 400);
-    }
+    console.log('🧹 clearChapter8 called');
+    
+    // Set chapter as inactive and use force cleanup
+    forceCleanupChapter8(map);
   }
 
   /**
@@ -410,6 +511,7 @@
   // Expose functions
   global.animateRubymarPath = animateRubymarPath;
   global.clearChapter8 = clearChapter8;
+  global.forceCleanupChapter8 = forceCleanupChapter8;
 
   // Add enhanced styles with RED text box and mobile-friendly sizing
   if (!document.getElementById('chapter8-styles')) {

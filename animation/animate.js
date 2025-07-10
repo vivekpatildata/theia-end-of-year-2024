@@ -1,6 +1,10 @@
 // animate.js - MV Tutor Animation (Mobile-Friendly with Enhanced Styling)
 
 (function(global) {
+  // Chapter state tracking for Chapter 7
+  let isChapter7Active = false;
+  let chapter7CleanupCallbacks = [];
+
   // Enhanced blinking points with satellite images and different marker types
   const chapter7Points = [
     {
@@ -41,10 +45,69 @@
   let glowEffect = null;
 
   /**
+   * Force cleanup function for Chapter 7
+   */
+  function forceCleanupChapter7(map) {
+    console.log('🧹 Force cleanup Chapter 7 triggered');
+    
+    // Set chapter as inactive
+    isChapter7Active = false;
+    
+    // Cancel any ongoing animations immediately
+    if (pathAnimationFrame) {
+      cancelAnimationFrame(pathAnimationFrame);
+      pathAnimationFrame = null;
+    }
+    
+    // Execute all cleanup callbacks
+    chapter7CleanupCallbacks.forEach(callback => {
+      try {
+        callback();
+      } catch (e) {
+        console.warn('Chapter 7 cleanup callback error:', e);
+      }
+    });
+    chapter7CleanupCallbacks = [];
+    
+    // Remove all Chapter 7 popups IMMEDIATELY
+    const tutorPopups = document.querySelectorAll('.tutor-popup');
+    tutorPopups.forEach(popup => {
+      popup.remove();
+    });
+    
+    // Remove all Chapter 7 markers IMMEDIATELY
+    chapter7Markers.forEach(marker => {
+      marker.remove();
+    });
+    chapter7Markers = [];
+    
+    // Remove Chapter 7 popups from array
+    chapter7Popups.forEach(p => p.remove());
+    chapter7Popups = [];
+    
+    // Clean up Israel annotation
+    if (israelAnnotationMarker) {
+      israelAnnotationMarker.remove();
+      israelAnnotationMarker = null;
+    }
+    
+    // Clean up path layers
+    cleanupPathLayers(map);
+    
+    console.log('✅ Force cleanup Chapter 7 completed');
+  }
+
+  /**
    * Enhanced path animation with progressive drawing and glow
    */
   async function animateTutorPath(map) {
     try {
+      // Set chapter as active
+      isChapter7Active = true;
+      
+      // Only cleanup path layers, not the entire chapter
+      cleanupPathLayers(map);
+      
       // Fetch the GeoJSON
       const response = await fetch('data/mv_tutor_path.geojson');
       if (!response.ok) {
@@ -100,8 +163,14 @@
         }
       }, 'tutor-anim-line');
 
+      // Check if chapter is still active before proceeding
+      if (!isChapter7Active) return;
+
       // Animate path drawing with easing
       await animatePathDrawing(map, coords, 1000);
+      
+      // Check again before adding markers
+      if (!isChapter7Active) return;
       
       // After path is complete, flash the markers
       flashChapter7Markers(map);
@@ -123,6 +192,12 @@
       }
 
       function updatePath(currentTime) {
+        // Check if chapter is still active
+        if (!isChapter7Active) {
+          resolve();
+          return;
+        }
+        
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const easedProgress = easeInOutQuad(progress);
@@ -135,18 +210,26 @@
             type: 'Feature',
             geometry: { type: 'LineString', coordinates: partialCoords }
           };
-          map.getSource('tutorAnim').setData(partialFeature);
+          
+          // Check if source still exists
+          if (map.getSource('tutorAnim')) {
+            map.getSource('tutorAnim').setData(partialFeature);
+          }
 
           // Update line width based on progress for dynamic effect
           const widthModifier = 0.5 + (0.5 * Math.sin(progress * Math.PI));
-          map.setPaintProperty('tutor-anim-line', 'line-width', 3 + widthModifier);
+          if (map.getLayer('tutor-anim-line')) {
+            map.setPaintProperty('tutor-anim-line', 'line-width', 3 + widthModifier);
+          }
         }
 
         if (progress < 1) {
           pathAnimationFrame = requestAnimationFrame(updatePath);
         } else {
           // Add completion pulse
-          pulseLineEffect(map);
+          if (isChapter7Active) {
+            pulseLineEffect(map);
+          }
           resolve();
         }
       }
@@ -165,12 +248,16 @@
     function pulse() {
       if (pulseCount >= maxPulses) return;
 
-      map.setPaintProperty('tutor-anim-glow', 'line-opacity', 0.6);
-      map.setPaintProperty('tutor-anim-glow', 'line-width', 20);
+      if (map.getLayer('tutor-anim-glow')) {
+        map.setPaintProperty('tutor-anim-glow', 'line-opacity', 0.6);
+        map.setPaintProperty('tutor-anim-glow', 'line-width', 20);
+      }
 
       setTimeout(() => {
-        map.setPaintProperty('tutor-anim-glow', 'line-opacity', 0.3);
-        map.setPaintProperty('tutor-anim-glow', 'line-width', 12);
+        if (map.getLayer('tutor-anim-glow')) {
+          map.setPaintProperty('tutor-anim-glow', 'line-opacity', 0.3);
+          map.setPaintProperty('tutor-anim-glow', 'line-width', 12);
+        }
         pulseCount++;
         
         if (pulseCount < maxPulses) {
@@ -187,7 +274,10 @@
    */
   function flashChapter7Markers(map) {
     chapter7Points.forEach((pt, idx) => {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
+        // Check if chapter is still active
+        if (!isChapter7Active) return;
+        
         // Create marker based on type
         const el = document.createElement('div');
         
@@ -215,6 +305,11 @@
         
         chapter7Markers.push(marker);
 
+        // Add cleanup callback
+        chapter7CleanupCallbacks.push(() => {
+          marker.remove();
+        });
+
         // Add entry animation
         el.style.opacity = '0';
         el.style.transform = 'translate(-50%, -50%) scale(0)';
@@ -225,7 +320,10 @@
         });
 
         // Show popup after marker animation
-        setTimeout(() => {
+        const popupTimeoutId = setTimeout(() => {
+          // Check if chapter is still active
+          if (!isChapter7Active) return;
+          
           const popupClassName = pt.hasGlow ? 'tutor-popup glow-effect' : 'tutor-popup';
           
           const popup = new mapboxgl.Popup({
@@ -241,12 +339,33 @@
           
           chapter7Popups.push(popup);
 
+          // Add cleanup callback
+          chapter7CleanupCallbacks.push(() => {
+            popup.remove();
+          });
+
           // Show Israel annotation after last popup
           if (idx === chapter7Points.length - 1) {
-            setTimeout(() => addIsraelAnnotation(map), 100);
+            const israelTimeoutId = setTimeout(() => {
+              if (!isChapter7Active) return;
+              addIsraelAnnotation(map);
+            }, 100);
+            
+            chapter7CleanupCallbacks.push(() => {
+              clearTimeout(israelTimeoutId);
+            });
           }
         }, 100);
+        
+        chapter7CleanupCallbacks.push(() => {
+          clearTimeout(popupTimeoutId);
+        });
       }, pt.delay);
+      
+      // Add timeout cleanup callback
+      chapter7CleanupCallbacks.push(() => {
+        clearTimeout(timeoutId);
+      });
     });
   }
 
@@ -275,6 +394,14 @@
       .setLngLat(israelAnnotationCoord)
       .addTo(map);
 
+    // Add cleanup callback
+    chapter7CleanupCallbacks.push(() => {
+      if (israelAnnotationMarker) {
+        israelAnnotationMarker.remove();
+        israelAnnotationMarker = null;
+      }
+    });
+
     // Animate in
     requestAnimationFrame(() => {
       el.style.transition = 'all 0.6s ease-out';
@@ -287,49 +414,10 @@
    * Enhanced cleanup with fade-out animations
    */
   function clearChapter7(map) {
-    // Cancel any ongoing animations
-    if (pathAnimationFrame) {
-      cancelAnimationFrame(pathAnimationFrame);
-      pathAnimationFrame = null;
-    }
-
-    // Fade out and remove path layers
-    if (map.getLayer('tutor-anim-line')) {
-      map.setPaintProperty('tutor-anim-line', 'line-opacity', 0);
-      map.setPaintProperty('tutor-anim-glow', 'line-opacity', 0);
-      
-      setTimeout(() => {
-        cleanupPathLayers(map);
-      }, 300);
-    }
-
-    // Fade out and remove markers
-    chapter7Markers.forEach(marker => {
-      const el = marker.getElement();
-      el.style.transition = 'all 0.3s ease-in';
-      el.style.opacity = '0';
-      el.style.transform = 'translate(-50%, -50%) scale(0)';
-      
-      setTimeout(() => marker.remove(), 300);
-    });
-    chapter7Markers = [];
-
-    // Remove popups
-    chapter7Popups.forEach(p => p.remove());
-    chapter7Popups = [];
-
-    // Fade out and remove Israel annotation
-    if (israelAnnotationMarker) {
-      const el = israelAnnotationMarker.getElement();
-      el.style.transition = 'all 0.3s ease-in';
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(10px)';
-      
-      setTimeout(() => {
-        israelAnnotationMarker.remove();
-        israelAnnotationMarker = null;
-      }, 300);
-    }
+    console.log('🧹 clearChapter7 called');
+    
+    // Set chapter as inactive and use force cleanup
+    forceCleanupChapter7(map);
   }
 
   /**
@@ -350,6 +438,7 @@
   // Expose functions globally
   global.animateTutorPath = animateTutorPath;
   global.clearChapter7 = clearChapter7;
+  global.forceCleanupChapter7 = forceCleanupChapter7;
 
   // Add enhanced CSS with mobile-friendly sizing and red text box
   if (!document.getElementById('chapter7-styles')) {
