@@ -6,7 +6,7 @@
         {
             coords: [-65.74221069043337, 12.391632177006642], // Venezuela Territorial Waters
             type: 'annotation',
-            text: 'Venezuela Territorial Waters'
+            text: 'Venezuela Exclusive Economic Zone (EEZ)'
         },
         {
             coords: [-70.88380, 12.43455], // Los Monjes Islands

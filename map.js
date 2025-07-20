@@ -730,8 +730,8 @@ function addLayers() {
       source: 'oilspill',
       layout: { visibility: 'none' },
       paint: {
-        'line-color': ['get', 'stroke'],
-        'line-width': ['get', 'stroke-width'],
+        // 'line-color': ['get', 'stroke'],
+        // 'line-width': ['get', 'stroke-width'],
         'line-opacity': ['get', 'stroke-opacity'],
         'line-blur': ['get', 'stroke-blur']
       }
@@ -1123,8 +1123,8 @@ const configs = [
   },
 
   chapter1: {
-    config: { center: [-60.7328, 11.1762], zoom: 11.5, pitch: 0, bearing: 0 },
-    legend: '<span style="color: #ffd700; font-weight: 600;">Gulfstream Wreck Site & Oil Contamination Zone</span>',
+    config: { center: [-60.6903, 11.1853], zoom: 10.22, pitch: 0, bearing: -16 },
+    legend: '<span style="color: #ffd700; font-weight: 600;">Gulfstream Wreck Location & Oil Contamination Zone</span>',
     dateRange: 'Feb 7 2024 – Apr 27 2025',
     async onEnter() {
       console.log('Entering chapter1');
@@ -1205,7 +1205,7 @@ const configs = [
 
   chapter3: {
     config: { center: [11.95, 47.87], zoom: 3.43, pitch: 0, bearing: 3 },
-    legend: 'Assessed Submarine Course',
+    legend: '┇ Assessed Submarine Course',
     dateRange: 'Aug 21 2024 – Sep 21 2024',
     async onEnter() {
       console.log('Entering chapter3');
@@ -1232,7 +1232,7 @@ const configs = [
 
   chapter4: {
     config: { center: [-5.284,36.058], zoom: 7.4, pitch: 0, bearing: 3 },
-    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> & <span style="color: #57aeff; font-weight: 600;">Atila</span> <span style="color: #ffd700; font-weight: 600;">– AIS Path STS Operations</span>',
+    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> <span style="color: #ffd700; font-weight: 600;">&</span> <span style="color: #57aeff; font-weight: 600;">Atila</span> <span style="color: #ffd700; font-weight: 600;">– AIS Path STS Operations</span>',
     dateRange: 'Nov 6 2024 – Nov 12 2024',
     async onEnter() {
       console.log('Entering chapter4');
@@ -1259,7 +1259,7 @@ const configs = [
 
   chapter5: {
     config: { center: [52.2,37.1 ], zoom: 1.62, pitch: 0, bearing: 0 },
-    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> & <span style="color: #57aeff; font-weight: 600;">Atila</span><span style="color: #ffd700; font-weight: 600;">– Post-STS Dispersal Routes</span>',
+    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> <span style="color: #ffd700; font-weight: 600;">&</span> <span style="color: #57aeff; font-weight: 600;">Atila </span><span style="color: #ffd700; font-weight: 600;">– Post-STS Dispersal Routes</span>',
     dateRange: 'Nov 9 2024 – Dec 6 2024',
     async onEnter() {
       console.log('Entering chapter5');
@@ -1301,25 +1301,25 @@ const configs = [
           { 
             center: [35.803,73.989], 
             zoom: 6.26, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Pioneer</span> <span style="color: #ffd700; font-weight: 600;">- Symmetrical AIS Spoofing</span>', 
-            date: '1 - 6 Aug 2024'
+            legend: '<span style="color: #62fda0; font-weight: 600;">Pioneer</span> <span style="color: #ffd700; font-weight: 600;">- Symmetrical AIS spoofing</span>', 
+            date: 'Aug 1 - Aug 6 2024'
           },
           { 
             center: [35.408,74.148], 
             zoom: 6.3, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Asya Energy</span><span style="color: #ffd700; font-weight: 600;">- Asymmetrical AIS Spoofing</span>', 
-            date: '2 -15 Aug 2024'
+            legend: '<span style="color: #62fda0; font-weight: 600;">Asya Energy</span> <span style="color: #ffd700; font-weight: 600;">- Asymmetrical AIS spoofing</span>', 
+            date: 'Aug 2 - Aug 15 2024'
           },
           { 
             center: [47.83, 73.6], 
             zoom: 3.2, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Everest Energy</span> - <span style="color: #ffd700; font-weight: 600;">- AIS Switched Off for a brief time (Dark AIS) </span>', 
-            date: '20 - 25 Aug 2024'
+            legend: '<span style="color: #62fda0; font-weight: 600;">Everest Energy</span> <span style="color: #ffd700; font-weight: 600;">- AIS switched off for a brief time (Dark AIS) </span>', 
+            date: 'Aug 20 - Aug 25 2024'
           },
           { 
             center: [47.83, 73.6], 
             zoom: 2.8, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Mulan</span><span style="color: #ffd700; font-weight: 600;">- Loitering Ballast for days before picking up cargo from ALNG2   </span>', 
+            legend: '<span style="color: #62fda0; font-weight: 600;">Mulan</span> <span style="color: #ffd700; font-weight: 600;">- Loitering ballast for days before picking up cargo from ALNG2   </span>', 
             date: 'Sept 17 – Dec 31 2024'
           }
         ];
@@ -1430,7 +1430,7 @@ configs.forEach((cfg, i) => {
   },
 
   chapter7: {
-    config: { center: [39.92, 25.76], zoom: 4.44, pitch: 0, bearing: 30 },
+    config: { center: [39.57, 24.14], zoom: 4.36, pitch: 0, bearing: 28 },
     legend: '<span style="color: #ffd700; font-weight: 600;">MV Tutor Track & Final Position Analysis</span>',
     dateRange: 'Jun 8 2024 – Jun 18 2024',
     async onEnter() {
@@ -1449,7 +1449,7 @@ configs.forEach((cfg, i) => {
   },
 
   chapter8: {
-    config: { center: [49.21, 16.29], zoom: 4, pitch: 0, bearing: 3 },
+    config: { center: [45.97, 17.49], zoom: 4.36,  pitch: 0, bearing: -20.8 },
     legend: '<span style="color: #ffd700; font-weight: 600;">Rubymar Satellite-based damage assessment and ecological impact tracking</span>',
     dateRange: 'Feb 18 2024 – Mar 2 2024',
     async onEnter() {
@@ -1468,8 +1468,8 @@ configs.forEach((cfg, i) => {
   },
 
   chapter9: {
-    config: { center: [56.285, 26.174], zoom: 6.72, pitch: 0, bearing: 0 },
-    legend: 'MSC Aries – AIS Course & Assessed Course',
+    config: { center: [55.072, 26.381], zoom: 6.47, pitch: 0, bearing: 0  },
+    legend: ' MSC Aries –  ⎸ AIS Course & ┇ Assessed Course',
     dateRange: 'Apr 12 2024 – Oct 2024',
     async onEnter() {
       console.log('Entering chapter9');
@@ -1495,7 +1495,7 @@ configs.forEach((cfg, i) => {
   },
 
   chapter10: {
-    config: { center: [104.0, 2.5], zoom: 6, pitch: 0, bearing: 0 },
+    config: { center: [103.273, 3.364], zoom: 5.73, pitch: 0, bearing: 0 },
     legend: 'ANSHUN II – Multisource Tracking',
     dateRange: 'Jul 1 2024 – Aug 7 2024',
     async onEnter() {

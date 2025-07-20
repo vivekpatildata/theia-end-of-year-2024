@@ -30,7 +30,7 @@
           <img src="sat-images/chapter9C.png" class="annotation-img" alt="MSC Aries Sat 3">
         </div>
       `,
-      offset: [-100, 10], // Offset to the left
+      offset: [-110, 10], // Offset to the left
       isDetained: true, // Special marker for detention
       hasGlow: true // Add red glow effect to satellite popup
     }
@@ -244,7 +244,7 @@
 
       /* DESKTOP: Satellite image sizes */
       .msc-popup .enhanced-popup .annotation-img {
-        width: 170px !important;    
+        width: 180px !important;    
         height: 180px !important;   
         object-fit: cover !important;
         display: block;
@@ -269,7 +269,7 @@
         }
 
         .msc-popup .enhanced-popup .annotation-img {
-          width: 136px !important;    /* 80% of desktop */
+          width: 140px !important;    /* 80% of desktop */
           height: 144px !important;   /* 80% of desktop */
         }
       }

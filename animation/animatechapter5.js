@@ -14,38 +14,38 @@
       text: 'Vessel Position 2'
     },
     {
-      coords: [24.3407, -27.3371], // Satellite image with red glow
+      coords: [30.4056, 	-11.0713], // Satellite image with red glow
       type: 'satellite-popup',
       popupHtml: `
         <div class="enhanced-popup">
           <img src="sat-images/chapter5A.png" class="annotation-img" alt="Satellite Detection">
         </div>
       `,
-      popupOffset: [0, 10],
+      popupOffset: [0, 50],
       hasGlow: true
     },
     {
       coords: [53.8779, -25.1195], // Red text box - vessel to China
       type: 'text-annotation',
       text: 'Atila was further on its way to China',
-      textOffset: [100, -20]
+      textOffset: [130, -30]
     },
     {
-      coords: [10.8528, 50.5561], // Satellite image popup
+      coords: [-11.0573, 59.9656], // Satellite image popup
       type: 'satellite-popup',
       popupHtml: `
         <div class="enhanced-popup">
           <img src="sat-images/chapter5B.png" class="annotation-img" alt="Satellite Detection">
         </div>
       `,
-      popupOffset: [110, 150],
+      popupOffset: [-70, 70],
       hasGlow: true
     },
     {
-      coords: [-11.0573, 59.9656], // Red text box - vessel to Murmansk
+      coords: [42.9621, 61.5122], // Red text box - vessel to Murmansk
       type: 'text-annotation',
       text: 'Sakarya was on its way to Murmansk',
-      textOffset: [0, 30]
+      textOffset: [0, -40]
     }
   ];
 
@@ -275,10 +275,10 @@
         border-top-color: rgba(255, 0, 0, 0.2);
       }
 
-      /* ADJUSTABLE SATELLITE IMAGE SIZE */
+      /* DESKTOP: Satellite image sizes - FINAL SIZES */
       .chapter5-popup .enhanced-popup .annotation-img {
-        width: 160px !important;    /* <-- CHANGE THIS to adjust image width */
-        height: 160px !important;   /* <-- CHANGE THIS to adjust image height */
+        width: 160px !important;    /* Desktop final size */
+        height: 160px !important;   /* Desktop final size */
         object-fit: fill !important;
         border-radius: 4px;
         display: block;
@@ -310,7 +310,20 @@
         letter-spacing: 0.5px;
       }
 
-      /* ─────────── Mobile Optimizations ─────────── */
+      /* ─────────── TABLET OPTIMIZATIONS (1024px) ─────────── */
+      @media screen and (max-width: 1024px) {
+        .chapter5-popup .enhanced-popup .annotation-img {
+          width: 140px !important;    /* 87.5% of desktop 160px */
+          height: 140px !important;   /* 87.5% of desktop 160px */
+        }
+
+        .chapter5-text-annotation {
+          font-size: 13px;
+          padding: 11px 15px;
+        }
+      }
+
+      /* ─────────── MOBILE OPTIMIZATIONS (768px) ─────────── */
       @media screen and (max-width: 768px) {
         .chapter5-red-marker {
           width: 35px;
@@ -333,26 +346,96 @@
         }
 
         .chapter5-popup .enhanced-popup .annotation-img {
-          width: 150px !important;    /* <-- MOBILE: adjust image width */
-          height: 150px !important;   /* <-- MOBILE: adjust image height */
+          width: 120px !important;    /* 75% of desktop 160px */
+          height: 120px !important;   /* 75% of desktop 160px */
         }
 
         .chapter5-text-annotation {
           font-size: 12px;
-          padding: 10px 12px;
+          padding: 10px 13px;
         }
       }
 
-      /* Extra small screens */
+      /* ─────────── SMALL MOBILE OPTIMIZATIONS (480px) ─────────── */
       @media screen and (max-width: 480px) {
+        .chapter5-red-marker {
+          width: 32px;
+          height: 32px;
+        }
+
+        .red-marker-core {
+          width: 14px;
+          height: 14px;
+        }
+
+        .red-marker-ring {
+          width: 28px;
+          height: 28px;
+        }
+
+        .red-marker-glow {
+          width: 18px;
+          height: 18px;
+        }
+
         .chapter5-popup .enhanced-popup .annotation-img {
-          width: 120px !important;
-          height: 120px !important;
+          width: 96px !important;     /* 60% of desktop 160px */
+          height: 96px !important;    /* 60% of desktop 160px */
         }
 
         .chapter5-text-annotation {
           font-size: 11px;
-          padding: 8px 10px;
+          padding: 8px 11px;
+        }
+      }
+
+      /* ─────────── EXTRA SMALL MOBILE (320px) ─────────── */
+      @media screen and (max-width: 320px) {
+        .chapter5-red-marker {
+          width: 28px;
+          height: 28px;
+        }
+
+        .red-marker-core {
+          width: 12px;
+          height: 12px;
+        }
+
+        .red-marker-ring {
+          width: 24px;
+          height: 24px;
+        }
+
+        .red-marker-glow {
+          width: 16px;
+          height: 16px;
+        }
+
+        .chapter5-popup .enhanced-popup .annotation-img {
+          width: 80px !important;     /* 50% of desktop 160px */
+          height: 80px !important;    /* 50% of desktop 160px */
+        }
+
+        .chapter5-text-annotation {
+          font-size: 10px;
+          padding: 6px 9px;
+        }
+      }
+
+      /* ─────────── Popup Overflow Protection ─────────── */
+      @media screen and (max-width: 768px) {
+        .chapter5-popup .mapboxgl-popup-content {
+          max-width: 95vw;
+          max-height: 80vh;
+          overflow: auto;
+        }
+      }
+
+      /* Extra safety for very small screens */
+      @media screen and (max-width: 320px) {
+        .chapter5-popup .mapboxgl-popup-content {
+          max-width: 98vw;
+          max-height: 75vh;
         }
       }
     `;

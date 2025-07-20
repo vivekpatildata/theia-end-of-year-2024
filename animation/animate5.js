@@ -8,18 +8,20 @@
   // Detection points for Chinese amphibious assault barges sea trials
   const chapter11Points = [
     {
-      coords: [113.6451, 22.7048], // First detection point - SINGLE large image
+      coords: [113.6451, 22.7048], // Marker position (unchanged)
+      popupCoords: [	113.2169, 	22.4878], // INDEPENDENT popup position
       type: 'single',
       popupHtml: `
         <div class="enhanced-popup single-large">
           <img src="sat-images/chapter11Anew2.png" class="annotation-img single-img" alt="Sea trial detection">
         </div>
       `,
-      offset: [0, 260], // FINAL POSITION: Popup below marker
+      offset: [0, 0], // Popup positioning offset
       delay: 500
     },
     {
       coords: [113.7080, 21.8732], // Group detection point - SINGLE extra-large image
+      popupCoords: [113.7080, 21.8732], // Popup at same location as marker
       type: 'group',
       isGroupLead: true, // This marker will show the group popup
       popupHtml: `
@@ -117,7 +119,7 @@
         // Check if chapter is still active
         if (!isChapter11Active) return;
         
-        // Create detection marker
+        // Create detection marker at marker coordinates
         const el = document.createElement('div');
         el.className = pt.type === 'group' ? 'detection-marker group-marker' : 'detection-marker single-marker';
         el.innerHTML = `
@@ -130,7 +132,7 @@
         `;
         
         const marker = new mapboxgl.Marker(el)
-          .setLngLat(pt.coords)
+          .setLngLat(pt.coords) // Marker at original coordinates
           .addTo(map);
         
         chapter11Markers.push(marker);
@@ -149,7 +151,7 @@
           el.style.transform = 'translate(-50%, -50%) scale(1)';
         });
 
-        // Show popup only for single markers and group lead
+        // Show popup at independent coordinates for single markers and group lead
         if ((pt.type === 'single') || (pt.type === 'group' && pt.isGroupLead)) {
           const popupTimeoutId = setTimeout(() => {
             // Check if chapter is still active
@@ -164,7 +166,7 @@
               className: popupClassName,
               maxWidth: 'none'
             })
-              .setLngLat(pt.coords)
+              .setLngLat(pt.popupCoords || pt.coords) // Use independent popup coordinates if available
               .setHTML(pt.popupHtml)
               .addTo(map);
             
@@ -387,11 +389,11 @@
         border-top-color: rgba(255, 0, 0, 0.2);
       }
 
-      /* DESKTOP: FINAL SIZES - Your Settings */
+      /* DESKTOP: FINAL SIZES - Your Final Settings */
       .enhanced-popup.single-large {
         display: block;
-        width: 400px;     /* Your final width */
-        height: 220px;    /* Your final height */
+        width: 400px;     /* Your final width for single popup */
+        height: 220px;    /* Your final height for single popup */
         overflow: hidden;
       }
 
@@ -405,8 +407,8 @@
 
       .enhanced-popup.group-large {
         display: block;
-        width: 300px;     /* Your final width */
-        height: 290px;    /* Your final height */
+        width: 300px;     /* Your final width for group popup */
+        height: 290px;    /* Your final height for group popup */
         overflow: hidden;
       }
 
@@ -418,7 +420,7 @@
         border-radius: 4px;
       }
 
-      /* TABLET OPTIMIZATIONS (1024px) - 75% of your final sizes */
+      /* TABLET OPTIMIZATIONS (1024px) - 80% of your final sizes */
       @media screen and (max-width: 1024px) {
         .detection-marker {
           width: 45px;
@@ -435,17 +437,17 @@
         }
 
         .enhanced-popup.single-large {
-          width: 300px;     /* 75% of 400px */
-          height: 165px;    /* 75% of 220px */
+          width: 320px;     /* 80% of 400px */
+          height: 176px;    /* 80% of 220px */
         }
 
         .enhanced-popup.group-large {
-          width: 225px;     /* 75% of 300px */
-          height: 218px;    /* 75% of 290px */
+          width: 240px;     /* 80% of 300px */
+          height: 232px;    /* 80% of 290px */
         }
       }
 
-      /* MOBILE OPTIMIZATIONS (768px) - 60% of your final sizes */
+      /* MOBILE OPTIMIZATIONS (768px) - 65% of your final sizes */
       @media screen and (max-width: 768px) {
         .detection-marker {
           width: 40px;
@@ -462,13 +464,13 @@
         }
 
         .enhanced-popup.single-large {
-          width: 240px;     /* 60% of 400px */
-          height: 132px;    /* 60% of 220px */
+          width: 260px;     /* 65% of 400px */
+          height: 143px;    /* 65% of 220px */
         }
 
         .enhanced-popup.group-large {
-          width: 180px;     /* 60% of 300px */
-          height: 174px;    /* 60% of 290px */
+          width: 195px;     /* 65% of 300px */
+          height: 189px;    /* 65% of 290px */
         }
 
         /* Ensure popups stay within viewport */
@@ -478,7 +480,7 @@
         }
       }
 
-      /* SMALL MOBILE OPTIMIZATIONS (480px) - 45% of your final sizes */
+      /* SMALL MOBILE OPTIMIZATIONS (480px) - 50% of your final sizes */
       @media screen and (max-width: 480px) {
         .detection-marker {
           width: 35px;
@@ -495,13 +497,13 @@
         }
 
         .enhanced-popup.single-large {
-          width: 180px;     /* 45% of 400px */
-          height: 99px;     /* 45% of 220px */
+          width: 200px;     /* 50% of 400px */
+          height: 110px;    /* 50% of 220px */
         }
 
         .enhanced-popup.group-large {
-          width: 135px;     /* 45% of 300px */
-          height: 131px;    /* 45% of 290px */
+          width: 150px;     /* 50% of 300px */
+          height: 145px;    /* 50% of 290px */
         }
 
         .sea-trials-popup .mapboxgl-popup-content {
@@ -510,7 +512,7 @@
         }
       }
 
-      /* EXTRA SMALL MOBILE (320px) - 35% of your final sizes */
+      /* EXTRA SMALL MOBILE (320px) - 40% of your final sizes */
       @media screen and (max-width: 320px) {
         .detection-marker {
           width: 30px;
@@ -527,13 +529,13 @@
         }
 
         .enhanced-popup.single-large {
-          width: 140px;     /* 35% of 400px */
-          height: 77px;     /* 35% of 220px */
+          width: 160px;     /* 40% of 400px */
+          height: 88px;     /* 40% of 220px */
         }
 
         .enhanced-popup.group-large {
-          width: 105px;     /* 35% of 300px */
-          height: 102px;    /* 35% of 290px */
+          width: 120px;     /* 40% of 300px */
+          height: 116px;    /* 40% of 290px */
         }
 
         .sea-trials-popup .mapboxgl-popup-content {

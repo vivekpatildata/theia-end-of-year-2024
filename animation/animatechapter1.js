@@ -2,18 +2,18 @@
 
 (function(global) {
     // Crash location and related coordinates
-    const crashCoord = [-60.770345219001996, 11.126129466518151];
-    const oilSpillLabelCoord = [-60.6824, 11.1674];
+    const crashCoord = [-60.780901682834156,	11.1326348402241 ];
+    const oilSpillLabelCoord = [-60.7210, 11.1068];
     
     // Satellite popup configuration
     const satellitePopupConfig = {
-      coords: [-60.770345219001996, 11.126129466518151], // Same as crash, but can be adjusted
+      coords: [-60.780901682834156,	11.1326348402241], // Same as crash, but can be adjusted
       popupHtml: `
         <div class="enhanced-popup">
           <img src="sat-images/chapter1A.png" class="annotation-img" alt="Gulfstream crash satellite imagery">
         </div>
       `,
-      offset: [0, -120] // ADJUST POPUP POSITION HERE: [x, y] - negative y moves up
+      offset: [0, -100] // ADJUST POPUP POSITION HERE: [x, y] - negative y moves up
     };
   
     // Storage for cleanup
@@ -69,7 +69,7 @@
       const el = document.createElement('div');
       el.className = 'annotation-text crash-annotation';
       el.innerHTML = `
-        <div class="crash-text">Vessel Capsized Location</div>
+        <div class="crash-text">Gulfstream Wreck Location</div>
       `;
       
       // Initial state
@@ -77,7 +77,7 @@
       el.style.transform = 'translateY(10px)';
   
       textAnnotation = new mapboxgl.Marker(el, { 
-        offset: [0, -80] // ADJUST TEXT POSITION HERE: [x, y] - negative y moves up
+        offset: [0, -50] // ADJUST TEXT POSITION HERE: [x, y] - negative y moves up
       })
         .setLngLat(crashCoord)
         .addTo(map);
@@ -298,7 +298,7 @@
         }
   
         .chapter1-popup .mapboxgl-popup-tip {
-          border-top-color: white;
+          border-top-color: black;
         }
   
         /* Red glow effect for satellite popup */
@@ -315,7 +315,7 @@
         .chapter1-popup .enhanced-popup .annotation-img {
           width: 184px !important;    /* <-- CHANGE THIS to increase/decrease image width */
           height: 170px !important;   /* <-- CHANGE THIS to increase/decrease image height */
-          object-fit: cover;
+          object-fit: fill;
           display: block;
         }
   

@@ -14,19 +14,26 @@
           <img src="sat-images/chapter7A.png" class="annotation-img" alt="Satellite imagery">
         </div>
       `,
-      offset: [-70, 250],
+      offset: [-10, 250],
       delay: 500,
-      markerType: 'orange', // Orange marker like animate2.js
+      markerType: 'orange', // Orange marker - using medium-yellow to avoid CSS interference
       hasGlow: false
     },
     {
-      coords: [42.5325, 14.8114], // Red Sea off Eritrea
+      coords: [39.5328, 18.2419], // Red Sea off Hurghada
+      // NO POPUP - just orange blinking dot
+      delay: 700,
+      markerType: 'orange', // Orange marker - using medium-yellow to avoid CSS interference
+      hasPopup: false // New flag to skip popup creation
+    },
+    {
+      coords: [41.6407, 14.4260], // Red Sea off Eritrea
       popupHtml: `
         <div class="enhanced-popup">
           <img src="sat-images/chapter7B.png" class="annotation-img" alt="Satellite imagery">
         </div>
       `,
-      offset: [0, -30],
+      offset: [30, -50],
       delay: 1000,
       markerType: 'red-final', // Special red marker for final AIS signal
       hasGlow: true // This one gets the red glow
@@ -282,8 +289,8 @@
         const el = document.createElement('div');
         
         if (pt.markerType === 'orange') {
-          // Orange marker like animate2.js
-          el.className = 'impact-marker medium';
+          // Orange marker - using medium-yellow to avoid CSS interference with animate2.js
+          el.className = 'impact-marker medium-yellow';
           el.innerHTML = `
             <div class="impact-core"></div>
             <div class="impact-ring"></div>
@@ -319,47 +326,49 @@
           el.style.transform = 'translate(-50%, -50%) scale(1)';
         });
 
-        // Show popup after marker animation
-        const popupTimeoutId = setTimeout(() => {
-          // Check if chapter is still active
-          if (!isChapter7Active) return;
-          
-          const popupClassName = pt.hasGlow ? 'tutor-popup glow-effect' : 'tutor-popup';
-          
-          const popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: false,
-            offset: pt.offset,
-            className: popupClassName,
-            maxWidth: 'none'
-          })
-            .setLngLat(pt.coords)
-            .setHTML(pt.popupHtml)
-            .addTo(map);
-          
-          chapter7Popups.push(popup);
-
-          // Add cleanup callback
-          chapter7CleanupCallbacks.push(() => {
-            popup.remove();
-          });
-
-          // Show Israel annotation after last popup
-          if (idx === chapter7Points.length - 1) {
-            const israelTimeoutId = setTimeout(() => {
-              if (!isChapter7Active) return;
-              addIsraelAnnotation(map);
-            }, 100);
+        // Show popup after marker animation - SKIP for hasPopup: false
+        if (pt.hasPopup !== false && pt.popupHtml) {
+          const popupTimeoutId = setTimeout(() => {
+            // Check if chapter is still active
+            if (!isChapter7Active) return;
             
+            const popupClassName = pt.hasGlow ? 'tutor-popup glow-effect' : 'tutor-popup';
+            
+            const popup = new mapboxgl.Popup({
+              closeButton: false,
+              closeOnClick: false,
+              offset: pt.offset,
+              className: popupClassName,
+              maxWidth: 'none'
+            })
+              .setLngLat(pt.coords)
+              .setHTML(pt.popupHtml)
+              .addTo(map);
+            
+            chapter7Popups.push(popup);
+
+            // Add cleanup callback
             chapter7CleanupCallbacks.push(() => {
-              clearTimeout(israelTimeoutId);
+              popup.remove();
             });
-          }
-        }, 100);
-        
-        chapter7CleanupCallbacks.push(() => {
-          clearTimeout(popupTimeoutId);
-        });
+          }, 100);
+          
+          chapter7CleanupCallbacks.push(() => {
+            clearTimeout(popupTimeoutId);
+          });
+        }
+
+        // Show Israel annotation after last popup
+        if (idx === chapter7Points.length - 1) {
+          const israelTimeoutId = setTimeout(() => {
+            if (!isChapter7Active) return;
+            addIsraelAnnotation(map);
+          }, 100);
+          
+          chapter7CleanupCallbacks.push(() => {
+            clearTimeout(israelTimeoutId);
+          });
+        }
       }, pt.delay);
       
       // Add timeout cleanup callback
@@ -445,7 +454,7 @@
     const style = document.createElement('style');
     style.id = 'chapter7-styles';
     style.textContent = `
-      /* ORANGE MARKER (from animate2.js style) */
+      /* YELLOW-ORANGE MARKER (to avoid interference with animate2.js) */
       .impact-marker {
         position: absolute;
         transform: translate(-50%, -50%);
@@ -489,26 +498,26 @@
         animation: impact-pulse 1.5s ease-out infinite;
       }
 
-      /* Orange marker styling */
-      .impact-marker.medium .impact-core {
-        background: #ff6600;
-        animation: medium-impact-glow 2s ease-in-out infinite;
+      /* MEDIUM-YELLOW marker styling - using #ffaa00 as requested */
+      .impact-marker.medium-yellow .impact-core {
+        background: #ffaa00;
+        animation: medium-yellow-impact-glow 2s ease-in-out infinite;
       }
 
-      .impact-marker.medium .impact-ring {
-        border-color: #ff6600;
+      .impact-marker.medium-yellow .impact-ring {
+        border-color: #ffaa00;
       }
 
-      .impact-marker.medium .impact-pulse {
-        background: radial-gradient(circle, rgba(255,102,0,0.8) 0%, transparent 70%);
+      .impact-marker.medium-yellow .impact-pulse {
+        background: radial-gradient(circle, rgba(255,170,0,0.8) 0%, transparent 70%);
       }
 
-      @keyframes medium-impact-glow {
+      @keyframes medium-yellow-impact-glow {
         0%, 100% {
-          box-shadow: 0 0 15px #ff6600, 0 0 30px #ff6600;
+          box-shadow: 0 0 15px #ffaa00, 0 0 30px #ffaa00;
         }
         50% {
-          box-shadow: 0 0 25px #ff6600, 0 0 50px #ff6600;
+          box-shadow: 0 0 25px #ffaa00, 0 0 50px #ffaa00;
         }
       }
 
@@ -538,8 +547,8 @@
       .final-ais-marker {
         position: absolute;
         transform: translate(-50%, -50%);
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
         pointer-events: none;
       }
 
@@ -634,7 +643,7 @@
         border-top-color: rgba(255, 0, 102, 0.2);
       }
 
-      /* DESKTOP: Satellite image sizes */
+      /* DESKTOP: Satellite image sizes - FINAL SIZES */
       .tutor-popup .enhanced-popup .annotation-img {
         width: 220px !important;    
         height: 200px !important;   
@@ -643,7 +652,7 @@
         border-radius: 4px;
       }
 
-      /* RED TEXT BOX - Chapter 5 Style */
+      /* RED TEXT BOX - Chapter 7 Style */
       .chapter7-text-annotation {
         position: absolute;
         transform: translate(-50%, -50%);
@@ -677,40 +686,73 @@
         filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
       }
 
-      /* TABLET OPTIMIZATIONS (1024px) */
+      /* TABLET OPTIMIZATIONS (1024px) - Proportional scaling from desktop */
       @media screen and (max-width: 1024px) {
         .tutor-popup .enhanced-popup .annotation-img {
-          width: 176px !important;    /* 80% of desktop */
-          height: 160px !important;   /* 80% of desktop */
+          width: 190px !important;    /* 86% of desktop 220px */
+          height: 173px !important;   /* 86% of desktop 200px */
+        }
+
+        .chapter7-text-annotation {
+          font-size: 13px;
+          padding: 11px 15px;
+        }
+
+        .warning-icon {
+          font-size: 15px;
+        }
+      }
+
+      /* MOBILE OPTIMIZATIONS (768px) - Better mobile scaling */
+      @media screen and (max-width: 768px) {
+        .tutor-popup .enhanced-popup .annotation-img {
+          width: 154px !important;    /* 70% of desktop 220px */
+          height: 140px !important;   /* 70% of desktop 200px */
         }
 
         .chapter7-text-annotation {
           font-size: 12px;
-          padding: 10px 14px;
+          padding: 10px 13px;
         }
 
         .warning-icon {
           font-size: 14px;
         }
+
+        /* Mobile marker adjustments */
+        .impact-marker {
+          width: 45px;
+          height: 45px;
+        }
+
+        .final-ais-marker {
+          width: 55px;
+          height: 55px;
+        }
+
+        .final-ais-core {
+          width: 15px;
+          height: 15px;
+        }
       }
 
-      /* MOBILE OPTIMIZATIONS (768px) */
-      @media screen and (max-width: 768px) {
+      /* SMALL MOBILE OPTIMIZATIONS (480px) - Smaller but usable */
+      @media screen and (max-width: 480px) {
         .tutor-popup .enhanced-popup .annotation-img {
-          width: 132px !important;    /* 60% of desktop */
-          height: 120px !important;   /* 60% of desktop */
+          width: 121px !important;    /* 55% of desktop 220px */
+          height: 110px !important;   /* 55% of desktop 200px */
         }
 
         .chapter7-text-annotation {
           font-size: 11px;
-          padding: 8px 12px;
+          padding: 8px 11px;
         }
 
         .warning-icon {
           font-size: 13px;
         }
 
-        /* Mobile marker adjustments */
+        /* Further mobile marker adjustments */
         .impact-marker {
           width: 40px;
           height: 40px;
@@ -721,43 +763,42 @@
           height: 50px;
         }
 
-        .final-ais-core {
+        .impact-core, .final-ais-core {
           width: 14px;
           height: 14px;
         }
       }
 
-      /* SMALL MOBILE OPTIMIZATIONS (480px) */
-      @media screen and (max-width: 480px) {
+      /* EXTRA SMALL MOBILE (320px) - Minimum usable sizes */
+      @media screen and (max-width: 320px) {
         .tutor-popup .enhanced-popup .annotation-img {
-          width: 99px !important;     /* 45% of desktop */
-          height: 90px !important;    /* 45% of desktop */
+          width: 88px !important;     /* 40% of desktop 220px */
+          height: 80px !important;    /* 40% of desktop 200px */
         }
 
         .chapter7-text-annotation {
           font-size: 10px;
-          padding: 6px 10px;
+          padding: 6px 9px;
         }
 
         .warning-icon {
           font-size: 12px;
         }
-      }
 
-      /* EXTRA SMALL MOBILE (320px) */
-      @media screen and (max-width: 320px) {
-        .tutor-popup .enhanced-popup .annotation-img {
-          width: 77px !important;     /* 35% of desktop */
-          height: 70px !important;    /* 35% of desktop */
+        /* Smallest mobile marker adjustments */
+        .impact-marker {
+          width: 35px;
+          height: 35px;
         }
 
-        .chapter7-text-annotation {
-          font-size: 9px;
-          padding: 5px 8px;
+        .final-ais-marker {
+          width: 45px;
+          height: 45px;
         }
 
-        .warning-icon {
-          font-size: 11px;
+        .impact-core, .final-ais-core {
+          width: 12px;
+          height: 12px;
         }
       }
 

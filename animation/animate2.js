@@ -15,7 +15,7 @@
           <img src="sat-images/chapter8A.png" class="annotation-img" alt="Rubymar Sat 2">
         </div>
       `,
-      offset: [-60, -40],
+      offset: [10, -40],
       delay: 500,
       impactLevel: 'medium'
     },
@@ -27,7 +27,7 @@
           <img src="sat-images/chapter8B.png" class="annotation-img" alt="Rubymar Sat 3">
         </div>
       `,
-      offset: [-170, 190],
+      offset: [-170, 170],
       delay: 800,
       impactLevel: 'critical'
     }
@@ -568,14 +568,39 @@
         animation: high-impact-glow 1.5s ease-in-out infinite;
       }
 
+      .impact-marker.high .impact-ring {
+        border-color: #ff6600;
+      }
+
+      .impact-marker.high .impact-pulse {
+        background: radial-gradient(circle, rgba(255,102,0,0.8) 0%, transparent 70%);
+      }
+
+      /* MEDIUM IMPACT - Updated to use #00A3E3 for all elements */
       .impact-marker.medium .impact-core {
-        background: #ffaa00;
+        background: #00A3E3;
         animation: medium-impact-glow 2s ease-in-out infinite;
+      }
+
+      .impact-marker.medium .impact-ring {
+        border-color: #00A3E3;
+      }
+
+      .impact-marker.medium .impact-pulse {
+        background: radial-gradient(circle, rgba(0,163,227,0.8) 0%, transparent 70%);
       }
 
       .impact-marker.critical .impact-core {
         background: #ff0000;
         animation: critical-impact-glow 1s ease-in-out infinite;
+      }
+
+      .impact-marker.critical .impact-ring {
+        border-color: #ff0000;
+      }
+
+      .impact-marker.critical .impact-pulse {
+        background: radial-gradient(circle, rgba(255,0,0,0.8) 0%, transparent 70%);
       }
 
       .danger-beacon {
@@ -621,12 +646,13 @@
         }
       }
 
+      /* UPDATED: Medium impact glow to use #00A3E3 */
       @keyframes medium-impact-glow {
         0%, 100% {
-          box-shadow: 0 0 15px #ffaa00, 0 0 30px #ffaa00;
+          box-shadow: 0 0 15px #00A3E3, 0 0 30px #00A3E3;
         }
         50% {
-          box-shadow: 0 0 25px #ffaa00, 0 0 50px #ffaa00;
+          box-shadow: 0 0 25px #00A3E3, 0 0 50px #00A3E3;
         }
       }
 
@@ -727,7 +753,7 @@
         border-top-color: rgba(255, 0, 0, 0.2);
       }
 
-      /* DESKTOP: Satellite image sizes */
+      /* DESKTOP: Satellite image sizes - KEEPING UNCHANGED */
       .rubymar-popup .enhanced-popup .annotation-img {
         width: 230px !important;    
         height: 205px !important;   
@@ -762,55 +788,55 @@
         letter-spacing: 0.5px;
       }
 
-      /* TABLET OPTIMIZATIONS (1024px) */
+      /* TABLET OPTIMIZATIONS (1024px) - Updated sizing */
       @media screen and (max-width: 1024px) {
         .rubymar-popup .enhanced-popup .annotation-img {
-          width: 184px !important;    /* 80% of desktop */
-          height: 164px !important;   /* 80% of desktop */
+          width: 200px !important;    /* Slightly reduced from 230px */
+          height: 178px !important;   /* Slightly reduced from 205px */
+        }
+
+        .chapter8-text-annotation {
+          font-size: 13px;
+          padding: 11px 15px;
+        }
+      }
+
+      /* MOBILE OPTIMIZATIONS (768px) - Better mobile sizing */
+      @media screen and (max-width: 768px) {
+        .rubymar-popup .enhanced-popup .annotation-img {
+          width: 170px !important;    /* Better mobile size */
+          height: 151px !important;   /* Proportional height */
         }
 
         .chapter8-text-annotation {
           font-size: 12px;
-          padding: 10px 14px;
+          padding: 10px 13px;
         }
       }
 
-      /* MOBILE OPTIMIZATIONS (768px) */
-      @media screen and (max-width: 768px) {
+      /* SMALL MOBILE OPTIMIZATIONS (480px) - Improved small mobile */
+      @media screen and (max-width: 480px) {
         .rubymar-popup .enhanced-popup .annotation-img {
-          width: 138px !important;    /* 60% of desktop */
-          height: 123px !important;   /* 60% of desktop */
+          width: 140px !important;    /* Better for small screens */
+          height: 125px !important;   /* Proportional height */
         }
 
         .chapter8-text-annotation {
           font-size: 11px;
-          padding: 8px 12px;
+          padding: 8px 11px;
         }
       }
 
-      /* SMALL MOBILE OPTIMIZATIONS (480px) */
-      @media screen and (max-width: 480px) {
+      /* EXTRA SMALL MOBILE (320px) - Optimized for smallest screens */
+      @media screen and (max-width: 320px) {
         .rubymar-popup .enhanced-popup .annotation-img {
-          width: 104px !important;    /* 45% of desktop */
-          height: 92px !important;    /* 45% of desktop */
+          width: 110px !important;    /* Minimum usable size */
+          height: 98px !important;    /* Proportional height */
         }
 
         .chapter8-text-annotation {
           font-size: 10px;
-          padding: 6px 10px;
-        }
-      }
-
-      /* EXTRA SMALL MOBILE (320px) */
-      @media screen and (max-width: 320px) {
-        .rubymar-popup .enhanced-popup .annotation-img {
-          width: 81px !important;     /* 35% of desktop */
-          height: 72px !important;    /* 35% of desktop */
-        }
-
-        .chapter8-text-annotation {
-          font-size: 9px;
-          padding: 5px 8px;
+          padding: 6px 9px;
         }
       }
 

@@ -15,8 +15,8 @@
           <img src="sat-images/chapter12B.png" class="annotation-img point1-img" alt="Chinese vessel satellite image">
         </div>
       `,
-      textOffset: [-200, -10], // ADJUST TEXT BOX POSITION: [x, y] - positive y moves down
-      popupOffset: [150, -90] // ADJUST SATELLITE IMAGE POSITION: [x, y] - positive y moves down
+      textOffset: [-140, 40], // ADJUST TEXT BOX POSITION: [x, y] - positive y moves down
+      popupOffset: [150, -80] // ADJUST SATELLITE IMAGE POSITION: [x, y] - positive y moves down
     },
     {
       coords: [115.0953, 15.2563], // Point 2: Red marker
@@ -26,8 +26,8 @@
           <img src="sat-images/chapter12A.png" class="annotation-img point2-img" alt="QSSY9 satellite image">
         </div>
       `,
-      textOffset: [-200, -10], // ADJUST TEXT BOX POSITION: [x, y]
-      popupOffset: [165, 350] // ADJUST SATELLITE IMAGE POSITION: [x, y]
+      textOffset: [-140, 40], // ADJUST TEXT BOX POSITION: [x, y]
+      popupOffset: [165, 370] // ADJUST SATELLITE IMAGE POSITION: [x, y]
     }
   ];
 
@@ -328,13 +328,13 @@
       /* POINT 1 IMAGE SIZE - ADJUSTABLE (YOUR NEW SIZE: 250x180) */
       .chapter12-popup .enhanced-popup .annotation-img.point1-img {
         width: 250px !important;    /* <-- POINT 1: CHANGE THIS to adjust width */
-        height: 180px !important;   /* <-- POINT 1: CHANGE THIS to adjust height */
+        height: 175px !important;   /* <-- POINT 1: CHANGE THIS to adjust height */
       }
 
       /* POINT 2 IMAGE SIZE - ADJUSTABLE (YOUR NEW SIZE: 250x180) */
       .chapter12-popup .enhanced-popup .annotation-img.point2-img {
         width: 250px !important;    /* <-- POINT 2: CHANGE THIS to adjust width */
-        height: 180px !important;   /* <-- POINT 2: CHANGE THIS to adjust height */
+        height: 175px !important;   /* <-- POINT 2: CHANGE THIS to adjust height */
       }
 
       /* ─────────── TABLET OPTIMIZATIONS (1024px) ─────────── */
@@ -368,12 +368,12 @@
         /* Tablet image sizes - 80% of your new desktop sizes */
         .chapter12-popup .enhanced-popup .annotation-img.point1-img {
           width: 200px !important;    /* 80% of 250px */
-          height: 144px !important;   /* 80% of 180px */
+          height: 140px !important;   /* 80% of 180px */
         }
 
         .chapter12-popup .enhanced-popup .annotation-img.point2-img {
           width: 200px !important;    /* 80% of 250px */
-          height: 144px !important;   /* 80% of 180px */
+          height: 140px !important;   /* 80% of 180px */
         }
       }
 
