@@ -173,7 +173,7 @@ async function loadIntroCoverageData() {
   
   // Coverage data sources for each mini-map
   const coverageFiles = [
-    'data/South_america.geojson',     // Mini-map 1
+    'data/south_america.geojson',     // Mini-map 1
     'data/middle_east.geojson',       // Mini-map 2
     'data/arctic_russia.geojson',     // Mini-map 3
     'data/south_china_sea.geojson'    // Mini-map 4
