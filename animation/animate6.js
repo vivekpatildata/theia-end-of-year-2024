@@ -9,7 +9,7 @@
   const chapter12Points = [
     {
       coords: [115.5287, 10.4919], // Point 1: Red marker
-      textContent: 'Vessel Chinese exercise surveying waters within the Philippines\' Exclusive Economic Zone',
+      textContent: 'Chinese vessel surveying waters within the Philippines\' Exclusive Economic Zone.',
       popupHtml: `
         <div class="enhanced-popup">
           <img src="sat-images/chapter12B.png" class="annotation-img point1-img" alt="Chinese vessel satellite image">
