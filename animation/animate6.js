@@ -9,7 +9,7 @@
   const chapter12Points = [
     {
       coords: [115.5287, 10.4919], // Point 1: Red marker
-      textContent: 'Chinese vessel surveying waters within the Philippines\' Exclusive Economic Zone.',
+      textContent: 'Chinese vessel HAIYANG DIZHI 12 HAO (IMO: 7714375) surveying waters within the Philippines\' Exclusive Economic Zone.',
       popupHtml: `
         <div class="enhanced-popup">
           <img src="sat-images/chapter12B.png" class="annotation-img point1-img" alt="Chinese vessel satellite image">
@@ -20,7 +20,7 @@
     },
     {
       coords: [115.0953, 15.2563], // Point 2: Red marker
-      textContent: 'QSSY9 was detected light by Theia as well as other Chinese Coast Guard vessels, all travelling in formation east towards the Scarborough Shoal arriving prior to 02:42 on 12 Oct 24.',
+      textContent: 'QSSY9 (MMSI: 412520149) was detected light by Theia as well as other Chinese Coast Guard vessels, all travelling in formation east towards the Scarborough Shoal arriving prior to 02:42 on 12 Oct 24.',
       popupHtml: `
         <div class="enhanced-popup">
           <img src="sat-images/chapter12A.png" class="annotation-img point2-img" alt="QSSY9 satellite image">

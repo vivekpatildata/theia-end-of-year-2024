@@ -1124,7 +1124,7 @@ const configs = [
 
   chapter1: {
     config: { center: [-60.6903, 11.1853], zoom: 10.22, pitch: 0, bearing: -16 },
-    legend: '<span style="color: #ffd700; font-weight: 600;">Gulfstream Wreck Location & Oil Contamination Zone</span>',
+    legend: '<span style="color: #ffd700; font-weight: 600;">GULFSTREAM Wreck Location & Oil Contamination Zone</span>',
     dateRange: 'Feb 7 2024 – Apr 27 2025',
     async onEnter() {
       console.log('Entering chapter1');
@@ -1232,7 +1232,7 @@ const configs = [
 
   chapter4: {
     config: { center: [-5.284,36.058], zoom: 7.4, pitch: 0, bearing: 3 },
-    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> <span style="color: #ffd700; font-weight: 600;">&</span> <span style="color: #57aeff; font-weight: 600;">Atila</span> <span style="color: #ffd700; font-weight: 600;">– AIS Path STS Operations</span>',
+    legend: '<span style="color: #62fda0; font-weight: 600;">SAKARYA</span> <span style="color: #ffd700; font-weight: 600;">&</span> <span style="color: #57aeff; font-weight: 600;">ATILA</span> <span style="color: #ffd700; font-weight: 600;">– AIS Path STS Operations</span>',
     dateRange: 'Nov 6 2024 – Nov 12 2024',
     async onEnter() {
       console.log('Entering chapter4');
@@ -1259,7 +1259,7 @@ const configs = [
 
   chapter5: {
     config: { center: [52.2,37.1 ], zoom: 1.62, pitch: 0, bearing: 0 },
-    legend: '<span style="color: #62fda0; font-weight: 600;">Sakarya</span> <span style="color: #ffd700; font-weight: 600;">&</span> <span style="color: #57aeff; font-weight: 600;">Atila </span><span style="color: #ffd700; font-weight: 600;">– Post-STS Dispersal Routes</span>',
+    legend: '<span style="color: #62fda0; font-weight: 600;">SAKARYA</span> <span style="color: #ffd700; font-weight: 600;">&</span> <span style="color: #57aeff; font-weight: 600;">ATILA </span><span style="color: #ffd700; font-weight: 600;">– Post-STS Dispersal Routes</span>',
     dateRange: 'Nov 9 2024 – Dec 6 2024',
     async onEnter() {
       console.log('Entering chapter5');
@@ -1301,25 +1301,25 @@ const configs = [
           { 
             center: [35.803,73.989], 
             zoom: 6.26, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Pioneer</span> <span style="color: #ffd700; font-weight: 600;">- Symmetrical AIS spoofing</span>', 
+            legend: '<span style="color: #62fda0; font-weight: 600;">PIONEER</span> <span style="color: #ffd700; font-weight: 600;">- Symmetrical AIS spoofing</span>', 
             date: 'Aug 1 - Aug 6 2024'
           },
           { 
             center: [35.408,74.148], 
             zoom: 6.3, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Asya Energy</span> <span style="color: #ffd700; font-weight: 600;">- Asymmetrical AIS spoofing</span>', 
+            legend: '<span style="color: #62fda0; font-weight: 600;">ASYA ENERGY</span> <span style="color: #ffd700; font-weight: 600;">- Asymmetrical AIS spoofing</span>', 
             date: 'Aug 2 - Aug 15 2024'
           },
           { 
             center: [47.83, 73.6], 
             zoom: 3.2, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Everest Energy</span> <span style="color: #ffd700; font-weight: 600;">- AIS switched off for a brief time (Dark AIS) </span>', 
+            legend: '<span style="color: #62fda0; font-weight: 600;">EVEREST ENERGY</span> <span style="color: #ffd700; font-weight: 600;">- AIS switched off for a brief time (Dark AIS) </span>', 
             date: 'Aug 20 - Aug 25 2024'
           },
           { 
             center: [47.83, 73.6], 
             zoom: 2.8, 
-            legend: '<span style="color: #62fda0; font-weight: 600;">Mulan</span> <span style="color: #ffd700; font-weight: 600;">- Loitering ballast for days before picking up cargo from ALNG2   </span>', 
+            legend: '<span style="color: #62fda0; font-weight: 600;">MULAN</span> <span style="color: #ffd700; font-weight: 600;">- Loitering ballast for days before picking up cargo from ALNG2   </span>', 
             date: 'Sept 17 – Dec 31 2024'
           }
         ];
@@ -1431,7 +1431,7 @@ configs.forEach((cfg, i) => {
 
   chapter7: {
     config: { center: [39.57, 24.14], zoom: 4.36, pitch: 0, bearing: 28 },
-    legend: '<span style="color: #ffd700; font-weight: 600;">MV Tutor Track & Final Position Analysis</span>',
+    legend: '<span style="color: #ffd700; font-weight: 600;">MV TUTOR Track & Final Position Analysis</span>',
     dateRange: 'Jun 8 2024 – Jun 18 2024',
     async onEnter() {
       console.log('Entering chapter7');
@@ -1450,7 +1450,7 @@ configs.forEach((cfg, i) => {
 
   chapter8: {
     config: { center: [45.97, 17.49], zoom: 4.36,  pitch: 0, bearing: -20.8 },
-    legend: '<span style="color: #ffd700; font-weight: 600;">Rubymar Satellite-based damage assessment and ecological impact tracking</span>',
+    legend: '<span style="color: #ffd700; font-weight: 600;">RUBYMAR Satellite-based damage assessment and ecological impact tracking</span>',
     dateRange: 'Feb 18 2024 – Mar 2 2024',
     async onEnter() {
       console.log('Entering chapter8');
@@ -1469,7 +1469,7 @@ configs.forEach((cfg, i) => {
 
   chapter9: {
     config: { center: [55.072, 26.381], zoom: 6.47, pitch: 0, bearing: 0  },
-    legend: ' MSC Aries –  ⎸ AIS Course & ┇ Assessed Course',
+    legend: ' MSC ARIES –  ⎸ AIS Course & ┇ Assessed Course',
     dateRange: 'Apr 12 2024 – Oct 2024',
     async onEnter() {
       console.log('Entering chapter9');

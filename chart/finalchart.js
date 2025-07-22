@@ -688,8 +688,8 @@ function createSummaryStats() {
           <div class="stat-label">Total Detections</div>
         </div>
         <div class="stat-item large">
-          <span class="stat-number large">74M km²</span>
-          <div class="stat-label">OF PLANETSCOPE & SENTINAL Satellite Coverage Daily</div>
+          <span class="stat-number large">27M km²</span>
+          <div class="stat-label">Of PLANETSCOPE Satellite Coverage Daily</div>
         </div>
       </div>
       <div class="summary-row-2">

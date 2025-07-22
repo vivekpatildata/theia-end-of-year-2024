@@ -27,7 +27,7 @@
     {
       coords: [53.8779, -25.1195], // Red text box - vessel to China
       type: 'text-annotation',
-      text: 'Atila was further on its way to China',
+      text: 'ATILA was further on its way to China',
       textOffset: [130, -30]
     },
     {
@@ -44,7 +44,7 @@
     {
       coords: [42.9621, 61.5122], // Red text box - vessel to Murmansk
       type: 'text-annotation',
-      text: 'Sakarya was on its way to Murmansk',
+      text: 'SAKARYA was on its way to Murmansk',
       textOffset: [0, -40]
     }
   ];
