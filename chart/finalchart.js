@@ -1,4 +1,4 @@
-/* Final Chart JS - Regional Maritime Intelligence Summary with Real Data */
+/* Final Chart JS - Regional Maritime Intelligence Summary with Real CSV Data */
 
 // Inject Final Chart CSS styles directly into the document
 function injectFinalChartCSS() {
@@ -51,10 +51,24 @@ function injectFinalChartCSS() {
     /* Regional Grid Layout */
     .regions-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto auto;
       gap: 1.5rem;
-      margin: 3rem 0;
+      margin: 3rem auto;
+      max-width: 1200px;
     }
+
+    /* First two rows - 6 items normal */
+    .regions-grid .region-card:nth-child(1) { grid-column: 1; grid-row: 1; }
+    .regions-grid .region-card:nth-child(2) { grid-column: 2; grid-row: 1; }
+    .regions-grid .region-card:nth-child(3) { grid-column: 3; grid-row: 1; }
+    .regions-grid .region-card:nth-child(4) { grid-column: 1; grid-row: 2; }
+    .regions-grid .region-card:nth-child(5) { grid-column: 2; grid-row: 2; }
+    .regions-grid .region-card:nth-child(6) { grid-column: 3; grid-row: 2; }
+
+    /* Third row - 2 items in columns 1 and 3, leave column 2 empty */
+    .regions-grid .region-card:nth-child(7) { grid-column: 1; grid-row: 3; }
+    .regions-grid .region-card:nth-child(8) { grid-column: 3; grid-row: 3; }
 
     .region-card {
       background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 30, 40, 0.6));
@@ -64,7 +78,7 @@ function injectFinalChartCSS() {
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      min-height: 280px;
+      min-height: 250px;
       display: flex;
       flex-direction: column;
     }
@@ -174,8 +188,9 @@ function injectFinalChartCSS() {
 
     .summary-row-2 {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1.5rem;
+      justify-items: center;
     }
 
     .stat-item {
@@ -227,10 +242,23 @@ function injectFinalChartCSS() {
 
     .top-categories-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto;
       gap: 1.5rem;
       margin-top: 1.5rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
     }
+
+    /* First row - 3 items */
+    .top-categories-grid .category-section:nth-child(1) { grid-column: 1; grid-row: 1; }
+    .top-categories-grid .category-section:nth-child(2) { grid-column: 2; grid-row: 1; }
+    .top-categories-grid .category-section:nth-child(3) { grid-column: 3; grid-row: 1; }
+
+    /* Second row - 2 items in columns 1 and 3, leave column 2 empty */
+    .top-categories-grid .category-section:nth-child(4) { grid-column: 1; grid-row: 2; }
+    .top-categories-grid .category-section:nth-child(5) { grid-column: 3; grid-row: 2; }
 
     .category-section {
       background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(20, 30, 40, 0.4));
@@ -381,6 +409,7 @@ function injectFinalChartCSS() {
 
       .region-card {
         padding: 1.2rem;
+        min-height: 220px;
       }
 
       .region-name {
@@ -528,28 +557,24 @@ function injectFinalChartCSS() {
 
 // REAL REGIONAL DATA - from CSV (excluding Total row)
 const regionalData = [
-  { region: "Americas", light: 179128, dark: 2505, sts: 505, optical: 4223, spoofing: 3444, detections: 648391 },
-  { region: "Europe", light: 1230178, dark: 24245, sts: 14065, optical: 10689, spoofing: 19505, detections: 3054462 },
-  { region: "Russia", light: 46, dark: 0, sts: 0, optical: 0, spoofing: 18, detections: 243 },
-  { region: "Africa", light: 398293, dark: 5896, sts: 816, optical: 6159, spoofing: 8193, detections: 1269948 },
-  { region: "Red Sea", light: 219165, dark: 3391, sts: 311, optical: 1936, spoofing: 4749, detections: 621557 },
-  { region: "Persian Gulf - Arabian Sea", light: 578686, dark: 7840, sts: 15330, optical: 13262, spoofing: 30695, detections: 1774066 },
-  { region: "South East Asia", light: 596940, dark: 15696, sts: 47217, optical: 48018, spoofing: 8128, detections: 3524848 },
-  { region: "South China Sea - Japan", light: 896569, dark: 20320, sts: 17072, optical: 11470, spoofing: 7494, detections: 4010539 }
+  { region: "Americas", light: 179128, dark: 2505, sts: 505, spoofing: 3444, detections: 648391 },
+  { region: "Europe", light: 1230178, dark: 24245, sts: 14065, spoofing: 19505, detections: 3054462 },
+  { region: "Russia", light: 46, dark: 0, sts: 0, spoofing: 18, detections: 243 },
+  { region: "Africa", light: 80553, dark: 269, sts: 104, spoofing: 1371, detections: 156405 },
+  { region: "Red Sea", light: 219165, dark: 3391, sts: 311, spoofing: 4749, detections: 621557 },
+  { region: "Persian Gulf - Arabian Sea", light: 578686, dark: 7840, sts: 15330, spoofing: 30695, detections: 1774066 },
+  { region: "South East Asia", light: 596940, dark: 15696, sts: 47217, spoofing: 8128, detections: 3524848 },
+  { region: "South China Sea - Japan", light: 896569, dark: 20320, sts: 17072, spoofing: 7494, detections: 4010539 }
 ];
 
 // REAL TOTALS - from CSV Total row
 const realTotals = {
-  light: 4099005,
-  dark: 79893,
-  sts: 95316,
-  optical: 95757,
-  spoofing: 82226,
-  detections: 14904054
+  light: 3781265,
+  dark: 74266,
+  sts: 94604,
+  spoofing: 75404,
+  detections: 13790511
 };
-
-// CSS variables are defined in your main styles.css file
-// No need to redefine them here
 
 // Calculate statistics using real totals
 function calculateStatistics() {
@@ -557,7 +582,6 @@ function calculateStatistics() {
     light: realTotals.light,
     dark: realTotals.dark,
     sts: realTotals.sts,
-    optical: realTotals.optical,
     spoofing: realTotals.spoofing,
     detections: realTotals.detections,
     totalActivities: realTotals.detections
@@ -567,9 +591,9 @@ function calculateStatistics() {
 // Utility function to format numbers (K/M format)
 function formatNumber(num) {
   if (num >= 1000000) {
-    return (num / 1000000).toFixed(2) + 'M';
+    return (num / 1000000).toFixed(1).replace('.0', '') + 'M';
   } else if (num >= 1000) {
-    return (num / 1000).toFixed(2) + 'K';
+    return (num / 1000).toFixed(1).replace('.0', '') + 'K';
   } else {
     return num.toString();
   }
@@ -587,14 +611,12 @@ function getTopRegionsByCategory(category) {
                    category === 'light' ? a.light :
                    category === 'dark' ? a.dark :
                    category === 'sts' ? a.sts :
-                   category === 'optical' ? a.optical :
                    category === 'spoofing' ? a.spoofing : 0;
     
     const bValue = category === 'detections' ? b.detections :
                    category === 'light' ? b.light :
                    category === 'dark' ? b.dark :
                    category === 'sts' ? b.sts :
-                   category === 'optical' ? b.optical :
                    category === 'spoofing' ? b.spoofing : 0;
     
     return bValue - aValue;
@@ -605,7 +627,6 @@ function getTopRegionsByCategory(category) {
                        category === 'light' ? realTotals.light :
                        category === 'dark' ? realTotals.dark :
                        category === 'sts' ? realTotals.sts :
-                       category === 'optical' ? realTotals.optical :
                        category === 'spoofing' ? realTotals.spoofing : 1;
 
   return sortedRegions.slice(0, 3).map((region, index) => {
@@ -613,7 +634,6 @@ function getTopRegionsByCategory(category) {
                   category === 'light' ? region.light :
                   category === 'dark' ? region.dark :
                   category === 'sts' ? region.sts :
-                  category === 'optical' ? region.optical :
                   category === 'spoofing' ? region.spoofing : 0;
     
     return {
@@ -626,7 +646,7 @@ function getTopRegionsByCategory(category) {
   });
 }
 
-// Create region card HTML with formatted numbers
+// Create region card HTML with formatted numbers (removed optical bunkering)
 function createRegionCard(region) {
   const total = region.detections;
   
@@ -648,10 +668,6 @@ function createRegionCard(region) {
           <span class="breakdown-value">${formatNumber(region.sts)}</span>
         </div>
         <div class="breakdown-item">
-          <span class="breakdown-label">Optical Bunkering</span>
-          <span class="breakdown-value">${formatNumber(region.optical)}</span>
-        </div>
-        <div class="breakdown-item">
           <span class="breakdown-label">Spoofing</span>
           <span class="breakdown-value">${formatNumber(region.spoofing)}</span>
         </div>
@@ -660,7 +676,7 @@ function createRegionCard(region) {
   `;
 }
 
-// Create summary statistics HTML with formatted numbers
+// Create summary statistics HTML with formatted numbers (removed optical bunkering)
 function createSummaryStats() {
   const stats = calculateStatistics();
   
@@ -672,8 +688,8 @@ function createSummaryStats() {
           <div class="stat-label">Total Detections</div>
         </div>
         <div class="stat-item large">
-          <span class="stat-number large">74 Million km²</span>
-          <div class="stat-label"> OF PLANETSCOPE & SENTINAL Satellite Coverage Daily</div>
+          <span class="stat-number large">74M km²</span>
+          <div class="stat-label">OF PLANETSCOPE & SENTINAL Satellite Coverage Daily</div>
         </div>
       </div>
       <div class="summary-row-2">
@@ -690,10 +706,6 @@ function createSummaryStats() {
           <div class="stat-label">Ship-To-Ship Transfers</div>
         </div>
         <div class="stat-item">
-          <span class="stat-number">${formatNumber(stats.optical)}</span>
-          <div class="stat-label">Optical Bunkering</div>
-        </div>
-        <div class="stat-item">
           <span class="stat-number">${formatNumber(stats.spoofing)}</span>
           <div class="stat-label">Spoofing</div>
         </div>
@@ -702,7 +714,7 @@ function createSummaryStats() {
   `;
 }
 
-// Create category ranking HTML with formatted numbers and percentages
+// Create category ranking HTML with formatted numbers and percentages (removed optical bunkering)
 function createCategoryRanking(categoryName, categoryKey) {
   const topRegions = getTopRegionsByCategory(categoryKey);
   
@@ -727,14 +739,13 @@ function createCategoryRanking(categoryName, categoryKey) {
   `;
 }
 
-// Create top regions HTML with all categories
+// Create top regions HTML with all categories (removed optical bunkering)
 function createTopRegions() {
   const categories = [
     { name: 'Total Detections', key: 'detections' },
     { name: 'AIS Light', key: 'light' },
     { name: 'AIS Dark', key: 'dark' },
     { name: 'Ship-To-Ship Transfers', key: 'sts' },
-    { name: 'Optical Bunkering', key: 'optical' },
     { name: 'Spoofing', key: 'spoofing' }
   ];
 
@@ -761,29 +772,28 @@ function createNarrative() {
     <div class="narrative-section fade-in-up">
       <h4>Regional Analysis Summary</h4>
       <p>
-      Throughout 2024, Theia's comprehensive surveillance architecture monitored global maritime activity across 8 critical regions. Our multi-source intelligence fusion identified 14.9 million maritime activities, providing unprecedented insight into both legitimate shipping operations and sanctions evasion networks operating worldwide.
-
+      Throughout 2024, Theia's comprehensive surveillance architecture monitored global maritime activity across 8 critical regions. Our multi-source intelligence fusion identified 13.8 million maritime activities, providing unprecedented insight into both legitimate shipping operations and sanctions evasion networks operating worldwide.
       </p>
       <p>
-      The South China Sea recorded the highest activity levels globally, with over 4 million detections as major shipping routes converged in this strategic region. Theia's automated tracking algorithms identified 17,072 ship-to-ship transfers, many occurring in international waters where vessels routinely exchange cargo and conduct maritime operations beyond traditional oversight boundaries.
+      The South China Sea - Japan region recorded the highest activity levels globally, with over 4.0 million detections (29.1% of global activity) as major shipping routes converged in this strategic theater. Theia's automated tracking algorithms identified 17,072 ship-to-ship transfers, representing 18.0% of all global STS operations conducted in international waters where vessels routinely exchange cargo beyond traditional oversight boundaries.
       </p>
       <p>
-      South East Asia emerged as the global epicenter for ship-to-ship transfer activity, accounting for 47,217 transfers—nearly half of all global STS operations. The platform's behavioral analysis capabilities detected vessels operating without standard AIS identification at significantly higher rates than other regions, indicating sophisticated logistics networks that extend beyond conventional monitoring coverage.
+      South East Asia emerged as the global epicenter for ship-to-ship transfer activity, accounting for 47,217 transfers—nearly half (49.9%) of all global STS operations. This region also demonstrated significant dark fleet activity with 15,696 AIS dark detections (21.1% of global dark fleet operations), indicating sophisticated logistics networks that operate beyond conventional monitoring coverage.
       </p>
       <p>
-      The Persian Gulf demonstrated the world's most intensive spoofing activity, with maritime operators conducting 30,695 coordinate manipulation incidents—representing over one-third of global spoofing events. These electronic countermeasures suggest systematic efforts to obscure vessel movements in this critical energy transit corridor, reflecting both sanctions pressure and operational security considerations.
+      The Persian Gulf - Arabian Sea demonstrated the world's most intensive spoofing activity, with maritime operators conducting 30,695 coordinate manipulation incidents—representing 40.7% of all global spoofing events. These electronic countermeasures suggest systematic efforts to obscure vessel movements in this critical energy transit corridor, reflecting both sanctions pressure and operational security considerations.
       </p>
       
-      <p>European waters revealed extensive shadow fleet infiltration among the 3 million maritime movements monitored. Theia's spoofing detection algorithms identified 19,505 incidents, indicating that alternative shipping networks have become increasingly integrated into traditional European trade routes, requiring persistent surveillance to distinguish legitimate from questionable operations.
+      <p>European waters revealed the most extensive dark fleet infiltration, with 24,245 AIS dark detections (32.6% of global dark activity) among the 3.1 million maritime movements monitored. Theia's spoofing detection algorithms also identified 19,505 incidents (25.9% of global spoofing), indicating that alternative shipping networks have become increasingly integrated into traditional European trade routes, requiring persistent surveillance to distinguish legitimate from questionable operations.
       </p>
 
       <p>The Americas demonstrated concentrated evasion activity, particularly around Venezuelan territorial waters where 3,444 spoofing incidents illustrated how sanctions enforcement drives technological adaptation among maritime operators seeking to circumvent monitoring systems.
       </p>
 
-      <p>The Red Sea maintained relatively standard identification protocols despite regional tensions, with commercial vessels continuing to broadcast proper AIS signals, suggesting that international shipping largely adhered to maritime safety standards even in challenging operating environments.
+      <p>The Red Sea maintained relatively elevated spoofing activity with 4,749 incidents despite regional tensions, while commercial vessels continued standard identification protocols in most cases, suggesting that international shipping adapted operational security practices to the challenging regional environment.
       </p>
 
-      <p>Theia's 2024 intelligence data reveals a global maritime environment where transparent commercial shipping operates alongside increasingly sophisticated alternative networks. The concentration of questionable activities in Asia-Pacific waters, combined with extensive electronic countermeasures in energy corridors, demonstrates that modern maritime security requires comprehensive regional monitoring capabilities to maintain effective oversight.
+      <p>Theia's 2024 intelligence data reveals a global maritime environment where transparent commercial shipping operates alongside increasingly sophisticated alternative networks. The concentration of ship-to-ship transfer activity in Asia-Pacific waters, combined with extensive electronic countermeasures in energy corridors and dark fleet operations in European waters, demonstrates that modern maritime security requires comprehensive regional monitoring capabilities to maintain effective oversight.
       </p>
 
     </div>
@@ -835,8 +845,9 @@ function initializeFinalChart() {
     // Initialize scroll animations
     initializeScrollAnimations();
     
-    console.log('✅ Final chart initialized successfully with real regional data');
+    console.log('✅ Final chart initialized successfully with real CSV data');
     console.log('📊 Real Data Totals:', realTotals);
+    console.log('📊 Regional Data Count:', regionalData.length);
   } catch (error) {
     console.error('❌ Error creating chart content:', error);
   }

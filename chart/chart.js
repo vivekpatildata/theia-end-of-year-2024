@@ -269,29 +269,27 @@ const chartConfig = {
   colorScheme: 'ocean',
   glowEffect: true,
   particleEffect: false,
-  minBarWidth: 85,               // REDUCED: was 100 - makes individual bars more compact
   barSpacing: 2                  // REDUCED: was 3 - less space between bars
 };
 
-// Detection categories - 6 categories
-const categories = ["Light", "Dark", "Ship-To-Ship Transfers", "Optical Bunkering", "Spoofing", "Detections"];
+// Detection categories - 5 categories (removed Optical Bunkering)
+const categories = ["Light", "Dark", "Ship-To-Ship Transfers", "Spoofing", "Detections"];
 
-// Enhanced detection data - REMOVED CONCLUSION
+// Enhanced detection data - Using CSV data
 const detectionData = {
-  "intro":     [0,    0,    0,    0,    0,    0],
-  "chapter1":  [98439,   763,    336895,    2123,    1636,    418],
-  "chapter2":  [80689,  1742,  311496,   2100,   1808,   87],
-  "chapter3":  [216521,  2251,  541184,  1423,  3523 ,   2123],
-  "chapter4":  [715118,  11410,  1732760,  4377,  11238,  10280],
-  "chapter5":  [80553,  269,  156405,  151,  1371,  104],
-  "chapter6":  [46,  0,  243,  0,  18,  0],
-  "chapter7":  [219165,  3391,  621557,  1936,  4749,  311],
-  "chapter8":  [219165,  3391,  621557,  1936,  4749,  311],
-  "chapter9":  [578686, 7840, 1774066, 13262,  30695,  15330],
-  "chapter10": [591796, 15625, 340773, 47988,  8035,  47217],
-  "chapter11": [710859, 17511, 2946252, 8684, 6351, 8222],
-  "chapter12": [710859, 17511, 2946252, 8684, 6351, 8222]
-  // REMOVED: "conclusion"
+  "intro":     [0, 0, 0, 0, 0],
+  "chapter1":  [98439, 763, 418, 1636, 336895],      // Americas
+  "chapter2":  [80689, 1742, 87, 1808, 311496],      // Americas (Venezuela)
+  "chapter3":  [216521, 2251, 2123, 3523, 541184], // Europe
+  "chapter4":  [715118, 11410, 10280, 11238, 1732760], // Europe (Mediterranean)
+  "chapter5":  [80553, 269, 104, 1371, 156405],     // Africa
+  "chapter6":  [46, 0, 0, 18, 243],                    // Russia
+  "chapter7":  [219165, 3391, 311, 4749, 621557],      // Red Sea
+  "chapter8":  [219165, 3391, 311, 4749, 621557],      // Red Sea
+  "chapter9":  [578686, 7840, 15330, 30695, 1774066],  // Persian Gulf - Arabian Sea
+  "chapter10": [596940, 15696, 47217, 8128, 3524848],  // South East Asia
+  "chapter11": [896569, 20320, 17072, 7494, 4010539],  // South China Sea - Japan
+  "chapter12": [896569, 20320, 17072, 7494, 4010539]   // South China Sea - Japan
 };
 
 // Location data - REMOVED CONCLUSION
@@ -305,28 +303,25 @@ const locationData = {
   "chapter6":  "Russian Arctic",
   "chapter7":  "Red Sea",
   "chapter8":  "Red Sea",
-  "chapter9":  "Arabian Sea- Persian Gulf ",
+  "chapter9":  "Arabian Sea - Persian Gulf",
   "chapter10": "Malacca Strait",
   "chapter11": "South China Sea",
   "chapter12": "South China Sea"
-  // REMOVED: "conclusion"
 };
 
-// Maritime Blue Color Schemes - IMPROVED DIFFERENTIATION
+// Maritime Blue Color Schemes - 5 colors (removed one for Optical Bunkering)
 const colorSchemes = {
   ocean: [
-    '#00ccff',  // Light - Bright cyan (keep as is - good)
-    '#0066cc',  // Dark - Medium blue (keep as is - good)
-    '#4a90e2',  // Ship-To-Ship Transfers - Lighter blue (differentiated)
-    '#2c5aa0',  // Optical Bunkering - Steel blue (middle tone)
-    '#1e3a8a',  // Spoofing - Navy blue (darker but distinct)
-    '#0f172a'   // Detections - Very dark navy (keep as is - good)
+    '#00ccff',  // Light - Bright cyan
+    '#0066cc',  // Dark - Medium blue
+    '#4a90e2',  // Ship-To-Ship Transfers - Lighter blue
+    '#1e3a8a',  // Spoofing - Navy blue
+    '#0f172a'   // Detections - Very dark navy
   ],
   fire: [
     '#ffeb3b',  // Light - Bright yellow
     '#ff9800',  // Dark - Orange
     '#e91e63',  // Ship-To-Ship Transfers - Pink
-    '#9c27b0',  // Optical Bunkering - Purple
     '#f44336',  // Spoofing - Red
     '#424242'   // Detections - Dark grey
   ],
@@ -334,14 +329,13 @@ const colorSchemes = {
     '#00ff88',  // Light - Neon green
     '#3a86ff',  // Dark - Neon blue
     '#ff006e',  // Ship-To-Ship Transfers - Neon pink
-    '#8338ec',  // Optical Bunkering - Neon purple
     '#ff3333',  // Spoofing - Neon red
     '#1a1a2e'   // Detections - Dark purple
   ]
 };
 
 // Initialize variables
-let currentData = [0, 0, 0, 0, 0, 0];
+let currentData = [0, 0, 0, 0, 0];
 let currentLocation = "Global Coverage";
 let animationFrame = null;
 let particles = [];
@@ -357,7 +351,7 @@ function getTextWidth(text, fontSize = 9) {  // REDUCED: was 10
   return text.length * avgCharWidth;
 }
 
-// Calculate proportional bar widths based on text content (mobile-optimized)
+// Calculate EQUAL bar widths (all same size)
 function calculateBarWidths(data, containerWidth) {
   const colors = getColors();
   const total = d3.sum(data);
@@ -368,30 +362,26 @@ function calculateBarWidths(data, containerWidth) {
   const isMobile = window.innerWidth <= 768;
   const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
   
-  // Adjust sizes based on device - MORE COMPACT
-  const mainFontSize = isMobile ? 8 : isTablet ? 8.5 : 9;      // REDUCED
-  const percentFontSize = isMobile ? 7 : isTablet ? 8 : 9;     // ENHANCED: was 6,7,7.5
-  const basePadding = isMobile ? 10 : isTablet ? 12 : 14;      // REDUCED
+  // Adjust sizes based on device
+  const mainFontSize = isMobile ? 8 : isTablet ? 8.5 : 9;
+  const percentFontSize = isMobile ? 7 : isTablet ? 8 : 9;
   
   // Create segments with text content
   const segments = data.map((value, index) => {
+    // Calculate percentage based on total of all 5 values
     const percentage = (value / total * 100).toFixed(1);
     let categoryText = categories[index];
     
     // Smart text abbreviation for mobile
     if (isMobile) {
       categoryText = categoryText.replace("Ship-To-Ship Transfers", "STS");
-      categoryText = categoryText.replace("Optical Bunkering", "Optical");
     }
     
     const valueText = value.toLocaleString();
     const percentText = `${percentage}%`;
     
-    // Calculate required text width
+    // Format main text - keep the word "Detections" visible
     const mainText = `${categoryText}: ${valueText}`;
-    const textWidth = getTextWidth(mainText, mainFontSize) + basePadding;
-    const percentWidth = getTextWidth(percentText, percentFontSize) + (basePadding * 0.6);
-    const requiredWidth = Math.max(textWidth, percentWidth, chartConfig.minBarWidth);
     
     return {
       index,
@@ -399,7 +389,6 @@ function calculateBarWidths(data, containerWidth) {
       category: categoryText,
       percentage,
       color: colors[index],
-      requiredWidth,
       mainText,
       percentText
     };
@@ -410,30 +399,20 @@ function calculateBarWidths(data, containerWidth) {
   
   if (visibleSegments.length === 0) return [];
   
-  // Calculate total required width including spacing
-  const totalRequiredWidth = visibleSegments.reduce((sum, s) => sum + s.requiredWidth, 0);
+  // EQUAL WIDTH CALCULATION - All bars same size
   const totalSpacing = (visibleSegments.length - 1) * chartConfig.barSpacing;
   const availableWidth = containerWidth - totalSpacing;
+  const equalWidth = availableWidth / visibleSegments.length;
   
-  // Scale factor calculation
-  let scaleFactor = 1;
-  if (availableWidth > totalRequiredWidth) {
-    scaleFactor = availableWidth / totalRequiredWidth;
-  } else if (availableWidth < totalRequiredWidth) {
-    // On small screens, compress slightly but maintain readability
-    scaleFactor = Math.max(0.85, availableWidth / totalRequiredWidth);
-  }
-  
-  // Calculate positions
+  // Calculate positions with equal widths
   let currentX = 0;
   const positionedSegments = visibleSegments.map(segment => {
-    const width = segment.requiredWidth * scaleFactor;
     const result = {
       ...segment,
       x: currentX,
-      width: width
+      width: equalWidth
     };
-    currentX += width + chartConfig.barSpacing;
+    currentX += equalWidth + chartConfig.barSpacing;
     return result;
   });
   
@@ -629,7 +608,7 @@ function updateOverlayChart(targetData, chapter = 'intro') {
     // Update current data
     currentData = interpolatedData;
     
-    // Calculate proportional segments
+    // Calculate equal-width segments
     const segments = calculateBarWidths(interpolatedData, width);
     
     // Update segments with enhanced effects
@@ -801,7 +780,7 @@ function renderFinalChart() {
     .attr("fill", "url(#bg-gradient)")
     .attr("rx", 8);
   
-  // Calculate segments for final chart
+  // Calculate segments for final chart with equal widths
   const segments = calculateBarWidths(finalData, width - 20); // 20px total padding
   
   // Create segment groups
@@ -979,7 +958,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const chapterNum = parseInt(chapter.replace('chapter', ''));
       if (chapterNum >= 1 && chapterNum <= 12) {
         // Show chart for chapters 1-12
-        const newData = detectionData[chapter] || [0, 0, 0, 0, 0, 0];
+        const newData = detectionData[chapter] || [0, 0, 0, 0, 0];
         console.log(`📊 Chart: Showing for ${chapter}`, newData);
         updateOverlayChart(newData, chapter);
       } else {
@@ -1032,7 +1011,7 @@ window.addEventListener('chapterChanged', (e) => {
     const chapterNum = parseInt(chapter.replace('chapter', ''));
     if (chapterNum >= 1 && chapterNum <= 12) {
       // Show chart for chapters 1-12
-      const newData = detectionData[chapter] || [0, 0, 0, 0, 0, 0];
+      const newData = detectionData[chapter] || [0, 0, 0, 0, 0];
       console.log(`📊 Chart: Showing for ${chapter}`, newData);
       updateOverlayChart(newData, chapter);
     }
