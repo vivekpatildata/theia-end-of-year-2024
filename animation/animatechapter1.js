@@ -69,7 +69,7 @@
       const el = document.createElement('div');
       el.className = 'annotation-text crash-annotation';
       el.innerHTML = `
-        <div class="crash-text">Gulfstream Wreck Location</div>
+        <div class="crash-text">GULFSTREAM Wreck Location</div>
       `;
       
       // Initial state
