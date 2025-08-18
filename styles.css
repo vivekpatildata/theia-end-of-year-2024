@@ -72,7 +72,7 @@ html, body {
   left: 50%;
   width: 100%;
   height: 100%;
-  border: 2px solid var(--primary-glow);
+  border: 2px solid var(--secondary-glow);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   animation: pulse-ring 2s ease-out infinite;

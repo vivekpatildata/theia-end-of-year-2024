@@ -48,125 +48,6 @@ function injectFinalChartCSS() {
       font-weight: 300;
     }
 
-    /* Regional Grid Layout */
-    .regions-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: auto auto auto;
-      gap: 1.5rem;
-      margin: 3rem auto;
-      max-width: 1200px;
-    }
-
-    /* First two rows - 6 items normal */
-    .regions-grid .region-card:nth-child(1) { grid-column: 1; grid-row: 1; }
-    .regions-grid .region-card:nth-child(2) { grid-column: 2; grid-row: 1; }
-    .regions-grid .region-card:nth-child(3) { grid-column: 3; grid-row: 1; }
-    .regions-grid .region-card:nth-child(4) { grid-column: 1; grid-row: 2; }
-    .regions-grid .region-card:nth-child(5) { grid-column: 2; grid-row: 2; }
-    .regions-grid .region-card:nth-child(6) { grid-column: 3; grid-row: 2; }
-
-    /* Third row - 2 items in columns 1 and 3, leave column 2 empty */
-    .regions-grid .region-card:nth-child(7) { grid-column: 1; grid-row: 3; }
-    .regions-grid .region-card:nth-child(8) { grid-column: 3; grid-row: 3; }
-
-    .region-card {
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 30, 40, 0.6));
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 1.5rem;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      min-height: 250px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .region-card::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
-      border-radius: 12px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: -1;
-    }
-
-    .region-card:hover::before {
-      opacity: 0.3;
-    }
-
-    .region-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
-    }
-
-    .region-name {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--primary-glow);
-      margin-bottom: 0.5rem;
-      text-align: center;
-      min-height: 1.5em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .region-total {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-align: center;
-      margin-bottom: 1.2rem;
-      min-height: 1.5em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .region-breakdown {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      flex-grow: 1;
-    }
-
-    .breakdown-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.4rem 0.6rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 4px;
-      min-height: 2.2em;
-    }
-
-    .breakdown-label {
-      color: var(--text-secondary);
-      font-weight: 400;
-      flex-shrink: 0;
-      min-width: 100px;
-      font-size: 0.8rem;
-    }
-
-    .breakdown-value {
-      color: var(--text-primary);
-      font-weight: 600;
-      text-align: right;
-      font-family: 'Courier New', monospace;
-      font-size: 0.8rem;
-      min-width: 80px;
-      letter-spacing: 0.5px;
-    }
-
     /* Summary Statistics */
     .summary-stats {
       display: flex;
@@ -224,146 +105,6 @@ function injectFinalChartCSS() {
       letter-spacing: 0.1em;
     }
 
-    /* Top Regions Highlight - Multi-category */
-    .top-regions {
-      margin: 3rem 0;
-      padding: 2rem;
-      background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(0, 0, 0, 0.3));
-      border-radius: 16px;
-      border: 1px solid rgba(0, 255, 255, 0.2);
-    }
-
-    .top-regions h4 {
-      font-size: 1.4rem;
-      color: var(--primary-glow);
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-
-    .top-categories-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: auto auto;
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-      max-width: 1000px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* First row - 3 items */
-    .top-categories-grid .category-section:nth-child(1) { grid-column: 1; grid-row: 1; }
-    .top-categories-grid .category-section:nth-child(2) { grid-column: 2; grid-row: 1; }
-    .top-categories-grid .category-section:nth-child(3) { grid-column: 3; grid-row: 1; }
-
-    /* Second row - 2 items in columns 1 and 3, leave column 2 empty */
-    .top-categories-grid .category-section:nth-child(4) { grid-column: 1; grid-row: 2; }
-    .top-categories-grid .category-section:nth-child(5) { grid-column: 3; grid-row: 2; }
-
-    .category-section {
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(20, 30, 40, 0.4));
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 1.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .category-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--secondary-glow);
-      margin-bottom: 1rem;
-      text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 0.5rem;
-    }
-
-    .category-rankings {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .ranking-item {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 0.5rem 0.8rem;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      border-left: 3px solid transparent;
-    }
-
-    .ranking-item:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-left-color: var(--primary-glow);
-    }
-
-    .ranking-item.rank-1 {
-      border-left-color: #FFD700;
-      background: rgba(255, 215, 0, 0.1);
-    }
-
-    .ranking-item.rank-2 {
-      border-left-color: #C0C0C0;
-      background: rgba(192, 192, 192, 0.1);
-    }
-
-    .ranking-item.rank-3 {
-      border-left-color: #CD7F32;
-      background: rgba(205, 127, 50, 0.1);
-    }
-
-    .ranking-number {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--primary-glow);
-      min-width: 20px;
-      text-align: center;
-    }
-
-    .ranking-name {
-      flex-grow: 1;
-      font-size: 0.9rem;
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .ranking-value {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      font-family: 'Courier New', monospace;
-      font-weight: 600;
-      min-width: 90px;
-      text-align: right;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.2rem;
-    }
-
-    .ranking-number-formatted {
-      font-size: 0.85rem;
-      color: var(--text-primary);
-      font-weight: 600;
-    }
-
-    .ranking-percentage {
-      font-size: 0.7rem;
-      color: var(--maritime-gold);
-      font-weight: 500;
-      opacity: 0.9;
-    }
-
-    .ranking-percentage::before {
-      content: '🌍 ';
-      font-size: 0.6rem;
-      opacity: 0.8;
-      margin-right: 0.1rem;
-    }
-
     /* Enhanced narrative section */
     .narrative-section {
       max-width: 800px;
@@ -401,34 +142,6 @@ function injectFinalChartCSS() {
         margin-bottom: 2rem;
       }
 
-      .regions-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        margin: 2rem 0;
-      }
-
-      .region-card {
-        padding: 1.2rem;
-        min-height: 220px;
-      }
-
-      .region-name {
-        font-size: 1.1rem;
-      }
-
-      .region-total {
-        font-size: 1.6rem;
-      }
-
-      .region-breakdown {
-        grid-template-columns: 1fr;
-        gap: 0.3rem;
-      }
-
-      .breakdown-item {
-        font-size: 0.8rem;
-      }
-
       .summary-stats {
         flex-direction: column;
         gap: 1.5rem;
@@ -460,58 +173,6 @@ function injectFinalChartCSS() {
 
       .stat-label {
         font-size: 0.8rem;
-      }
-
-      .top-regions {
-        margin: 2rem 0;
-        padding: 1.5rem;
-      }
-
-      .top-regions h4 {
-        font-size: 1.2rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .top-categories-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        margin-top: 1rem;
-      }
-
-      .category-section {
-        padding: 1.2rem;
-      }
-
-      .category-title {
-        font-size: 1rem;
-      }
-
-      .ranking-item {
-        padding: 0.4rem 0.6rem;
-        gap: 0.6rem;
-      }
-
-      .ranking-number {
-        font-size: 1.1rem;
-        min-width: 18px;
-      }
-
-      .ranking-name {
-        font-size: 0.8rem;
-      }
-
-      .ranking-value {
-        font-size: 0.75rem;
-        min-width: 70px;
-      }
-
-      .ranking-number-formatted {
-        font-size: 0.8rem;
-      }
-
-      .ranking-percentage::before {
-        font-size: 0.55rem;
-        margin-right: 0.05rem;
       }
 
       .narrative-section {
@@ -599,84 +260,7 @@ function formatNumber(num) {
   }
 }
 
-// Utility function to calculate percentage share
-function calculatePercentage(value, total) {
-  return ((value / total) * 100).toFixed(1);
-}
-
-// Get top 3 regions by different categories with percentage calculations
-function getTopRegionsByCategory(category) {
-  const sortedRegions = [...regionalData].sort((a, b) => {
-    const aValue = category === 'detections' ? a.detections :
-                   category === 'light' ? a.light :
-                   category === 'dark' ? a.dark :
-                   category === 'sts' ? a.sts :
-                   category === 'spoofing' ? a.spoofing : 0;
-    
-    const bValue = category === 'detections' ? b.detections :
-                   category === 'light' ? b.light :
-                   category === 'dark' ? b.dark :
-                   category === 'sts' ? b.sts :
-                   category === 'spoofing' ? b.spoofing : 0;
-    
-    return bValue - aValue;
-  });
-
-  // Get the appropriate total for percentage calculations
-  const categoryTotal = category === 'detections' ? realTotals.detections :
-                       category === 'light' ? realTotals.light :
-                       category === 'dark' ? realTotals.dark :
-                       category === 'sts' ? realTotals.sts :
-                       category === 'spoofing' ? realTotals.spoofing : 1;
-
-  return sortedRegions.slice(0, 3).map((region, index) => {
-    const value = category === 'detections' ? region.detections :
-                  category === 'light' ? region.light :
-                  category === 'dark' ? region.dark :
-                  category === 'sts' ? region.sts :
-                  category === 'spoofing' ? region.spoofing : 0;
-    
-    return {
-      rank: index + 1,
-      name: region.region,
-      value: value,
-      formattedValue: formatNumber(value),
-      percentage: calculatePercentage(value, categoryTotal)
-    };
-  });
-}
-
-// Create region card HTML with formatted numbers (removed optical bunkering)
-function createRegionCard(region) {
-  const total = region.detections;
-  
-  return `
-    <div class="region-card fade-in-up">
-      <div class="region-name">${region.region}</div>
-      <div class="region-total">${formatNumber(total)}</div>
-      <div class="region-breakdown">
-        <div class="breakdown-item">
-          <span class="breakdown-label">AIS Light</span>
-          <span class="breakdown-value">${formatNumber(region.light)}</span>
-        </div>
-        <div class="breakdown-item">
-          <span class="breakdown-label">AIS Dark</span>
-          <span class="breakdown-value">${formatNumber(region.dark)}</span>
-        </div>
-        <div class="breakdown-item">
-          <span class="breakdown-label">Ship-To-Ship</span>
-          <span class="breakdown-value">${formatNumber(region.sts)}</span>
-        </div>
-        <div class="breakdown-item">
-          <span class="breakdown-label">Spoofing</span>
-          <span class="breakdown-value">${formatNumber(region.spoofing)}</span>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// Create summary statistics HTML with formatted numbers (removed optical bunkering)
+// Create summary statistics HTML with formatted numbers
 function createSummaryStats() {
   const stats = calculateStatistics();
   
@@ -714,59 +298,9 @@ function createSummaryStats() {
   `;
 }
 
-// Create category ranking HTML with formatted numbers and percentages (removed optical bunkering)
-function createCategoryRanking(categoryName, categoryKey) {
-  const topRegions = getTopRegionsByCategory(categoryKey);
-  
-  const rankingsHTML = topRegions.map(region => `
-    <div class="ranking-item rank-${region.rank}">
-      <span class="ranking-number">${region.rank}</span>
-      <span class="ranking-name">${region.name}</span>
-      <span class="ranking-value">
-        <span class="ranking-number-formatted">${region.formattedValue}</span>
-        <span class="ranking-percentage">${region.percentage}%</span>
-      </span>
-    </div>
-  `).join('');
-
-  return `
-    <div class="category-section">
-      <div class="category-title">${categoryName}</div>
-      <div class="category-rankings">
-        ${rankingsHTML}
-      </div>
-    </div>
-  `;
-}
-
-// Create top regions HTML with all categories (removed optical bunkering)
-function createTopRegions() {
-  const categories = [
-    { name: 'Total Detections', key: 'detections' },
-    { name: 'AIS Light', key: 'light' },
-    { name: 'AIS Dark', key: 'dark' },
-    { name: 'Ship-To-Ship Transfers', key: 'sts' },
-    { name: 'Spoofing', key: 'spoofing' }
-  ];
-
-  const categoriesHTML = categories.map(category => 
-    createCategoryRanking(category.name, category.key)
-  ).join('');
-
-  return `
-    <div class="top-regions fade-in-up">
-      <h4>Top 3 Most Active Regions by Category</h4>
-      <div class="top-categories-grid">
-        ${categoriesHTML}
-      </div>
-    </div>
-  `;
-}
-
 // Create narrative section with real data insights
 function createNarrative() {
   const stats = calculateStatistics();
-  const topRegion = getTopRegionsByCategory('detections')[0];
   
   return `
     <div class="narrative-section fade-in-up">
@@ -820,7 +354,7 @@ function initializeFinalChart() {
   }
 
   try {
-    // Create the complete chart HTML
+    // Create the complete chart HTML - KEPT createSummaryStats(), REMOVED region cards
     const chartHTML = `
       <div class="final-chart-container">
         <h3 class="final-chart-title">Global Maritime Intelligence Summary</h3>
@@ -829,11 +363,6 @@ function initializeFinalChart() {
         </p>
         
         ${createSummaryStats()}
-        ${createTopRegions()}
-        
-        <div class="regions-grid">
-          ${regionalData.map(region => createRegionCard(region)).join('')}
-        </div>
         
         ${createNarrative()}
       </div>

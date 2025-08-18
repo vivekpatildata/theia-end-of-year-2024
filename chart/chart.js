@@ -56,14 +56,6 @@ function injectChartCSS() {
       paint-order: stroke fill;
     }
 
-    .percent-label {
-      font-family: 'Manrope', sans-serif !important;
-      font-weight: 700 !important;    /* ENHANCED: was 600 - more prominent */
-      text-shadow: 0 0 8px rgba(0, 0, 0, 0.9), 0 0 4px rgba(0, 0, 0, 0.7) !important; /* ENHANCED: stronger shadow */
-      dominant-baseline: middle;
-      paint-order: stroke fill;
-    }
-
     .segment {
       transition: all 0.3s ease;
       stroke-linejoin: round;
@@ -103,10 +95,6 @@ function injectChartCSS() {
       .main-label {
         font-size: 8px !important;   /* REDUCED: was 9px */
       }
-
-      .percent-label {
-        font-size: 7px !important;   /* ENHANCED: was 6px */
-      }
     }
 
     /* Tablet optimizations */
@@ -123,10 +111,6 @@ function injectChartCSS() {
       .main-label {
         font-size: 8.5px !important; /* REDUCED: was 9.5px */
       }
-
-      .percent-label {
-        font-size: 8px !important;   /* ENHANCED: was 7px */
-      }
     }
 
     /* Large screen optimizations */
@@ -142,103 +126,11 @@ function injectChartCSS() {
       .main-label {
         font-size: 9px !important;   /* REDUCED: was 11px */
       }
-
-      .percent-label {
-        font-size: 9px !important;   /* ENHANCED: was 7.5px */
-      }
-    }
-
-    /* Enhanced Final Chart Styling */
-    #chart-final {
-      padding: 5rem 2rem;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-dark), #111);
-      position: relative;
-      overflow: hidden;
-    }
-
-    #chart-final::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
-    }
-
-    #chart-final svg {
-      width: 100%;
-      height: 80px;
-      margin: 2rem 0;
-      filter: drop-shadow(0 8px 24px rgba(0, 255, 255, 0.4));
-      overflow: visible;
-    }
-
-    .chart-container h3 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .explanation {
-      max-width: 700px;
-      margin: 0 auto;
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      font-weight: 300;
-    }
-
-    .final-segment {
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .final-segment:hover {
-      filter: brightness(1.1);
-    }
-
-    .final-segment text {
-      font-family: 'Manrope', sans-serif;
-      text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
-      dominant-baseline: middle;
-      paint-order: stroke fill;
-    }
-
-    .sparkles circle {
-      pointer-events: none;
-      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8));
-    }
-
-    /* Mobile final chart adjustments */
-    @media screen and (max-width: 768px) {
-      #chart-final {
-        padding: 1rem 1rem;
-      }
-
-      .chart-container h3 {
-        font-size: 1.5rem;
-      }
-
-      .explanation {
-        font-size: 1rem;
-      }
-
-      #chart-final svg {
-        height: 65px;
-      }
     }
 
     /* High DPI display optimizations */
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-      .main-label,
-      .percent-label,
-      .final-segment text {
+      .main-label {
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -247,8 +139,7 @@ function injectChartCSS() {
 
     /* Reduced motion preferences */
     @media (prefers-reduced-motion: reduce) {
-      .segment,
-      .final-segment {
+      .segment {
         transition: none !important;
       }
       
@@ -339,6 +230,7 @@ let currentData = [0, 0, 0, 0, 0];
 let currentLocation = "Global Coverage";
 let animationFrame = null;
 let particles = [];
+let lastChapter = null; // Track the last chapter for scroll direction detection
 
 // Get color palette
 function getColors() {
@@ -364,7 +256,6 @@ function calculateBarWidths(data, containerWidth) {
   
   // Adjust sizes based on device
   const mainFontSize = isMobile ? 8 : isTablet ? 8.5 : 9;
-  const percentFontSize = isMobile ? 7 : isTablet ? 8 : 9;
   
   // Create segments with text content
   const segments = data.map((value, index) => {
@@ -378,7 +269,6 @@ function calculateBarWidths(data, containerWidth) {
     }
     
     const valueText = value.toLocaleString();
-    const percentText = `${percentage}%`;
     
     // Format main text - keep the word "Detections" visible
     const mainText = `${categoryText}: ${valueText}`;
@@ -389,8 +279,7 @@ function calculateBarWidths(data, containerWidth) {
       category: categoryText,
       percentage,
       color: colors[index],
-      mainText,
-      percentText
+      mainText
     };
   });
   
@@ -648,7 +537,7 @@ function updateOverlayChart(targetData, chapter = 'intro') {
       .attr("y", responsiveHeight)
       .remove();
     
-    // Update main text labels with responsive sizing
+    // Update main text labels with responsive sizing - CENTERED vertically now
     const mainTexts = svg.selectAll("text.main-label")
       .data(segments, d => d.index);
     
@@ -666,7 +555,7 @@ function updateOverlayChart(targetData, chapter = 'intro') {
       .transition()
       .duration(300)
       .attr("x", d => d.x + d.width / 2)
-      .attr("y", responsiveHeight / 2 - (isMobile ? 4 : 5))  // SLIGHTLY MOVED UP: was -2,-3
+      .attr("y", responsiveHeight / 2)  // CENTERED: moved to exact center
       .attr("fill", "#ffffff")
       .attr("font-size", `${isMobile ? 8 : isTablet ? 8.5 : 9}px`)  // REDUCED
       .attr("opacity", 1)
@@ -678,29 +567,7 @@ function updateOverlayChart(targetData, chapter = 'intro') {
       .attr("opacity", 0)
       .remove();
     
-    // Update percentage labels - POSITIONED BELOW AND MORE PROMINENT
-    const percentTexts = svg.selectAll("text.percent-label")
-      .data(segments, d => d.index);
-    
-    const percentTextsEnter = percentTexts.enter().append("text")
-      .attr("class", "percent-label")
-      .attr("text-anchor", "middle")
-      .attr("font-family", "'Manrope', sans-serif")
-      .attr("font-weight", "700")  // ENHANCED: more bold
-      .attr("opacity", 0);
-    
-    percentTexts.merge(percentTextsEnter)
-      .text(d => d.percentText)
-      .transition()
-      .duration(300)
-      .attr("x", d => d.x + d.width / 2)
-      .attr("y", responsiveHeight / 2 + (isMobile ? 6 : 8))  // MOVED DOWN: clear separation from main text
-      .attr("fill", "#ffffff")  // CHANGED: white for prominence
-      .attr("font-size", `${isMobile ? 7 : isTablet ? 8 : 9}px`)  // ENHANCED: larger font size
-      .attr("opacity", 1)  // ENHANCED: full opacity
-      .attr("text-shadow", "0 0 8px rgba(0, 0, 0, 0.9), 0 0 4px rgba(0, 0, 0, 0.7)");  // ENHANCED: stronger shadow
-    
-    percentTexts.exit().remove();
+    // REMOVED: All percentage label code has been deleted
     
     // Continue animation
     if (progress < 1) {
@@ -744,146 +611,6 @@ function pulseChart() {
     .remove();
 }
 
-// Enhanced mobile-friendly final chart render
-function renderFinalChart() {
-  const finalData = detectionData["chapter12"];
-  const svg = d3.select("#bar-chart-final");
-  const width = parseInt(svg.style("width"));
-  const isMobile = window.innerWidth <= 768;
-  const height = isMobile ? 65 : 80;
-  const colors = getColors();
-  
-  svg.selectAll("*").remove();
-  svg.attr("viewBox", `0 0 ${width} ${height}`)
-    .attr("preserveAspectRatio", "xMidYMid meet");
-  
-  // Add background gradient
-  const defs = svg.append("defs");
-  const bgGradient = defs.append("linearGradient")
-    .attr("id", "bg-gradient")
-    .attr("x1", "0%")
-    .attr("y1", "0%")
-    .attr("x2", "0%")
-    .attr("y2", "100%");
-  
-  bgGradient.append("stop")
-    .attr("offset", "0%")
-    .style("stop-color", "rgba(0, 0, 0, 0.8)");
-  
-  bgGradient.append("stop")
-    .attr("offset", "100%")
-    .style("stop-color", "rgba(0, 0, 0, 0.2)");
-  
-  svg.append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("fill", "url(#bg-gradient)")
-    .attr("rx", 8);
-  
-  // Calculate segments for final chart with equal widths
-  const segments = calculateBarWidths(finalData, width - 20); // 20px total padding
-  
-  // Create segment groups
-  const segmentGroups = svg.selectAll("g.final-segment")
-    .data(segments)
-    .enter().append("g")
-    .attr("class", "final-segment")
-    .attr("transform", "translate(10, 0)") // 10px left padding
-    .attr("opacity", 0);
-  
-  // Add rectangles with gradients
-  segmentGroups.append("rect")
-    .attr("x", d => d.x)
-    .attr("y", 10)
-    .attr("height", height - 20)
-    .attr("width", d => d.width)
-    .attr("fill", (d, i) => colors[d.index])
-    .attr("stroke", (d, i) => d3.color(colors[d.index]).brighter(0.5))
-    .attr("stroke-width", 1)
-    .attr("rx", 4);
-  
-  // Add category labels
-  segmentGroups.append("text")
-    .attr("x", d => d.x + d.width / 2)
-    .attr("y", height / 2 - (isMobile ? 6 : 8))
-    .attr("text-anchor", "middle")
-    .attr("fill", "#ffffff")
-    .attr("font-size", isMobile ? "10px" : "12px")
-    .attr("font-weight", "600")
-    .attr("letter-spacing", "0.02em")
-    .text(d => d.category);
-  
-  // Add value labels
-  segmentGroups.append("text")
-    .attr("x", d => d.x + d.width / 2)
-    .attr("y", height / 2 + (isMobile ? 2 : 4))
-    .attr("text-anchor", "middle")
-    .attr("fill", "#ffffff")
-    .attr("font-size", isMobile ? "12px" : "14px")
-    .attr("font-weight", "700")
-    .text(d => d.value.toLocaleString());
-  
-  // Add percentage labels
-  segmentGroups.append("text")
-    .attr("x", d => d.x + d.width / 2)
-    .attr("y", height / 2 + (isMobile ? 14 : 18))
-    .attr("text-anchor", "middle")
-    .attr("fill", (d, i) => colors[d.index])
-    .attr("font-size", isMobile ? "8px" : "10px")
-    .attr("font-weight", "500")
-    .attr("opacity", 0.8)
-    .text(d => `${d.percentage}%`);
-  
-  // Animate appearance with stagger
-  segmentGroups
-    .transition()
-    .duration(800)
-    .delay((d, i) => i * 100)
-    .attr("opacity", 1)
-    .on("end", function(d, i) {
-      if (i === segments.length - 1) {
-        addSparkles(svg, width, height);
-      }
-    });
-}
-
-// Add mobile-friendly sparkle effects
-function addSparkles(svg, width, height) {
-  const isMobile = window.innerWidth <= 768;
-  const sparkleCount = isMobile ? 12 : 20; // Fewer sparkles on mobile
-  const sparkles = [];
-  
-  for (let i = 0; i < sparkleCount; i++) {
-    sparkles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 3 + 1,
-      delay: Math.random() * 1000
-    });
-  }
-  
-  const sparkleGroup = svg.append("g").attr("class", "sparkles");
-  
-  sparkleGroup.selectAll("circle")
-    .data(sparkles)
-    .enter().append("circle")
-    .attr("cx", d => d.x)
-    .attr("cy", d => d.y)
-    .attr("r", 0)
-    .attr("fill", "#ffffff")
-    .attr("opacity", 0)
-    .transition()
-    .delay(d => d.delay)
-    .duration(300)
-    .attr("r", d => d.size)
-    .attr("opacity", 0.8)
-    .transition()
-    .duration(300)
-    .attr("r", 0)
-    .attr("opacity", 0)
-    .remove();
-}
-
 // Hide chart for intro and AFTER chapter 12
 function hideChart() {
   d3.select("#bar-chart-overlay")
@@ -902,9 +629,8 @@ function handleResize() {
   resizeTimeout = setTimeout(() => {
     // Re-render current chart with new dimensions
     if (currentData.some(d => d > 0)) {
-      updateOverlayChart(currentData);
+      updateOverlayChart(currentData, lastChapter || 'intro');
     }
-    renderFinalChart();
   }, 250);
 }
 
@@ -915,46 +641,25 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Initialize charts
   initOverlayChart();
-  renderFinalChart();
   
   // Add resize listener for mobile responsiveness
   window.addEventListener('resize', handleResize);
   
-  // ADDED: Track if we've reached the final chart section
-  let finalChartReached = false;
-  
-  // ADDED: Hide bar chart overlay when final chart section comes into view
-  const finalChartObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        console.log('📊 Bar Chart: Hiding (final chart section reached)');
-        finalChartReached = true; // Set flag to prevent re-showing
-        hideChart(); // Hide the bar chart overlay
-      }
-    });
-  }, { threshold: 0.1 });
-
-  // Observe the final chart section to hide bar chart overlay
-  const finalChartSection = document.getElementById('chart-final');
-  if (finalChartSection) {
-    finalChartObserver.observe(finalChartSection);
-  }
-  
-  // UPDATED: Modified chapter change listener to respect finalChartReached flag
+  // Listen for chapter changes
   window.addEventListener('chapterChanged', (e) => {
     const chapter = e.detail.chapter;
+    console.log(`📊 Chart: Chapter changed to ${chapter}`);
     
-    // If we've reached the final chart section, don't show the bar chart anymore
-    if (finalChartReached) {
-      console.log('📊 Bar Chart: Ignoring chapter change (final chart section reached)');
-      return;
-    }
+    // Update last chapter for tracking
+    lastChapter = chapter;
     
-    // Hide chart for intro and after chapter 12 (when map is off screen)
+    // Hide chart for intro
     if (chapter === "intro") {
       console.log('📊 Chart: Hiding for intro');
       hideChart();
-    } else if (chapter && chapter.startsWith('chapter')) {
+    } 
+    // Show chart for chapters 1-12
+    else if (chapter && chapter.startsWith('chapter')) {
       const chapterNum = parseInt(chapter.replace('chapter', ''));
       if (chapterNum >= 1 && chapterNum <= 12) {
         // Show chart for chapters 1-12
@@ -966,89 +671,33 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`📊 Chart: Hiding for ${chapter} (beyond chapter 12)`);
         hideChart();
       }
-    } else {
-      // Hide chart for any non-chapter content (after scrolling past)
+    } 
+    // Hide chart for any non-chapter content
+    else {
       console.log(`📊 Chart: Hiding for non-chapter content: ${chapter}`);
       hideChart();
     }
   });
   
-  // Add hover effects to final chart
-  d3.selectAll("#bar-chart-final .final-segment")
-    .on("mouseenter", function() {
-      if (window.innerWidth > 768) { // Only on non-mobile
-        d3.select(this).select("rect")
-          .transition()
-          .duration(200)
-          .attr("y", 5)
-          .attr("height", window.innerWidth <= 768 ? 55 : 70);
-      }
-    })
-    .on("mouseleave", function() {
-      if (window.innerWidth > 768) { // Only on non-mobile
-        d3.select(this).select("rect")
-          .transition()
-          .duration(200)
-          .attr("y", 10)
-          .attr("height", window.innerWidth <= 768 ? 45 : 60);
-      }
-    });
-  
-  console.log('✅ Mobile-friendly maritime chart initialized (compact version)');
-});
-
-// UPDATED: Listen for chapter changes - Hide chart after chapter 12
-window.addEventListener('chapterChanged', (e) => {
-  const chapter = e.detail.chapter;
-  
-  // Hide chart for intro
-  if (chapter === "intro") {
-    console.log('📊 Chart: Hiding for intro');
-    hideChart();
-  } 
-  // Show chart for chapters 1-12 only
-  else if (chapter && chapter.startsWith('chapter')) {
-    const chapterNum = parseInt(chapter.replace('chapter', ''));
-    if (chapterNum >= 1 && chapterNum <= 12) {
-      // Show chart for chapters 1-12
-      const newData = detectionData[chapter] || [0, 0, 0, 0, 0];
-      console.log(`📊 Chart: Showing for ${chapter}`, newData);
-      updateOverlayChart(newData, chapter);
-    }
-    // Don't do anything for chapters beyond 12 - let scroll handler take care of it
-  } 
-  // Hide chart for any non-chapter content
-  else {
-    console.log(`📊 Chart: Hiding for non-chapter content: ${chapter}`);
-    hideChart();
-  }
-});
-
-// SIMPLE: Just hide chart when final chart section appears
-document.addEventListener('DOMContentLoaded', () => {
-  // Wait a bit for everything to load, then set up the observer
-  setTimeout(() => {
-    const finalSection = document.getElementById('chart-final');
-    if (finalSection) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            console.log('📊 FINAL: Hiding bar chart overlay now');
-            const barChart = document.getElementById('bar-chart-overlay');
-            if (barChart) {
-              barChart.style.display = 'none';
-              barChart.style.opacity = '0';
-            }
-          }
-        });
-      }, { 
-        threshold: 0.05,  // Trigger when just 5% visible
-        rootMargin: '0px 0px -50px 0px'  // Trigger a bit before it's fully visible
+  // Separate observer for final chart section
+  const finalChartSection = document.getElementById('chart-final');
+  if (finalChartSection) {
+    const finalChartObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          console.log('📊 Chart: Final chart section in view - hiding bar chart');
+          hideChart();
+        }
       });
-      
-      observer.observe(finalSection);
-    }
-  }, 1000);
+    }, { 
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px' 
+    });
+    
+    finalChartObserver.observe(finalChartSection);
+  }
+  
+  console.log('✅ Mobile-friendly maritime chart initialized (compact version - NO PERCENTAGES)');
 });
 
 // Configuration panel (for development)
@@ -1107,7 +756,7 @@ if (window.location.hostname === 'localhost') {
   // Handle config changes
   document.getElementById('config-glow').addEventListener('change', (e) => {
     chartConfig.glowEffect = e.target.checked;
-    updateOverlayChart(currentData);
+    updateOverlayChart(currentData, lastChapter || 'intro');
   });
   
   document.getElementById('config-particles').addEventListener('change', (e) => {
@@ -1117,7 +766,6 @@ if (window.location.hostname === 'localhost') {
   document.getElementById('config-colors').addEventListener('change', (e) => {
     chartConfig.colorScheme = e.target.value;
     initOverlayChart();
-    updateOverlayChart(currentData);
-    renderFinalChart();
+    updateOverlayChart(currentData, lastChapter || 'intro');
   });
 }
